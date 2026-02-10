@@ -173,7 +173,7 @@ export const oronInsights: Insight[] = [
     causalParams: {
       source: 'travel_load',
       target: 'sleep_efficiency_pct',
-      curveType: 'v_max',
+      curveType: 'plateau_down',
       theta: {
         value: 0.57,
         unit: 'jet lag score',
@@ -319,7 +319,7 @@ export const oronInsights: Insight[] = [
     causalParams: {
       source: 'travel_load',
       target: 'deep_sleep_min',
-      curveType: 'v_max',
+      curveType: 'linear',
       theta: {
         value: 0.57,
         unit: 'jet lag score',
@@ -1327,7 +1327,7 @@ export const oronInsights: Insight[] = [
     causalParams: {
       source: 'daily_run_km',
       target: 'hrv_7d_mean',
-      curveType: 'v_max',
+      curveType: 'plateau_up',
       theta: {
         value: 25.31,
         unit: 'km/week',
@@ -1471,7 +1471,7 @@ export const oronInsights: Insight[] = [
     causalParams: {
       source: 'sleep_duration_hrs',
       target: 'hrv_daily_mean',
-      curveType: 'v_max',
+      curveType: 'linear',
       theta: {
         value: 6.73,
         unit: 'hours',
