@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Filter, LayoutGrid, List, Sparkles, Clock, TrendingUp, TrendingDown, Minus, Target, Info, User, Calendar, Activity, Droplets, ChevronDown, SlidersHorizontal, Gauge } from 'lucide-react'
+import { Filter, LayoutGrid, List, Sparkles, Clock, TrendingUp, TrendingDown, Minus, Target, Info, User, Calendar, Activity, Droplets, ChevronDown, SlidersHorizontal, Gauge, TestTube } from 'lucide-react'
 import { PageLayout, Section, Grid } from '@/components/layout'
 import { Card, Button, Toggle, Badge, Tooltip, PatientSelector, CertaintySlider } from '@/components/common'
 import { InsightCard, InsightGrid } from '@/components/insights'
@@ -150,50 +150,68 @@ export function InsightsView() {
                     )}
                   </div>
 
-                  {/* Active Loads */}
-                  {activePersona.loads && activePersona.loads.length > 0 && (
-                    <div className="mt-5 pt-5 border-t border-slate-100">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Gauge className="w-4 h-4 text-amber-500" />
-                        <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Active Loads</span>
+                  {/* Active Loads & Biomarkers */}
+                  {activePersona.loads && activePersona.loads.length > 0 && (() => {
+                    const loads = activePersona.loads!.filter((l) => l.kind === 'load')
+                    const markers = activePersona.loads!.filter((l) => l.kind === 'marker')
+                    const statusColors = {
+                      low: { bar: 'bg-emerald-400', bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700' },
+                      moderate: { bar: 'bg-amber-400', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
+                      high: { bar: 'bg-orange-500', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700' },
+                      critical: { bar: 'bg-red-500', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
+                    }
+                    const renderCard = (item: typeof loads[number]) => {
+                      const colors = statusColors[item.status]
+                      const TrendIcon = item.trend === 'rising' ? TrendingUp : item.trend === 'falling' ? TrendingDown : Minus
+                      const trendColor = item.trend === 'rising' ? 'text-red-500' : item.trend === 'falling' ? 'text-emerald-500' : 'text-slate-400'
+                      return (
+                        <Tooltip key={item.id} content={item.detail || item.label}>
+                          <div className={cn('p-3 rounded-lg border', colors.bg, colors.border)}>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-xs font-semibold text-slate-700 truncate">{item.label}</span>
+                              <TrendIcon className={cn('w-3.5 h-3.5 flex-shrink-0', trendColor)} />
+                            </div>
+                            <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                              <div
+                                className={cn('h-full rounded-full transition-all', colors.bar)}
+                                style={{ width: `${item.value}%` }}
+                              />
+                            </div>
+                            <div className="flex items-center justify-between mt-1.5">
+                              <span className={cn('text-xs font-medium', colors.text)}>{item.status}</span>
+                              <span className="text-xs text-slate-400">{item.value}%</span>
+                            </div>
+                          </div>
+                        </Tooltip>
+                      )
+                    }
+                    return (
+                      <div className="mt-5 pt-5 border-t border-slate-100 space-y-5">
+                        {loads.length > 0 && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-3">
+                              <Gauge className="w-4 h-4 text-amber-500" />
+                              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Active Loads</span>
+                            </div>
+                            <div className={cn('grid gap-3', loads.length === 1 ? 'grid-cols-1' : loads.length === 2 ? 'grid-cols-2' : loads.length === 3 ? 'grid-cols-3' : 'grid-cols-4')}>
+                              {loads.map(renderCard)}
+                            </div>
+                          </div>
+                        )}
+                        {markers.length > 0 && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-3">
+                              <TestTube className="w-4 h-4 text-violet-500" />
+                              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Biomarkers</span>
+                            </div>
+                            <div className={cn('grid gap-3', markers.length === 1 ? 'grid-cols-1' : markers.length === 2 ? 'grid-cols-2' : markers.length === 3 ? 'grid-cols-3' : 'grid-cols-4')}>
+                              {markers.map(renderCard)}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="grid grid-cols-5 gap-3">
-                        {activePersona.loads.map((load) => {
-                          const statusColors = {
-                            low: { bar: 'bg-emerald-400', bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700' },
-                            moderate: { bar: 'bg-amber-400', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
-                            high: { bar: 'bg-orange-500', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700' },
-                            critical: { bar: 'bg-red-500', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
-                          }
-                          const colors = statusColors[load.status]
-                          const TrendIcon = load.trend === 'rising' ? TrendingUp : load.trend === 'falling' ? TrendingDown : Minus
-                          const trendColor = load.trend === 'rising' ? 'text-red-500' : load.trend === 'falling' ? 'text-emerald-500' : 'text-slate-400'
-
-                          return (
-                            <Tooltip key={load.id} content={load.detail || load.label}>
-                              <div className={cn('p-3 rounded-lg border', colors.bg, colors.border)}>
-                                <div className="flex items-center justify-between mb-1.5">
-                                  <span className="text-xs font-semibold text-slate-700 truncate">{load.label}</span>
-                                  <TrendIcon className={cn('w-3.5 h-3.5 flex-shrink-0', trendColor)} />
-                                </div>
-                                {/* Load bar */}
-                                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                  <div
-                                    className={cn('h-full rounded-full transition-all', colors.bar)}
-                                    style={{ width: `${load.value}%` }}
-                                  />
-                                </div>
-                                <div className="flex items-center justify-between mt-1.5">
-                                  <span className={cn('text-xs font-medium', colors.text)}>{load.status}</span>
-                                  <span className="text-xs text-slate-400">{load.value}%</span>
-                                </div>
-                              </div>
-                            </Tooltip>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )}
+                    )
+                  })()}
                 </div>
               </div>
             </div>

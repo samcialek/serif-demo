@@ -82,6 +82,7 @@ export interface Campaign {
 export interface PersonaLoad {
   id: string
   label: string
+  kind: 'load' | 'marker'  // load = accumulation of choices; marker = slow biology
   value: number        // 0-100 scale
   trend: 'rising' | 'falling' | 'stable'
   status: 'low' | 'moderate' | 'high' | 'critical'

@@ -41,6 +41,7 @@ export const rajanPersona: Persona = {
     {
       id: 'sleep-debt',
       label: 'Sleep Debt',
+      kind: 'load',
       value: 72,
       trend: 'rising',
       status: 'high',
@@ -50,6 +51,7 @@ export const rajanPersona: Persona = {
     {
       id: 'training-load',
       label: 'Training Load',
+      kind: 'load',
       value: 65,
       trend: 'stable',
       status: 'moderate',
@@ -59,6 +61,7 @@ export const rajanPersona: Persona = {
     {
       id: 'glycemic-stress',
       label: 'Glycemic Stress',
+      kind: 'marker',
       value: 58,
       trend: 'rising',
       status: 'moderate',
@@ -68,6 +71,7 @@ export const rajanPersona: Persona = {
     {
       id: 'work-stress',
       label: 'Work Stress',
+      kind: 'load',
       value: 78,
       trend: 'rising',
       status: 'high',
@@ -77,6 +81,7 @@ export const rajanPersona: Persona = {
     {
       id: 'acr-ratio',
       label: 'ACR (Acute:Chronic)',
+      kind: 'load',
       value: 45,
       trend: 'stable',
       status: 'moderate',

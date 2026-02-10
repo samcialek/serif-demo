@@ -56,6 +56,7 @@ export const oronPersona: Persona = {
     {
       id: 'iron-depletion',
       label: 'Iron Depletion Risk',
+      kind: 'marker',
       value: 85,
       trend: 'stable',
       status: 'critical',
@@ -70,6 +71,7 @@ export const oronPersona: Persona = {
     {
       id: 'training-load',
       label: 'Training Load',
+      kind: 'load',
       value: 35,
       trend: 'falling',
       status: 'moderate',
@@ -84,6 +86,7 @@ export const oronPersona: Persona = {
     {
       id: 'ferritin-stores',
       label: 'Ferritin Stores',
+      kind: 'marker',
       value: 46,
       trend: 'rising',
       status: 'moderate',
@@ -97,6 +100,7 @@ export const oronPersona: Persona = {
     {
       id: 'travel-load',
       label: 'Travel Load',
+      kind: 'load',
       value: 0,
       trend: 'stable',
       status: 'low',
@@ -111,6 +115,7 @@ export const oronPersona: Persona = {
     {
       id: 'inflammation',
       label: 'Inflammation',
+      kind: 'marker',
       value: 10,
       trend: 'stable',
       status: 'low',
@@ -123,6 +128,7 @@ export const oronPersona: Persona = {
     {
       id: 'omega3-status',
       label: 'Omega-3 Status',
+      kind: 'marker',
       value: 65,
       trend: 'falling',
       status: 'moderate',
