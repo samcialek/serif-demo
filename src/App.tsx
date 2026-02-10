@@ -14,6 +14,7 @@ import {
   DataView,
   StyleDemoView,
   CurveStyleDemoView,
+  DataValueView,
 } from '@/views'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/admin" element={<AdminView />} />
           <Route path="/style-demo" element={<StyleDemoView />} />
           <Route path="/curve-demo" element={<CurveStyleDemoView />} />
+          <Route path="/data-value" element={<DataValueView />} />
         </Route>
       </Routes>
     </BrowserRouter>

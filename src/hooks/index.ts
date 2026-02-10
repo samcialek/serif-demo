@@ -28,3 +28,4 @@ export {
   useInViewAnimation,
   easings,
 } from './useAnimatedValue'
+export { useDataValue } from './useDataValue'

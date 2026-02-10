@@ -20,7 +20,7 @@ export const oronPersona: Persona = {
   age: 43,
   archetype: 'The Iron-Depleted Endurance Athlete',
   narrative: 'Elite-level triathlete with exceptional VO2peak (52 ml/min/kg) but critically low iron status threatening performance. 9+ years of GPS workout data reveal training patterns driving iron depletion.',
-  daysOfData: 4000, // Computed: 2015-02-13 to 2026-02-07
+  daysOfData: 4012, // 2015-02-13 to 2026-02-07 = 4012 days
   devices: ['bloodwork', 'gpx', 'medix-cpet', 'apple-watch', 'autosleep'],
   deviceConnections: [
     { deviceId: 'bloodwork', isActive: true, firstConnected: '2023-03-10', lastRefreshed: '2025-11-22T00:00:00Z' },
@@ -151,7 +151,7 @@ export const oronInsights: Insight[] = [
     title: 'Travel Load -> Sleep Efficiency',
     headline: 'Travel Load affects sleep efficiency pct with a threshold effect',
     summary: 'Travel Load affects sleep efficiency pct with a threshold effect',
-    recommendation: 'After crossing time zones, use morning bright light (30 min) and low-dose melatonin (0.5 mg at destination bedtime) to bring jet lag below 0.6. Above that threshold, sleep efficiency drops 29% per unit.',
+    recommendation: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
     explanation: 'Jet lag disrupts circadian rhythm, delaying melatonin onset and reducing sleep efficiency. The effect intensifies above 0.6 jet lag score (-29.46 % per unit vs +4.15 below).',
 
     causalParams: {
@@ -282,11 +282,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 0.6 jet lag score from available data.',
 
     actionable: true,
-    suggestedAction: 'View Travel Recovery',
+    suggestedAction: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
     priority: 1,
     status: 'new',
 
-    showWork: 'Serif found a sharp threshold in your travel-vs-sleep data. Below a jet lag score of 0.6, travel has little impact on sleep efficiency — but above it, each additional unit of jet lag drops efficiency by ~29 percentage points. This is based on 1,181 nights of your personal data (100% personal evidence). The threshold aligns with published research on circadian disruption and sleep (Dunican 2023, Fowler 2017). Confidence is high (86%) because the pattern is consistent across your history. Bottom line: mild travel is fine, but crossing the 0.6 jet lag threshold substantially disrupts your sleep.',
+    showWork: 'Piecewise-linear model: sleep_efficiency_pct ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: +4.149 per unit. Above theta: -29.463 per unit. Fitted on 1181 data points (effective N = 393). Evidence split: 100% personal / 0% population. Prior source: Dunican et al. 2023; Fowler et al. MSSE 2017; Oura/NUS SLEEP 2025 (evidence tier: observational).',
   },
 
   {
@@ -297,7 +297,7 @@ export const oronInsights: Insight[] = [
     title: 'Travel Load -> Deep Sleep',
     headline: 'Travel Load affects deep sleep min with a threshold effect',
     summary: 'Travel Load affects deep sleep min with a threshold effect',
-    recommendation: 'Protect deep sleep after travel: morning bright light (30 min), align meals to local time, and avoid intense exercise for 24 h. Above 0.6 jet lag score, deep sleep drops ~60 min per unit.',
+    recommendation: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
     explanation: 'Jet lag disrupts slow-wave sleep architecture via circadian misalignment.',
 
     causalParams: {
@@ -430,11 +430,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 0.6 jet lag score from available data.',
 
     actionable: true,
-    suggestedAction: 'View Travel Recovery',
+    suggestedAction: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
     priority: 1,
     status: 'new',
 
-    showWork: 'Your deep sleep is highly sensitive to jet lag. Below a score of 0.6, travel actually correlates with more deep sleep (+37 min per unit), likely reflecting physical fatigue. But above 0.6, circadian disruption crushes slow-wave sleep by ~60 min per unit — a large effect. This comes from 1,136 nights of personal data (100% personal evidence, 83% changepoint probability). Literature on jet lag and SWS disruption (Dunican 2023) supports this threshold. This is one of the strongest effects in your data and explains why multi-timezone travel hammers your recovery.',
+    showWork: 'Piecewise-linear model: deep_sleep_min ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: +36.777 per unit. Above theta: -59.733 per unit. Fitted on 1136 data points (effective N = 378). Evidence split: 100% personal / 0% population. Prior source: Dunican et al. 2023; jet lag SWS disruption (evidence tier: observational).',
   },
 
   {
@@ -445,7 +445,7 @@ export const oronInsights: Insight[] = [
     title: 'ACWR -> Neutrophil-Lymphocyte Ratio',
     headline: 'Acwr affects nlr with a threshold effect',
     summary: 'Acwr affects nlr with a threshold effect',
-    recommendation: 'Build training load gradually (max 10% volume increase/week) to bring ACWR toward 0.8-1.2. Above 1.2, immune stress rises sharply. Currently at 0.69 — add sessions using 80/20 polarized distribution.',
+    recommendation: 'Sweet spot near 1.2 ratio. Both too little and too much are suboptimal.',
     explanation: 'Training stress shifts immune balance: neutrophilia + lymphopenia = elevated NLR. The effect intensifies above 1.2 ratio (+0.14 ratio per unit vs -0.04 below).',
 
     causalParams: {
@@ -571,11 +571,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (0.9) is below the threshold (1.2 ratio).',
 
     actionable: true,
-    suggestedAction: 'Adjust Training Load',
+    suggestedAction: 'Sweet spot near 1.2 ratio. Both too little and too much are suboptimal.',
     priority: 1,
     status: 'new',
 
-    showWork: 'Your immune balance (measured by neutrophil-to-lymphocyte ratio) shifts when your acute-to-chronic workload ratio exceeds 1.2. Below that, NLR stays stable or slightly decreases. Above it, NLR rises sharply (+0.14 per unit) — a sign of exercise-induced immune stress. This insight blends 27% personal data (618 days, limited lab draws) with 73% population evidence from Simpson et al. (2020) on stress neutrophilia. The changepoint probability is very high (99%), meaning the threshold is robust even though personal lab data is sparse. Your current ACWR of 0.93 is below this threshold.',
+    showWork: 'Piecewise-linear model: nlr ~ f(acwr) with changepoint at theta. Theta = 1.2 ratio. Below theta: -0.040 per unit. Above theta: +0.145 per unit. Fitted on 618 data points (effective N = 20). Evidence split: 27% personal / 73% population. Prior source: Simpson et al. Exerc Immunol Rev 2020; stress neutrophilia (evidence tier: observational).',
   },
 
   {
@@ -586,7 +586,7 @@ export const oronInsights: Insight[] = [
     title: 'ACWR -> Resting HR Trend',
     headline: 'Acwr affects resting hr 7d mean with a threshold effect',
     summary: 'Acwr affects resting hr 7d mean with a threshold effect',
-    recommendation: 'Increase training load progressively toward ACWR 1.0-1.2 for cardiovascular benefit — resting HR drops 4.3 bpm per unit up to 1.8. At 0.69, you have room to safely add volume (10%/week, 80/20 polarized). Cap at 1.2 for immune safety.',
+    recommendation: 'Threshold identified at 1.8 ratio.',
     explanation: 'Chronic overreaching elevates baseline sympathetic tone and resting heart rate. Most of the effect occurs below 1.8 ratio (-4.34 bpm per unit), with diminishing returns above.',
 
     causalParams: {
@@ -715,11 +715,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (0.9) is below the threshold (1.8 ratio).',
 
     actionable: true,
-    suggestedAction: 'Build Load Safely',
+    suggestedAction: 'Threshold identified at 1.8 ratio.',
     priority: 2,
     status: 'new',
 
-    showWork: 'Your resting heart rate drops substantially as training load increases — about 4.3 bpm per unit of ACWR below the 1.8 threshold. Above 1.8, the relationship flattens (only +0.5 bpm per unit), suggesting diminishing cardiovascular adaptation at very high loads. Built from 2,400 days of personal Apple Watch and GPX data (100% personal evidence). The threshold aligns with Hulin and Gabbett\'s meta-analyses (BJSM 2016) on acute-to-chronic workload and injury/overtraining risk. At your current ACWR of 0.93, you have significant room to increase training load.',
+    showWork: 'Piecewise-linear model: resting_hr_7d_mean ~ f(acwr) with changepoint at theta. Theta = 1.8 ratio. Below theta: -4.338 per unit. Above theta: +0.486 per unit. Fitted on 2400 data points (effective N = 342). Evidence split: 100% personal / 0% population. Prior source: Hulin et al., BJSM 2016; Gabbett, BJSM 2016 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -730,7 +730,7 @@ export const oronInsights: Insight[] = [
     title: 'Sleep Duration -> Cortisol',
     headline: 'Sleep Duration Hrs affects cortisol with a threshold effect',
     summary: 'Sleep Duration Hrs affects cortisol with a threshold effect',
-    recommendation: 'Aim for at least 7.4 hours of sleep to keep cortisol in check. Below this, each lost hour raises cortisol ~1.1 mcg/dL. Set a consistent bedtime giving 7.0-7.5 hours in bed — aligns with your HRV and glucose targets too.',
+    recommendation: 'Threshold identified at 7.4 hours.',
     explanation: 'Sleep restriction elevates next-morning cortisol via HPA axis dysregulation. Most of the effect occurs below 7.4 hours (-1.10 mcg/dL per unit), with diminishing returns above.',
 
     causalParams: {
@@ -859,11 +859,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (6.9) is below the threshold (7.4 hours).',
 
     actionable: true,
-    suggestedAction: 'Set Sleep Target',
+    suggestedAction: 'Threshold identified at 7.4 hours.',
     priority: 2,
     status: 'new',
 
-    showWork: 'Sleeping less than 7.4 hours raises your next-morning cortisol by about 1.1 mcg/dL per hour lost — a substantial HPA axis effect. Above 7.4 hours, cortisol is essentially flat. This insight leans heavily on population research (94% population / 6% personal) because you only have 2 effective lab-sleep overlaps. The threshold comes from Spiegel et al. (Lancet 1999), a landmark study on sleep restriction and cortisol. At your current average of 6.9 hours, you\'re about half an hour short — enough to measurably elevate morning cortisol. More sleep data will strengthen this estimate.',
+    showWork: 'Piecewise-linear model: cortisol_smoothed ~ f(sleep_duration_hrs) with changepoint at theta. Theta = 7.4 hours. Below theta: -1.101 per unit. Above theta: +0.030 per unit. Fitted on 452 data points (effective N = 2). Evidence split: 6% personal / 94% population. Prior source: Spiegel et al. Lancet 1999; sleep restriction → cortisol (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -874,7 +874,7 @@ export const oronInsights: Insight[] = [
     title: 'Workout Time -> Sleep Efficiency',
     headline: 'Last Workout End Hour affects sleep efficiency pct with a threshold effect',
     summary: 'Last Workout End Hour affects sleep efficiency pct with a threshold effect',
-    recommendation: 'Finish all workouts before 7:45 PM. After this cutoff, each additional hour of late exercise costs 2.0% sleep efficiency. Move evening sessions earlier or swap to morning training.',
+    recommendation: 'Threshold identified at 7:44 PM.',
     explanation: 'Late workouts elevate core temperature and sympathetic tone, delaying sleep onset. The effect intensifies above 19.7 hour (-2.02 % per unit vs -0.06 below).',
 
     causalParams: {
@@ -1006,11 +1006,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (15.7) is below the threshold (19.7 hour).',
 
     actionable: true,
-    suggestedAction: 'Set Workout Cutoff',
+    suggestedAction: 'Threshold identified at 7:44 PM.',
     priority: 4,
     status: 'new',
 
-    showWork: 'Finishing workouts after ~7:45 PM significantly hurts your sleep efficiency. Before that time, workout timing barely matters (-0.06% per hour). But after 7:45 PM, each additional hour costs about 2% in sleep efficiency — mainly through elevated core temperature and sympathetic activation. Based on 1,181 nights of personal data (100% personal evidence). Two meta-analyses support this pattern (Stutz 2019, Frimpong 2021), though the changepoint probability is moderate (39%), meaning the exact cutoff time has some uncertainty. You currently finish workouts around 3:40 PM, well within the safe zone.',
+    showWork: 'Piecewise-linear model: sleep_efficiency_pct ~ f(last_workout_end_hour) with changepoint at theta. Theta = 19.7 hour. Below theta: -0.063 per unit. Above theta: -2.023 per unit. Fitted on 1181 data points (effective N = 393). Evidence split: 100% personal / 0% population. Prior source: Stutz et al., Sports Med 2019; Frimpong et al., Sleep Med Rev 2021 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -1021,7 +1021,7 @@ export const oronInsights: Insight[] = [
     title: 'Travel Load -> NLR',
     headline: 'Travel Load affects nlr with a threshold effect',
     summary: 'Travel Load affects nlr with a threshold effect',
-    recommendation: 'After travel, use bright light and meal timing to resolve jet lag quickly — your immune balance (NLR) shifts above 0.5 jet lag score. Avoid hard training for 24-48 h post-travel to prevent compounding immune stress.',
+    recommendation: 'Threshold identified at 0.5 jet lag score.',
     explanation: 'Travel stress and circadian disruption shift immune balance toward neutrophilia. The effect intensifies above 0.5 jet lag score (+0.02 ratio per unit vs +0.00 below).',
 
     causalParams: {
@@ -1147,11 +1147,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 0.5 jet lag score from available data.',
 
     actionable: true,
-    suggestedAction: 'View Travel Recovery',
+    suggestedAction: 'Threshold identified at 0.5 jet lag score.',
     priority: 4,
     status: 'new',
 
-    showWork: 'Travel-related circadian disruption nudges your immune markers. Below a jet lag score of 0.5, NLR barely changes. Above it, NLR rises modestly (+0.017 per unit), reflecting a shift toward innate immune activation. This is a smaller effect than the ACWR-NLR link, but it\'s based on 611 days of personal data (100% personal, 87 effective observations). Morris et al. (PNAS 2016) demonstrated that circadian disruption directly shifts immune cell populations. The changepoint probability is low (30%), so the exact threshold is uncertain, but the directional effect is consistent.',
+    showWork: 'Piecewise-linear model: nlr ~ f(travel_load) with changepoint at theta. Theta = 0.5 jet lag score. Below theta: +0.004 per unit. Above theta: +0.017 per unit. Fitted on 611 data points (effective N = 87). Evidence split: 100% personal / 0% population. Prior source: Morris et al. PNAS 2016; circadian disruption immune shift (evidence tier: observational).',
   },
 
   {
@@ -1162,7 +1162,7 @@ export const oronInsights: Insight[] = [
     title: 'Ferritin -> VO2peak',
     headline: 'Ferritin affects vo2 peak with a threshold effect',
     summary: 'Ferritin affects vo2 peak with a threshold effect',
-    recommendation: 'Continue iron repletion — ferritin at 46 ng/mL is above the 35.6 performance threshold. Take iron bisglycinate 25 mg + vitamin C daily, avoid calcium/coffee near iron dose, keep running below 35 km/week. Target ferritin above 50 ng/mL.',
+    recommendation: 'Threshold identified at 35.6 ng/mL.',
     explanation: 'Iron stores limit oxygen transport capacity via hemoglobin synthesis.',
 
     causalParams: {
@@ -1290,11 +1290,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (46.0) is above the threshold (35.6 ng/mL).',
 
     actionable: true,
-    suggestedAction: 'View Iron Campaign',
+    suggestedAction: 'Threshold identified at 35.6 ng/mL.',
     priority: 4,
     status: 'new',
 
-    showWork: 'Your VO2peak improves with higher ferritin, but the gains are nearly twice as large below 35.6 ng/mL (+0.23 ml/min/kg per 10 units) compared to above it (+0.12). This suggests iron stores are a rate limiter for oxygen transport until ferritin reaches ~36, after which other factors dominate. The insight blends 27% personal data with 73% population evidence (DellaValle & Haas, MSSE 2014). At your current ferritin of 46 ng/mL, you\'re above the threshold, meaning your iron status is supporting — but not limiting — aerobic capacity. Maintaining ferritin above 35 is the key takeaway.',
+    showWork: 'Piecewise-linear model: vo2_peak_smoothed ~ f(ferritin_smoothed) with changepoint at theta. Theta = 35.6 ng/mL. Below theta: +0.230 per unit. Above theta: +0.122 per unit. Fitted on 452 data points (effective N = 20). Evidence split: 27% personal / 73% population. Prior source: DellaValle & Haas, MSSE 2014 (evidence tier: observational).',
   },
 
   {
@@ -1305,7 +1305,7 @@ export const oronInsights: Insight[] = [
     title: 'Weekly Volume -> HRV Baseline',
     headline: 'Daily Run Km affects hrv 7d mean with a threshold effect',
     summary: 'Daily Run Km affects hrv 7d mean with a threshold effect',
-    recommendation: 'Target 25 km/week running for optimal HRV — each additional km below this improves HRV by 0.18 ms. Above 25 km/week, returns diminish. Staying at this level also protects your critically low iron stores.',
+    recommendation: 'Sweet spot near 25.3 km/week. Both too little and too much are suboptimal.',
     explanation: 'Moderate volume improves vagal tone; excessive volume suppresses it via overtraining. Most of the effect occurs below 25.3 km/week (+0.18 ms per unit), with diminishing returns above.',
 
     causalParams: {
@@ -1434,11 +1434,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 25.3 km/week from available data.',
 
     actionable: true,
-    suggestedAction: 'Set Weekly Volume',
+    suggestedAction: 'Sweet spot near 25.3 km/week. Both too little and too much are suboptimal.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Running volume improves your 7-day HRV baseline up to about 25 km/week (+0.18 ms per km). Beyond that, HRV gains flatline — a classic inverted-U pattern where excessive volume suppresses parasympathetic recovery. Based on 2,401 days of personal Apple Watch and GPX data (100% personal evidence). This aligns with Plews et al. (2013) and Buchheit (2014), who documented HRV ceiling effects in trained males. The changepoint probability is moderate (47%), reflecting natural variability in the optimal volume. The practical takeaway: ~25 km/week appears to be your aerobic sweet spot for vagal tone.',
+    showWork: 'Piecewise-linear model: hrv_7d_mean ~ f(daily_run_km) with changepoint at theta. Theta = 25.3 km/week. Below theta: +0.181 per unit. Above theta: -0.006 per unit. Fitted on 2401 data points (effective N = 343). Evidence split: 100% personal / 0% population. Prior source: Plews et al., Sports Med 2013; Buchheit 2014; trained male CV narrowing (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -1449,7 +1449,7 @@ export const oronInsights: Insight[] = [
     title: 'Sleep Duration -> Next-Day HRV',
     headline: 'Sleep Duration Hrs affects hrv daily mean with a threshold effect',
     summary: 'Sleep Duration Hrs affects hrv daily mean with a threshold effect',
-    recommendation: 'Your HRV peaks at 6.7 h sleep, but cortisol and glucose data recommend 7.0-7.4 h. Target 7.0 hours as the balanced optimum. Set a consistent 22:30 bedtime and 05:30 wake time.',
+    recommendation: 'Sweet spot near 6.7 hours. Both too little and too much are suboptimal.',
     explanation: 'Adequate sleep restores parasympathetic tone; insufficient sleep elevates sympathetic activity. The effect intensifies above 6.7 hours (-0.37 ms per unit vs +0.12 below).',
 
     causalParams: {
@@ -1578,11 +1578,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (7.5) is above the threshold (6.7 hours).',
 
     actionable: true,
-    suggestedAction: 'Set Sleep Target',
+    suggestedAction: 'Sweet spot near 6.7 hours. Both too little and too much are suboptimal.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Your HRV peaks at about 6.7 hours of sleep, then declines with longer sleep durations (-0.37 ms per additional hour). Below 6.7 hours, HRV rises modestly with more sleep (+0.12 ms/hr). This inverted-U pattern — where too much sleep actually lowers HRV — is uncommon but has been documented in trained athletes (Lastella 2015). Built from 2,204 nights of personal data with 734 effective observations (100% personal evidence). Zhang et al. (2025 meta-analysis) confirmed this non-linear sleep-HRV relationship. At 7.5 hours, you\'re slightly past your personal HRV optimum, though other outcomes may benefit from the extra sleep.',
+    showWork: 'Piecewise-linear model: hrv_daily_mean ~ f(sleep_duration_hrs) with changepoint at theta. Theta = 6.7 hours. Below theta: +0.117 per unit. Above theta: -0.367 per unit. Fitted on 2204 data points (effective N = 734). Evidence split: 100% personal / 0% population. Prior source: Zhang et al., Front Neurol 2025 (meta-analysis); Lastella et al. 2015 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -1593,7 +1593,7 @@ export const oronInsights: Insight[] = [
     title: 'Daily Training Load -> Next-Day HRV',
     headline: 'Daily Trimp affects hrv daily mean with a threshold effect',
     summary: 'Daily Trimp affects hrv daily mean with a threshold effect',
-    recommendation: 'Don\'t fear sessions up to 80 TRIMP — above this threshold, HRV paradoxically improves as your body adapts to moderate-high loads. Keep hard days near 80 TRIMP and easy days below 40 for recovery.',
+    recommendation: 'Threshold identified at 80.2 TRIMP.',
     explanation: 'Acute training load drives autonomic nervous system fatigue measured via HRV depression. The effect intensifies above 80.2 TRIMP (+0.25 ms per unit vs -0.10 below).',
 
     causalParams: {
@@ -1723,11 +1723,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 80.2 TRIMP from available data.',
 
     actionable: true,
-    suggestedAction: 'Plan Session Load',
+    suggestedAction: 'Threshold identified at 80.2 TRIMP.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Daily training load (TRIMP) has a non-linear effect on your next-day HRV. Below 80 TRIMP, HRV slightly declines with training (-0.10 ms per unit) — mild parasympathetic suppression. Above 80 TRIMP, HRV actually increases (+0.25 ms per unit), possibly reflecting a rebound or supercompensation effect on recovery days following hard sessions. Based on 2,391 days of personal data with 797 effective observations (100% personal evidence). Stanley (2013) and Buchheit (2014) documented similar autonomic responses in trained males. The low changepoint probability (20%) means this pattern is noisy — use with caution.',
+    showWork: 'Piecewise-linear model: hrv_daily_mean ~ f(daily_trimp) with changepoint at theta. Theta = 80.2 TRIMP. Below theta: -0.101 per unit. Above theta: +0.252 per unit. Fitted on 2391 data points (effective N = 797). Evidence split: 100% personal / 0% population. Prior source: Stanley et al., Sports Med 2013; Buchheit 2014; trained male CV narrowing (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -1738,7 +1738,7 @@ export const oronInsights: Insight[] = [
     title: 'Active Energy -> Deep Sleep',
     headline: 'Active Energy Kcal affects deep sleep min with a threshold effect',
     summary: 'Active Energy Kcal affects deep sleep min with a threshold effect',
-    recommendation: 'On training days, aim for 500+ active calories to maximize deep sleep. Above this, the deep sleep benefit doubles. On rest days, target 300 kcal through walking or light activity.',
+    recommendation: 'Threshold identified at 504.4 kcal.',
     explanation: 'Physical activity increases slow-wave sleep need via adenosine accumulation and thermoregulation.',
 
     causalParams: {
@@ -1869,11 +1869,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (1101.8) is above the threshold (504.4 kcal).',
 
     actionable: true,
-    suggestedAction: 'Set Activity Target',
+    suggestedAction: 'Threshold identified at 504.4 kcal.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Higher daily active calories modestly increase your deep sleep, and the effect doubles above ~500 kcal. Below 504 kcal, each additional 100 kcal adds about 0.4 minutes of deep sleep. Above it, the gain increases to ~0.8 min per 100 kcal. While the per-unit effect is small, it accumulates — burning 1,000 kcal adds roughly 4-8 minutes of deep sleep. Built from 1,136 nights (100% personal evidence). Kline (2014) and Stutz (2019) demonstrated exercise-driven improvements in slow-wave sleep via adenosine accumulation and thermoregulation. At ~1,100 kcal/day, you\'re well above the threshold.',
+    showWork: 'Piecewise-linear model: deep_sleep_min ~ f(active_energy_kcal) with changepoint at theta. Theta = 504.4 kcal. Below theta: +0.004 per unit. Above theta: +0.008 per unit. Fitted on 1136 data points (effective N = 378). Evidence split: 100% personal / 0% population. Prior source: Kline, Am J Lifestyle Med 2014; Stutz et al., Sports Med 2019 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -1884,7 +1884,7 @@ export const oronInsights: Insight[] = [
     title: 'Running Volume -> Iron',
     headline: 'Daily Run Km affects iron total with a threshold effect',
     summary: 'Daily Run Km affects iron total with a threshold effect',
-    recommendation: 'Cap running at 35 km/week while iron is critically low (37 mcg/dL). Above 177 km/month, iron depletion accelerates 6x. Substitute cycling for excess volume. Supplement with iron bisglycinate 25 mg + vitamin C daily.',
+    recommendation: 'Threshold identified at 177.2 km/month.',
     explanation: 'Foot-strike hemolysis destroys red blood cells; iron lost via hemolysis, sweat, and GI ischemia. The effect intensifies above 177.2 km/month (-0.30 mcg/dL per unit vs -0.05 below).',
 
     causalParams: {
@@ -2018,11 +2018,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (56.4) is below the threshold (177.2 km/month).',
 
     actionable: true,
-    suggestedAction: 'View Iron Campaign',
+    suggestedAction: 'Threshold identified at 177.2 km/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Running depletes iron at all volumes, but the rate accelerates sharply above ~177 km/month. Below that, iron drops slowly (-0.05 mcg/dL per km). Above it, foot-strike hemolysis, sweat losses, and GI ischemia combine to drain iron nearly 6x faster (-0.30 per km). This insight is almost entirely population-driven (94% population / 6% personal) because you have only 2 effective lab-training overlaps — it\'s a strong prior from Sim et al. (Sports Med 2019 meta-analysis) awaiting more personal data. At your current ~56 km/month, you\'re well below the danger zone, but this matters if you ramp training.',
+    showWork: 'Piecewise-linear model: iron_total_smoothed ~ f(daily_run_km) with changepoint at theta. Theta = 177.2 km/month. Below theta: -0.053 per unit. Above theta: -0.298 per unit. Fitted on 452 data points (effective N = 2). Evidence split: 6% personal / 94% population. Prior source: Sim et al., Sports Med 2019 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2033,7 +2033,7 @@ export const oronInsights: Insight[] = [
     title: 'Zone 2 Volume -> LDL',
     headline: 'Daily Zone2 Min affects ldl with a threshold effect',
     summary: 'Daily Zone2 Min affects ldl with a threshold effect',
-    recommendation: 'Accumulate 200+ min/month Zone 2 training to optimize LDL. Your current LDL of 68 is excellent — maintain with 3-4 Zone 2 sessions per week (50-60 min each). Mix running and cycling to protect iron stores.',
+    recommendation: 'Threshold identified at 201.8 min/month.',
     explanation: 'Aerobic exercise can modestly reduce LDL and shift particle size from small-dense to large-buoyant.',
 
     causalParams: {
@@ -2165,11 +2165,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 201.8 min/month from available data.',
 
     actionable: true,
-    suggestedAction: 'Plan Zone 2 Volume',
+    suggestedAction: 'Threshold identified at 201.8 min/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Zone 2 aerobic exercise reduces your LDL up to about 200 min/month (-0.19 mg/dL per unit). Beyond that, LDL may slightly rebound (+0.21 per unit), possibly reflecting increased cholesterol turnover during very high exercise volumes. This insight is heavily population-based (93% population / 7% personal) with only 4 effective lab-training overlaps. The threshold draws from Mann (2014) and Kelley (2012) meta-analyses on exercise and lipid profiles. Your current LDL of 68 mg/dL is already excellent. As more lab draws accumulate, Serif will refine the personal component of this estimate.',
+    showWork: 'Piecewise-linear model: ldl_smoothed ~ f(daily_zone2_min) with changepoint at theta. Theta = 201.8 min/month. Below theta: -0.194 per unit. Above theta: +0.213 per unit. Fitted on 618 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: Mann et al., J Lipid Res 2014; Kelley et al., Atherosclerosis 2012 (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2180,7 +2180,7 @@ export const oronInsights: Insight[] = [
     title: 'Zone 2 Volume -> Non-HDL Cholesterol',
     headline: 'Daily Zone2 Min affects non hdl cholesterol with a threshold effect',
     summary: 'Daily Zone2 Min affects non hdl cholesterol with a threshold effect',
-    recommendation: 'Target 200+ min/month Zone 2 for non-HDL reduction. This aligns with your LDL and triglyceride thresholds — one Zone 2 prescription covers all three lipid markers. Prioritize consistency over intensity.',
+    recommendation: 'Threshold identified at 202.8 min/month.',
     explanation: 'Aerobic exercise reduces atherogenic lipoproteins (LDL + VLDL + IDL). Most of the effect occurs below 202.8 min/month (-0.21 mg/dL per unit), with diminishing returns above.',
 
     causalParams: {
@@ -2312,11 +2312,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 202.8 min/month from available data.',
 
     actionable: true,
-    suggestedAction: 'Plan Zone 2 Volume',
+    suggestedAction: 'Threshold identified at 202.8 min/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Non-HDL cholesterol (the atherogenic particle fraction: LDL + VLDL + IDL) decreases with Zone 2 exercise up to ~203 min/month (-0.21 mg/dL per unit), then plateaus. The diminishing returns above 203 min/month (+0.04 per unit) suggest you\'ve captured most of the lipid benefit by that volume. Heavily population-based (93% population / 7% personal, only 4 lab draws). The ACSM position stand on exercise and lipids supports this dose-response curve. This insight will sharpen as you accumulate more lab draws alongside training data.',
+    showWork: 'Piecewise-linear model: non_hdl_cholesterol_smoothed ~ f(daily_zone2_min) with changepoint at theta. Theta = 202.8 min/month. Below theta: -0.212 per unit. Above theta: +0.041 per unit. Fitted on 618 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: ACSM position stand; composite atherogenic particle reduction (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2327,7 +2327,7 @@ export const oronInsights: Insight[] = [
     title: 'Zone 2 Volume -> Total Cholesterol',
     headline: 'Daily Zone2 Min affects total cholesterol with a threshold effect',
     summary: 'Daily Zone2 Min affects total cholesterol with a threshold effect',
-    recommendation: 'Maintain at least 150 min/month Zone 2 for total cholesterol management. You likely exceed this in normal weeks — the key is maintaining consistency during travel or low-load periods.',
+    recommendation: 'Threshold identified at 152.1 min/month.',
     explanation: 'Aerobic exercise net effect on total cholesterol (HDL up, LDL down). Most of the effect occurs below 152.1 min/month (-0.25 mg/dL per unit), with diminishing returns above.',
 
     causalParams: {
@@ -2461,11 +2461,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 152.1 min/month from available data.',
 
     actionable: true,
-    suggestedAction: 'Plan Zone 2 Volume',
+    suggestedAction: 'Threshold identified at 152.1 min/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Total cholesterol drops meaningfully with Zone 2 exercise up to ~152 min/month (-0.25 mg/dL per unit), reflecting the combined effect of HDL rising and LDL falling. Above 152 min/month, the effect essentially disappears (+0.01 per unit) — the net lipid benefit is fully captured. This is the lowest threshold of the three lipid insights, meaning total cholesterol responds to less exercise than LDL or non-HDL alone. Heavily population-based (93% / 7% personal, 4 lab draws). Aligned with AHA Physical Activity Guidelines. About 2.5 hours of Zone 2 per month appears sufficient.',
+    showWork: 'Piecewise-linear model: total_cholesterol_smoothed ~ f(daily_zone2_min) with changepoint at theta. Theta = 152.1 min/month. Below theta: -0.248 per unit. Above theta: +0.011 per unit. Fitted on 618 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: AHA guidelines; net HDL↑ + LDL↓ effect (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2476,7 +2476,7 @@ export const oronInsights: Insight[] = [
     title: 'Training Hours -> Glucose',
     headline: 'Daily Duration Min affects glucose with a threshold effect',
     summary: 'Daily Duration Min affects glucose with a threshold effect',
-    recommendation: 'Maintain 1,200+ min/month total training to protect fasting glucose (currently 96 mg/dL, borderline). With ACWR at 0.69 and training load \'low\', focus on rebuilding volume. Combine Zone 2 sessions with daily walks.',
+    recommendation: 'Threshold identified at 1272.1 min/month.',
     explanation: 'Exercise upregulates GLUT4 transporters, improving glucose disposal. The effect intensifies above 1272.1 min/month (+0.31 mg/dL per unit vs -0.00 below).',
 
     causalParams: {
@@ -2609,11 +2609,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (313.5) is below the threshold (1272.1 min/month).',
 
     actionable: true,
-    suggestedAction: 'Build Training Volume',
+    suggestedAction: 'Threshold identified at 1272.1 min/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Below ~21 hours of training per month, exercise volume has essentially no impact on your fasting glucose. Above that threshold, glucose rises by ~0.31 mg/dL per additional unit — a counterintuitive effect that may reflect cortisol-driven glycogenolysis during very high training volumes, or a statistical artifact from sparse data. Based on 93% population evidence (Colberg et al., Diabetes Care 2016, on GLUT4 upregulation) with only 4 personal lab overlaps. At your current ~5 hrs/month of training, you\'re well below this threshold. This insight needs more personal lab data to become actionable.',
+    showWork: 'Piecewise-linear model: glucose_smoothed ~ f(daily_duration_min) with changepoint at theta. Theta = 1272.1 min/month. Below theta: -0.000 per unit. Above theta: +0.310 per unit. Fitted on 616 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: Colberg et al. Diabetes Care 2016; GLUT4 upregulation (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2624,7 +2624,7 @@ export const oronInsights: Insight[] = [
     title: 'Sleep Duration -> Glucose',
     headline: 'Sleep Duration Hrs affects glucose with a threshold effect',
     summary: 'Sleep Duration Hrs affects glucose with a threshold effect',
-    recommendation: 'Sleep at least 7.2 hours to keep fasting glucose below 100 mg/dL — each lost hour raises glucose via impaired insulin sensitivity. At 96 mg/dL, this margin matters.',
+    recommendation: 'Threshold identified at 7.2 hours.',
     explanation: 'Chronic sleep restriction impairs insulin sensitivity and glucose tolerance. Most of the effect occurs below 7.2 hours (+0.50 mg/dL per unit), with diminishing returns above.',
 
     causalParams: {
@@ -2754,11 +2754,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (6.9) is below the threshold (7.2 hours).',
 
     actionable: true,
-    suggestedAction: 'Set Sleep Target',
+    suggestedAction: 'Threshold identified at 7.2 hours.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Sleeping less than 7.2 hours raises fasting glucose by about 0.5 mg/dL per hour of sleep lost — a clinically meaningful effect over time via impaired insulin sensitivity. Above 7.2 hours, glucose slightly decreases (-0.12 per hour). This is almost entirely a population-based estimate (93% population / 7% personal) with only 4 lab-sleep data points. The threshold comes from Spiegel et al. (Lancet 1999), the landmark study linking sleep restriction to insulin resistance. At 6.9 hours, you\'re just below threshold. Even 15-20 extra minutes of sleep could help. More lab draws will personalize this estimate.',
+    showWork: 'Piecewise-linear model: glucose_smoothed ~ f(sleep_duration_hrs) with changepoint at theta. Theta = 7.2 hours. Below theta: +0.503 per unit. Above theta: -0.117 per unit. Fitted on 4 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: Spiegel et al. Lancet 1999; sleep restriction → insulin resistance (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2769,7 +2769,7 @@ export const oronInsights: Insight[] = [
     title: 'Zone 2 Volume -> Triglycerides',
     headline: 'Daily Zone2 Min affects triglycerides with a threshold effect',
     summary: 'Daily Zone2 Min affects triglycerides with a threshold effect',
-    recommendation: 'Maintain 200+ min/month Zone 2 to keep triglycerides excellent (42 mg/dL). 3-4 sessions/week and this marker stays strong. Distribute across running and cycling for iron protection.',
+    recommendation: 'Threshold identified at 208.7 min/month.',
     explanation: 'Aerobic exercise increases lipoprotein lipase activity, clearing triglycerides.',
 
     causalParams: {
@@ -2901,11 +2901,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Threshold identified at 208.7 min/month from available data.',
 
     actionable: true,
-    suggestedAction: 'Plan Zone 2 Volume',
+    suggestedAction: 'Threshold identified at 208.7 min/month.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Triglycerides show a crossover effect around 209 min/month of Zone 2 exercise. Below that, TG slightly increases with more exercise (+0.07 mg/dL per unit) — possibly because moderate exercise mobilizes stored triglycerides into the bloodstream. Above 209 min/month, exercise clears TG faster than it mobilizes them (-0.09 per unit). Heavily population-based (93% population / 7% personal, 4 lab draws). AHA guidelines note that men\'s triglyceride response to exercise is relatively predictable. Your current TG of 62 mg/dL is already optimal; this insight is mainly relevant if lipids shift.',
+    showWork: 'Piecewise-linear model: triglycerides_smoothed ~ f(daily_zone2_min) with changepoint at theta. Theta = 208.7 min/month. Below theta: +0.074 per unit. Above theta: -0.090 per unit. Fitted on 618 data points (effective N = 4). Evidence split: 7% personal / 93% population. Prior source: AHA Physical Activity Guidelines; male TG response less variable (evidence tier: meta-analysis/RCT).',
   },
 
   {
@@ -2916,7 +2916,7 @@ export const oronInsights: Insight[] = [
     title: 'Daily Activity -> Body Mass',
     headline: 'Steps affects body mass kg with a threshold effect',
     summary: 'Steps affects body mass kg with a threshold effect',
-    recommendation: 'Maintain 13,000+ daily steps for weight stability. Below this, each 1,000 extra steps helps reduce body mass. On rest days, a 60-min walk hits the target. Training days exceed it naturally.',
+    recommendation: 'Threshold identified at 13004.9 steps.',
     explanation: 'Higher daily activity creates energy deficit supporting weight management. Most of the effect occurs below 13004.9 steps (+0.02 kg per unit), with diminishing returns above.',
 
     causalParams: {
@@ -3051,11 +3051,11 @@ export const oronInsights: Insight[] = [
     whyNow: 'Current value (14777.0) is above the threshold (13004.9 steps).',
 
     actionable: true,
-    suggestedAction: 'Set Step Goal',
+    suggestedAction: 'Threshold identified at 13004.9 steps.',
     priority: 6,
     status: 'new',
 
-    showWork: 'Daily step count influences body mass up to about 13,000 steps/day, after which additional steps have virtually no effect on weight. Below that threshold, the relationship is modest (+0.024 kg per unit). This is a small effect at the individual level but compounds over weeks. Based on 171 days of personal Apple Watch data blended with 73% population evidence from Richardson (2008) and Dwyer (2011). At ~14,800 steps/day, you\'re above the threshold — additional steps aren\'t likely to further reduce body mass. For weight management, dietary factors and training intensity probably matter more at your activity level.',
+    showWork: 'Piecewise-linear model: body_mass_kg ~ f(steps) with changepoint at theta. Theta = 13004.9 steps. Below theta: +0.024 per unit. Above theta: -0.000 per unit. Fitted on 171 data points (effective N = 20). Evidence split: 27% personal / 73% population. Prior source: Richardson et al. Ann Intern Med 2008; Dwyer et al. BMJ 2011 (evidence tier: observational).',
   },
 ]
 
@@ -3063,12 +3063,13 @@ export const oronInsights: Insight[] = [
 // LAB RESULTS — From Quest Labs (6 draws)
 // ──────────────────────────────────────────────────────────────
 
-// Lab results from actual Quest Labs draws (6 draws, verified against structured JSON)
+// Lab results from actual Quest Labs draws (6 draws, verified against rebuilt 381-record dataset)
 export const oronLabs: LabResult[] = [
   {
     // Draw 6: 11/22/2025 — most recent, comprehensive panel
     date: '2025-11-22',
     fastingGlucose: 96,
+    hba1c: 5.2,
     insulin: 5.1,
     totalCholesterol: 125,
     ldl: 68,
@@ -3081,64 +3082,71 @@ export const oronLabs: LabResult[] = [
     vitaminD: 47,
     ferritin: 46,
     iron: 37,
-    ironSaturationPct: 9,
+    tibc: 397,
+    ironSaturationPct: 9.3,
     apob: 61,
     epa: 0.5,
     dha: 2.2,
     aaEpaRatio: 30.9,
   },
   {
-    // Draw 5: 11/13/2024 — comprehensive panel
-    date: '2024-11-13',
-    fastingGlucose: 93,
-    insulin: 2.6,
-    totalCholesterol: 136,
-    ldl: 67,
-    hdl: 57,
-    triglycerides: 52,
-    hsCrp: 0.4,
-    testosterone: 327,
-    cortisol: 15.1,
-    tsh: 4.44,
-    vitaminD: 47,
-    ferritin: 24,
-    iron: 63,
-    tibc: 436,
-    ironSaturationPct: 14,
-    apob: 72,
-  },
-  {
-    // Draw 4: 05/31/2024 — CBC + metabolic
-    date: '2024-05-31',
-    fastingGlucose: 78,
-    insulin: 2.8,
-    totalCholesterol: 142,
-    ldl: 81,
-    hdl: 48,
-    triglycerides: 57,
-    hsCrp: 0.2,
-  },
-  {
-    // Draw 3: 03/15/2025 — CBC + lipids + omega-3
+    // Draw 5: 03/15/2025 — CBC + lipids + omega-3
     date: '2025-03-15',
     fastingGlucose: 77,
+    hba1c: 5.0,
     insulin: 2.0,
     totalCholesterol: 114,
     ldl: 58,
     hdl: 44,
     triglycerides: 42,
     hsCrp: 0.3,
-    iron: 37,
-    tibc: 399,
-    ironSaturationPct: 9,
     epa: 0.5,
     dha: 2.2,
     aaEpaRatio: 24.5,
   },
   {
-    // Draw 2: 11/01/2023 — hormones only
+    // Draw 4: 11/13/2024 — comprehensive panel
+    date: '2024-11-13',
+    fastingGlucose: 93,
+    hba1c: 5.1,
+    insulin: 2.6,
+    totalCholesterol: 136,
+    ldl: 67,
+    hdl: 57,
+    triglycerides: 52,
+    hsCrp: 0.4,
+    cortisol: 15.1,
+    tsh: 4.44,
+    vitaminD: 47,
+    ferritin: 24,
+    iron: 63,
+    tibc: 436,
+    ironSaturationPct: 14.4,
+    apob: 72,
+  },
+  {
+    // Draw 3: 11/12/2024 — testosterone recheck
+    date: '2024-11-12',
+    testosterone: 327,
+  },
+  {
+    // Draw 2: 05/31/2024 — CBC + metabolic
+    date: '2024-05-31',
+    fastingGlucose: 78,
+    hba1c: 5.1,
+    insulin: 2.8,
+    totalCholesterol: 142,
+    ldl: 81,
+    hdl: 48,
+    triglycerides: 57,
+    hsCrp: 0.1,
+  },
+  {
+    // Draw 1: 11/01/2023 — hormones + omega-3
     date: '2023-11-01',
     testosterone: 444,
+    epa: 0.3,
+    dha: 1.1,
   },
 ]
 
@@ -3167,7 +3175,7 @@ export const oronProtocols: Protocol[] = [
     status: 'suggested',
     baseline: { value: 37, unit: 'mcg/dL' },
     actions: [
-      { id: 'reduce-run-volume', label: 'Reduce weekly running to <35 km', category: 'activity', isActive: true, impact: 8, actionType: 'target', linkedInsightId: 'oron_insight_1' },
+      { id: 'reduce-run-volume', label: 'Reduce weekly running to <35 km', category: 'activity', isActive: true, impact: 8, actionType: 'target', linkedInsightId: 'oron-weekly_run_km-iron_total' },
       { id: 'iron-supplement', label: 'Iron supplementation (physician-guided)', category: 'nutrition', isActive: true, impact: 9, actionType: 'target' },
       { id: 'vitamin-c', label: 'Take vitamin C with iron for absorption', category: 'nutrition', isActive: true, impact: 4, actionType: 'target' },
       { id: 'retest-8wk', label: 'Retest iron panel in 8 weeks', category: 'metabolic', isActive: true, impact: 7, actionType: 'target' },
@@ -3251,46 +3259,39 @@ export const oronDailyPlan: DailyPlan = {
   date: new Date().toISOString().split('T')[0],
   greeting: 'Good morning, Oron. Your iron status remains critical at 37 mcg/dL. Today\'s focus: manage training volume while supporting iron repletion.',
   priorities: {
-    high: [
-      {
-        id: 'plan-iron-1',
-        text: 'Reduce running below 38 km/week or supplement iron with physician guidance',
-        explanation: 'Iron at 37 mcg/dL is below reference range. Foot-strike hemolysis from high-volume running is the primary mechanism.',
-        evidenceWeight: '20% personal, 80% population',
-      },
-      {
-        id: 'plan-iron-2',
-        text: 'Keep running below 35 km/week while repleting iron stores',
-        explanation: 'Ferritin improving (24→46) but still below athlete-optimal range of 50+ ng/mL.',
-        evidenceWeight: '20% personal, 80% population',
-      },
-    ],
+    high: [],
     moderate: [
       {
-        id: 'plan-testosterone',
-        text: 'Include recovery weeks every 3rd week; limit training to <11.5 hrs/week',
-        explanation: 'Testosterone 327-444 ng/dL is lower-normal. Overtraining suppresses the HPG axis.',
-        evidenceWeight: '18% personal, 82% population',
+        id: 'plan-oron-weekly_run_km-iron_total',
+        text: 'Reduce running volume below 40 km/week or supplement iron (consult physician for IV iron given severity)',
+        explanation: 'Foot-strike hemolysis destroys red blood cells during high-volume running. Your iron dropped from 63 to 37 mcg/dL (ref: 50-180), which is critically low. At your current weekly volume, you are losing iron faster than oral supplements can replace it.',
+        evidenceWeight: '6% personal, 94% population',
       },
       {
-        id: 'plan-zone2-hdl',
-        text: 'Target 150+ min/week Zone 2 to raise HDL above 50 mg/dL',
-        explanation: 'HDL at 44 mg/dL is adequate but below protective threshold.',
-        evidenceWeight: '20% personal, 80% population',
+        id: 'plan-oron-weekly_zone2_min-triglycerides',
+        text: 'Maintain 146+ min/week of Zone 2 training to sustain low triglycerides',
+        explanation: 'Regular Zone 2 exercise activates lipoprotein lipase, clearing triglycerides. Your TG at 42 mg/dL is excellent (<150 optimal, <100 ideal).',
+        evidenceWeight: '12% personal, 88% population',
       },
     ],
     maintain: [
       {
-        id: 'plan-tg',
-        text: 'Maintain 145+ min/week of Zone 2 training for triglycerides',
-        explanation: 'TG at 42 mg/dL is exceptional. Keep doing what works.',
-        evidenceWeight: '20% personal, 80% population',
+        id: 'plan-oron-weekly_training_hrs-testosterone',
+        text: 'Keep total training below 12 hours/week; prioritize recovery weeks',
+        explanation: 'Overtraining suppresses the HPG axis, lowering testosterone. Your levels (327-444 ng/dL) are lower-normal for age 43. High training volume without adequate recovery exacerbates this.',
+        evidenceWeight: '9% personal, 91% population',
       },
       {
-        id: 'plan-crp',
-        text: 'Keep ACWR below 1.28 to maintain excellent hsCRP',
-        explanation: 'hsCRP 0.3 mg/L indicates minimal inflammation.',
-        evidenceWeight: '20% personal, 80% population',
+        id: 'plan-oron-weekly_run_km-ferritin',
+        text: 'Target ferritin >50 ng/mL. Keep running below 36 km/week while repleting stores',
+        explanation: 'Ferritin reflects total body iron stores. Yours hit a critical low of 24 ng/mL (ref: 38-380) and has improved to 46 — still below the 50+ ng/mL target for athletes.',
+        evidenceWeight: '6% personal, 94% population',
+      },
+      {
+        id: 'plan-oron-weekly_zone2_min-hdl',
+        text: 'Target 146+ min/week Zone 2 to raise HDL above 50 mg/dL',
+        explanation: 'HDL at 44 mg/dL is adequate but not protective (>50 preferred for men). Consistent Zone 2 training is the most effective non-pharmacological HDL booster.',
+        evidenceWeight: '12% personal, 88% population',
       },
     ],
   },

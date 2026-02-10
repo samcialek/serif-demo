@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Database,
+  TrendingUp,
 } from 'lucide-react'
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {}
@@ -23,6 +24,7 @@ const navItems = [
   { to: '/data', icon: Database, label: 'Data' },
   { to: '/integration', icon: Link2, label: 'Devices' },
   { to: '/insights', icon: Lightbulb, label: 'Insights' },
+  { to: '/data-value', icon: TrendingUp, label: 'Data Value' },
   { to: '/protocols', icon: ListChecks, label: 'Protocols' },
   { to: '/coach', icon: Users, label: 'Coach' },
   { to: '/api', icon: Code, label: 'API' },
