@@ -383,7 +383,7 @@ export function DoseResponseCurve({
           d={curvePath}
           fill="none"
           stroke={colors.line}
-          strokeWidth="2.5"
+          strokeWidth="3"
           strokeLinecap="round"
         />
 
@@ -399,8 +399,8 @@ export function DoseResponseCurve({
         />
 
         {/* Threshold point */}
-        <circle cx={thetaX} cy={thetaY} r="6" fill={colors.threshold} />
-        <circle cx={thetaX} cy={thetaY} r="3" fill="white" />
+        <circle cx={thetaX} cy={thetaY} r="7" fill={colors.threshold} />
+        <circle cx={thetaX} cy={thetaY} r="3.5" fill="white" />
 
         {/* Threshold confidence interval */}
         {!compact && (
@@ -446,29 +446,7 @@ export function DoseResponseCurve({
           </>
         )}
 
-        {/* Curve type badge - inline in SVG for better space usage */}
-        {!compact && (
-          <g>
-            <rect
-              x={svgWidth - padding - 52}
-              y={padding + 2}
-              width={50}
-              height={16}
-              fill={shapeMeta.fill}
-              stroke={shapeMeta.color}
-              strokeWidth="1"
-            />
-            <text
-              x={svgWidth - padding - 27}
-              y={padding + 13}
-              textAnchor="middle"
-              className="text-[9px] font-bold uppercase"
-              fill={shapeMeta.color}
-            >
-              {shapeMeta.icon} {shapeMeta.shortName}
-            </text>
-          </g>
-        )}
+        {/* Curve type badge removed — too busy */}
 
         {/* Theta label - positioned below threshold point */}
         {showLabels && !compact && (
@@ -572,12 +550,33 @@ export function EffectSizeDisplay({ params, variant = 'full' }: EffectSizeDispla
     )
   }
 
+  const isLinear = params.curveType === 'linear'
+
+  // For linear curves, show a single-row summary instead of misleading below/above split
+  if (isLinear) {
+    // Pick the dominant slope (the one with the larger absolute value)
+    const dominant = Math.abs(params.betaAbove.value) >= Math.abs(params.betaBelow.value)
+      ? params.betaAbove : params.betaBelow
+    return (
+      <div className="p-3 border bg-slate-50 border-slate-200 rounded">
+        <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+          Slope
+        </div>
+        <div className={`font-mono font-black text-lg ${
+          dominant.value > 0 ? 'text-emerald-600' : 'text-rose-600'
+        }`}>
+          {dominant.description}
+        </div>
+      </div>
+    )
+  }
+
   // Clean design with subtle borders for internal elements
   return (
     <div className="grid grid-cols-2 gap-0">
       <div className={`p-3 border border-r-0 ${isVShape ? 'bg-sky-50 border-sky-200' : 'bg-emerald-50 border-emerald-200'}`}>
         <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
-          {isVShape ? 'Below θ' : 'Below Threshold'}
+          Below θ
         </div>
         <div className={`font-mono font-black text-lg ${
           params.betaBelow.value > 0 ? 'text-emerald-600' : 'text-rose-600'
@@ -587,7 +586,7 @@ export function EffectSizeDisplay({ params, variant = 'full' }: EffectSizeDispla
       </div>
       <div className={`p-3 border ${isVShape ? 'bg-violet-50 border-violet-200' : 'bg-rose-50 border-rose-200'}`}>
         <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
-          {isVShape ? 'Above θ' : 'Above Threshold'}
+          Above θ
         </div>
         <div className={`font-mono font-black text-lg ${
           params.betaAbove.value > 0 ? 'text-emerald-600' : 'text-rose-600'

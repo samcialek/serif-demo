@@ -195,6 +195,7 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
   ) => {
     const [internalExpanded, setInternalExpanded] = useState(false)
     const [showCode, setShowCode] = useState(false)
+    const [showWorkOpen, setShowWorkOpen] = useState(false)
     const expanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded
 
     const toggleExpand = () => {
@@ -369,26 +370,40 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               })()}
             </div>
 
-            {/* Show Work - Always Visible Preview */}
+            {/* Causal Analysis — collapsible */}
             {insight.showWork && (
-              <div className="mt-4 p-4 bg-amber-50/70 rounded-lg border border-amber-200">
-                <div className="flex items-start gap-3">
+              <div className="mt-4 rounded-lg border border-amber-200 overflow-hidden">
+                <button
+                  onClick={() => setShowWorkOpen(!showWorkOpen)}
+                  className="w-full flex items-center gap-3 p-3 bg-amber-50/70 hover:bg-amber-50 transition-colors text-left"
+                >
                   <div className="p-1.5 bg-amber-100 rounded">
                     <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Causal Analysis</h4>
-                      <span className="text-[9px] px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">
-                        n={insight.evidence.personalDays} days · {Math.round(insight.certainty * 100)}% confidence
-                      </span>
-                    </div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{insight.showWork}</p>
-                    <p className="text-[10px] text-amber-600 mt-2 italic">
-                      This insight uses causal inference (not just correlation) to control for confounding variables.
-                    </p>
-                  </div>
-                </div>
+                  <h4 className="flex-1 text-[10px] font-bold text-amber-700 uppercase tracking-wider">Causal Analysis</h4>
+                  <span className="text-[9px] px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">
+                    n={insight.evidence.personalDays} days · {Math.round(insight.certainty * 100)}% confidence
+                  </span>
+                  {showWorkOpen ? <ChevronUp className="w-3.5 h-3.5 text-amber-500" /> : <ChevronDown className="w-3.5 h-3.5 text-amber-500" />}
+                </button>
+                <AnimatePresence>
+                  {showWorkOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 pb-4 pt-2 bg-amber-50/40">
+                        <p className="text-sm text-slate-700 leading-relaxed">{insight.showWork}</p>
+                        <p className="text-[10px] text-amber-600 mt-2 italic">
+                          This insight uses causal inference (not just correlation) to control for confounding variables.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
 
@@ -396,11 +411,11 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
             {hasCausalParams && variant === 'detailed' && (
               <div className="mt-5">
                 <h4 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">Dose-Response Curve</h4>
-                <div className="bg-slate-50/50 rounded-lg p-2">
+                <div className="bg-slate-50/50 rounded-lg p-3">
                   <DoseResponseCurve
                     params={insight.causalParams!}
                     width="100%"
-                    height={120}
+                    height={160}
                     showCurrentValue={showCurrentPosition}
                   />
                 </div>
@@ -438,7 +453,7 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
             )}
 
             {/* Population vs Individual Threshold Comparison */}
-            {insight.populationThreshold && (
+            {insight.populationThreshold && Math.abs(Number(insight.populationThreshold.value) - Number(insight.cause.threshold)) > 0.01 && (
               <div className="mt-5 p-4 bg-gradient-to-r from-slate-50 to-primary-50/30 rounded-lg border border-primary-100">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-[10px] font-bold text-primary-600 uppercase tracking-wider">Your Threshold vs Population</span>
@@ -469,22 +484,12 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               </div>
             )}
 
-            {/* Comparison (before/after) - Clinical Precision */}
+            {/* Optimal target — single card (removed "current" side) */}
             {insight.comparison && (
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className={cn(
-                  'p-4 text-center rounded-lg',
-                  insight.outcome.direction === 'negative' ? 'bg-rose-50' : 'bg-slate-50'
-                )}>
-                  <div className="text-2xl font-semibold text-slate-800">{insight.comparison.before.value}</div>
-                  <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">{insight.comparison.before.label}</div>
-                </div>
-                <div className={cn(
-                  'p-4 text-center rounded-lg',
-                  insight.outcome.direction === 'positive' || insight.outcome.direction === 'negative' ? 'bg-emerald-50' : 'bg-slate-50'
-                )}>
+              <div className="mt-5">
+                <div className="p-4 text-center rounded-lg bg-emerald-50 border border-emerald-200">
                   <div className="text-2xl font-semibold text-slate-800">{insight.comparison.after.value}</div>
-                  <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">{insight.comparison.after.label}</div>
+                  <div className="text-[10px] font-medium text-emerald-600 uppercase tracking-wider mt-1">{insight.comparison.after.label}</div>
                 </div>
               </div>
             )}
@@ -492,28 +497,29 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
 
           {/* Evidence bar - Clinical Precision */}
           <div className="px-5 pb-4">
+            {(() => { const personalPct = Math.min(99, Math.round(insight.evidence.personalWeight * 100)); const populationPct = Math.max(1, 100 - personalPct); return (
             <div className="flex items-center gap-4 text-xs">
               <div className="flex-1">
                 <div className="flex justify-between mb-1.5">
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Personal</span>
-                  <span className="font-medium text-primary-600">{Math.round(insight.evidence.personalWeight * 100)}%</span>
+                  <span className="font-medium text-primary-600">{personalPct}%</span>
                 </div>
                 <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-serif-cyan rounded-full"
-                    style={{ width: `${insight.evidence.personalWeight * 100}%` }}
+                    style={{ width: `${personalPct}%` }}
                   />
                 </div>
               </div>
               <div className="flex-1">
                 <div className="flex justify-between mb-1.5">
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Population</span>
-                  <span className="font-medium text-slate-500">{Math.round(insight.evidence.populationWeight * 100)}%</span>
+                  <span className="font-medium text-slate-500">{populationPct}%</span>
                 </div>
                 <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-slate-300 rounded-full"
-                    style={{ width: `${insight.evidence.populationWeight * 100}%` }}
+                    style={{ width: `${populationPct}%` }}
                   />
                 </div>
               </div>
@@ -523,6 +529,7 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
                 </div>
               )}
             </div>
+            ) })()}
           </div>
 
           {/* Expandable evidence section - Clinical Precision */}
