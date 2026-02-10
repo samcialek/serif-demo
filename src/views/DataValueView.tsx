@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { PageLayout } from '@/components/layout'
 import { Tabs, TabList, TabTrigger, TabContent } from '@/components/common/Tabs'
-import { DataValueSummary, CurrentSourcesPanel, MarginalValuePanel } from '@/components/dataValue'
+import { DataValueSummary, MarginalValuePanel } from '@/components/dataValue'
 import { useDataValue } from '@/hooks/useDataValue'
 import { cn } from '@/utils/classNames'
 import type { MechanismTestability } from '@/data/dataValue/types'
@@ -103,7 +103,6 @@ function EdgeCoverageMap({
 export function DataValueView() {
   const {
     edgeResults,
-    existingSources,
     rankedCandidates,
     testableEdges,
     untestableEdges,
@@ -115,7 +114,7 @@ export function DataValueView() {
     fittedEdgeCount,
   } = useDataValue()
 
-  const [activeTab, setActiveTab] = useState('sources')
+  const [activeTab, setActiveTab] = useState('opportunities')
 
   return (
     <PageLayout
@@ -136,20 +135,9 @@ export function DataValueView() {
       {/* Internal tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} variant="underline">
         <TabList>
-          <TabTrigger value="sources">Your Data Sources</TabTrigger>
           <TabTrigger value="opportunities">Data Opportunities</TabTrigger>
           <TabTrigger value="coverage">Edge Coverage Map</TabTrigger>
         </TabList>
-
-        <TabContent value="sources">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <CurrentSourcesPanel sources={existingSources} />
-          </motion.div>
-        </TabContent>
 
         <TabContent value="opportunities">
           <motion.div
