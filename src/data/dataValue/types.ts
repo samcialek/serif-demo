@@ -86,6 +86,12 @@ export interface CandidateDataSource {
   newResponseFamilies: string[]
   newColumns: string[]
   frequency: string
+  /** 2-3 curated narratives about the most interesting edges this source would affect */
+  keyEdgeNarratives: Array<{
+    edgeTitle: string
+    narrative: string
+    type: 'unlock' | 'boost' | 'confounder'
+  }>
 }
 
 /** Marginal value score for a candidate data source */

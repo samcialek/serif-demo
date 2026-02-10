@@ -83,6 +83,33 @@ export function CandidateSourceCard({ candidate, score, className }: CandidateSo
         </div>
       </div>
 
+      {/* Key edge narratives */}
+      {candidate.keyEdgeNarratives.length > 0 && (
+        <div>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+            Key edges affected
+          </p>
+          <div className="space-y-2.5">
+            {candidate.keyEdgeNarratives.map((item) => (
+              <div key={item.edgeTitle} className="relative pl-3 border-l-2 border-indigo-200">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className={cn(
+                    'text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded',
+                    item.type === 'boost' && 'bg-blue-50 text-blue-600',
+                    item.type === 'unlock' && 'bg-emerald-50 text-emerald-600',
+                    item.type === 'confounder' && 'bg-violet-50 text-violet-600',
+                  )}>
+                    {item.type === 'boost' ? 'signal boost' : item.type === 'unlock' ? 'new edge' : 'confounder'}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-700">{item.edgeTitle}</span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">{item.narrative}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Confounder badges */}
       {score.resolvedLatentNodes.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
@@ -102,14 +129,14 @@ export function CandidateSourceCard({ candidate, score, className }: CandidateSo
             Signal boosted ({score.boostedEdgeTitles.length})
           </p>
           <div className="space-y-0.5">
-            {score.boostedEdgeTitles.slice(0, 5).map((title) => (
+            {score.boostedEdgeTitles.slice(0, 3).map((title) => (
               <p key={title} className="text-xs text-slate-600 pl-2 border-l-2 border-slate-200">
                 {title}
               </p>
             ))}
-            {score.boostedEdgeTitles.length > 5 && (
+            {score.boostedEdgeTitles.length > 3 && (
               <p className="text-xs text-slate-400 pl-2">
-                +{score.boostedEdgeTitles.length - 5} more
+                +{score.boostedEdgeTitles.length - 3} more
               </p>
             )}
           </div>
