@@ -1,0 +1,635 @@
+import { useMemo, useState } from 'react'
+import type { CurveType, CausalParameters } from '@/types'
+
+interface DoseResponseCurveProps {
+  params: CausalParameters
+  width?: number | '100%'
+  height?: number
+  showLabels?: boolean
+  showCurrentValue?: boolean
+  compact?: boolean
+  className?: string
+}
+
+// ============================================================================
+// CURVE SHAPE TAXONOMY
+// Comprehensive naming system for dose-response curve shapes
+// ============================================================================
+
+interface CurveShapeMetadata {
+  // Primary identifiers
+  name: string                    // Human-readable name (e.g., "Saturating Benefit")
+  shortName: string               // Abbreviated (e.g., "SAT-BEN")
+
+  // Shape characteristics
+  geometry: string                // Mathematical shape (e.g., "Concave Ascending Plateau")
+  curvature: 'linear' | 'convex' | 'concave' | 'sigmoidal' | 'parabolic'
+  symmetry: 'symmetric' | 'left-asymmetric' | 'right-asymmetric'
+
+  // Behavioral interpretation
+  interpretation: string          // What this means practically
+  thresholdMeaning: string        // What crossing θ means
+  recommendation: string          // General guidance
+
+  // Risk profile
+  riskProfile: 'safe' | 'caution' | 'risk' | 'optimize'
+
+  // Visual
+  icon: string                    // Unicode symbol
+  color: string
+  fill: string
+}
+
+const curveShapeMetadata: Record<CurveType, CurveShapeMetadata> = {
+  plateau_up: {
+    name: 'Saturating Benefit',
+    shortName: 'SAT-BEN',
+    geometry: 'Concave Ascending → Plateau',
+    curvature: 'concave',
+    symmetry: 'right-asymmetric',
+    interpretation: 'Benefits increase up to a threshold, then level off. More is not better past θ.',
+    thresholdMeaning: 'Point of diminishing returns - you\'ve captured most of the benefit',
+    recommendation: 'Aim to reach θ, but don\'t stress about exceeding it',
+    riskProfile: 'safe',
+    icon: '📈→',
+    color: '#10B981',
+    fill: 'rgba(16, 185, 129, 0.15)',
+  },
+
+  plateau_down: {
+    name: 'Threshold Decay',
+    shortName: 'THR-DEC',
+    geometry: 'Plateau → Convex Descending',
+    curvature: 'convex',
+    symmetry: 'left-asymmetric',
+    interpretation: 'Outcome is stable until threshold, then declines rapidly. Stay below θ.',
+    thresholdMeaning: 'Critical tipping point - exceeding this triggers negative effects',
+    recommendation: 'Stay below θ with safety margin',
+    riskProfile: 'caution',
+    icon: '→📉',
+    color: '#EF4444',
+    fill: 'rgba(239, 68, 68, 0.15)',
+  },
+
+  v_min: {
+    name: 'Optimal Minimum',
+    shortName: 'OPT-MIN',
+    geometry: 'Convex Parabola (U-Shape)',
+    curvature: 'parabolic',
+    symmetry: 'symmetric',
+    interpretation: 'Both too little and too much are harmful. There\'s a "sweet spot" at θ.',
+    thresholdMeaning: 'Goldilocks point - the optimal balance between extremes',
+    recommendation: 'Target θ precisely; deviation in either direction hurts',
+    riskProfile: 'optimize',
+    icon: '∪',
+    color: '#06B6D4',
+    fill: 'rgba(6, 182, 212, 0.15)',
+  },
+
+  v_max: {
+    name: 'Optimal Peak',
+    shortName: 'OPT-PK',
+    geometry: 'Concave Parabola (Inverted U)',
+    curvature: 'parabolic',
+    symmetry: 'symmetric',
+    interpretation: 'Maximum benefit at θ, with diminishing returns on either side.',
+    thresholdMeaning: 'Peak performance point - this is where you want to be',
+    recommendation: 'Aim for θ; both under and over are suboptimal',
+    riskProfile: 'optimize',
+    icon: '∩',
+    color: '#8B5CF6',
+    fill: 'rgba(139, 92, 246, 0.15)',
+  },
+
+  linear: {
+    name: 'Linear Dose-Response',
+    shortName: 'LIN-DR',
+    geometry: 'Linear Monotonic',
+    curvature: 'linear',
+    symmetry: 'symmetric',
+    interpretation: 'Effect scales proportionally with dose. No threshold effects.',
+    thresholdMeaning: 'Reference point only - effects are continuous across the range',
+    recommendation: 'More (or less) directly translates to proportional change',
+    riskProfile: 'safe',
+    icon: '↗',
+    color: '#6B7280',
+    fill: 'rgba(107, 114, 128, 0.15)',
+  },
+}
+
+// Derive current status description
+function getStatusDescription(
+  curveType: CurveType,
+  status?: 'below_optimal' | 'at_optimal' | 'above_optimal' | 'below_threshold' | 'above_threshold'
+): { label: string; severity: 'good' | 'moderate' | 'poor'; advice: string } {
+  if (!status || status === 'at_optimal') {
+    return { label: 'At Optimal', severity: 'good', advice: 'Maintain current behavior' }
+  }
+
+  if (curveType === 'plateau_up') {
+    if (status === 'below_optimal') {
+      return { label: 'Below Saturation', severity: 'moderate', advice: 'Room to increase for more benefit' }
+    }
+    return { label: 'Above Saturation', severity: 'good', advice: 'At or past full benefit - no action needed' }
+  }
+
+  if (curveType === 'plateau_down') {
+    if (status === 'below_optimal') {
+      return { label: 'In Safe Zone', severity: 'good', advice: 'Well below threshold - maintain' }
+    }
+    return { label: 'Past Threshold', severity: 'poor', advice: 'Reduce to get back below θ' }
+  }
+
+  if (curveType === 'v_min' || curveType === 'v_max') {
+    if (status === 'below_optimal') {
+      return { label: 'Below Optimal', severity: 'moderate', advice: 'Increase toward θ' }
+    }
+    return { label: 'Above Optimal', severity: 'moderate', advice: 'Decrease toward θ' }
+  }
+
+  // Linear / threshold statuses — no clear optimal, show position relative to kink
+  if (status === 'below_threshold') {
+    return { label: 'Below θ', severity: 'moderate', advice: 'Below the threshold — effect differs above' }
+  }
+  if (status === 'above_threshold') {
+    return { label: 'Above θ', severity: 'moderate', advice: 'Above the threshold — effect differs below' }
+  }
+  return { label: status === 'below_optimal' ? 'Lower Range' : 'Higher Range', severity: 'moderate', advice: 'Adjust based on goals' }
+}
+
+// Color scheme for different curve types (legacy support)
+const curveColors = {
+  plateau_up: {
+    line: '#10B981',
+    fill: 'rgba(16, 185, 129, 0.1)',
+    threshold: '#10B981',
+  },
+  plateau_down: {
+    line: '#EF4444',
+    fill: 'rgba(239, 68, 68, 0.1)',
+    threshold: '#EF4444',
+  },
+  v_min: {
+    line: '#06B6D4',
+    fill: 'rgba(6, 182, 212, 0.1)',
+    threshold: '#06B6D4',
+  },
+  v_max: {
+    line: '#8B5CF6',
+    fill: 'rgba(139, 92, 246, 0.1)',
+    threshold: '#8B5CF6',
+  },
+  linear: {
+    line: '#6B7280',
+    fill: 'rgba(107, 114, 128, 0.1)',
+    threshold: '#6B7280',
+  },
+}
+
+// Generate SVG path for different curve types
+function generateCurvePath(
+  curveType: CurveType,
+  width: number,
+  height: number,
+  padding: number
+): string {
+  const w = width - padding * 2
+  const h = height - padding * 2
+  const startX = padding
+  const startY = height - padding
+  const endX = width - padding
+  const endY = padding
+  const midX = width / 2
+  const midY = height / 2
+
+  switch (curveType) {
+    case 'plateau_up':
+      // Rises then plateaus
+      return `M ${startX} ${startY}
+              Q ${startX + w * 0.3} ${startY - h * 0.3} ${midX} ${startY - h * 0.8}
+              L ${endX} ${startY - h * 0.8}`
+
+    case 'plateau_down':
+      // Flat then drops
+      return `M ${startX} ${endY + h * 0.2}
+              L ${midX} ${endY + h * 0.2}
+              Q ${midX + w * 0.2} ${endY + h * 0.3} ${endX} ${startY}`
+
+    case 'v_min':
+      // U-shaped (optimal minimum)
+      return `M ${startX} ${endY + h * 0.2}
+              Q ${startX + w * 0.25} ${startY - h * 0.1} ${midX} ${startY - h * 0.15}
+              Q ${midX + w * 0.25} ${startY - h * 0.1} ${endX} ${endY + h * 0.2}`
+
+    case 'v_max':
+      // Inverted U (optimal peak)
+      return `M ${startX} ${startY - h * 0.2}
+              Q ${startX + w * 0.25} ${endY + h * 0.1} ${midX} ${endY + h * 0.15}
+              Q ${midX + w * 0.25} ${endY + h * 0.1} ${endX} ${startY - h * 0.2}`
+
+    case 'linear':
+    default:
+      return `M ${startX} ${startY} L ${endX} ${endY}`
+  }
+}
+
+// Get the Y position for a given X value on the curve
+function getYPositionOnCurve(
+  curveType: CurveType,
+  xPercent: number,
+  height: number,
+  padding: number
+): number {
+  const h = height - padding * 2
+  const startY = height - padding
+  const endY = padding
+
+  switch (curveType) {
+    case 'plateau_up':
+      if (xPercent < 0.5) {
+        return startY - (xPercent * 2 * h * 0.8)
+      }
+      return startY - h * 0.8
+
+    case 'plateau_down':
+      if (xPercent < 0.5) {
+        return endY + h * 0.2
+      }
+      return endY + h * 0.2 + ((xPercent - 0.5) * 2 * h * 0.6)
+
+    case 'v_min':
+      const distFromCenter = Math.abs(xPercent - 0.5) * 2
+      return startY - h * 0.15 - (distFromCenter * h * 0.65)
+
+    case 'v_max':
+      const distFromPeak = Math.abs(xPercent - 0.5) * 2
+      return endY + h * 0.15 + (distFromPeak * h * 0.65)
+
+    default:
+      return startY - (xPercent * h)
+  }
+}
+
+export function DoseResponseCurve({
+  params,
+  width = 280,
+  height = 140,
+  showLabels = true,
+  showCurrentValue = true,
+  compact = false,
+  className,
+}: DoseResponseCurveProps) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  // Use fixed internal dimensions for SVG, scale via viewBox
+  const svgWidth = typeof width === 'number' ? width : 280
+  const svgHeight = height
+  const padding = compact ? 15 : 20
+
+  // Handle mouse move for cursor-following tooltip
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY })
+  }
+
+  // Calculate tooltip position with viewport boundary handling
+  const tooltipWidth = 240
+  const tooltipHeight = 200
+  const offset = 12
+
+  const tooltipX = typeof window !== 'undefined' && mousePos.x + offset + tooltipWidth > window.innerWidth
+    ? mousePos.x - tooltipWidth - offset
+    : mousePos.x + offset
+
+  const tooltipY = typeof window !== 'undefined' && mousePos.y + offset + tooltipHeight > window.innerHeight
+    ? mousePos.y - tooltipHeight - offset
+    : mousePos.y + offset
+
+  const colors = curveColors[params.curveType]
+  const shapeMeta = curveShapeMetadata[params.curveType]
+  const statusInfo = getStatusDescription(params.curveType, params.currentStatus)
+
+  // Calculate positions using svgWidth for internal calculations
+  const thetaXPercent = 0.5 // Threshold at center
+  const thetaX = padding + (svgWidth - padding * 2) * thetaXPercent
+  const thetaY = getYPositionOnCurve(params.curveType, thetaXPercent, svgHeight, padding)
+
+  // Calculate current value position if available
+  const currentXPercent = useMemo(() => {
+    if (params.currentValue === undefined) return null
+    const theta = params.theta.value
+    const range = theta * 0.6 // Assume range is ±60% of theta
+    const normalized = (params.currentValue - (theta - range)) / (range * 2)
+    return Math.max(0.05, Math.min(0.95, normalized))
+  }, [params.currentValue, params.theta.value])
+
+  const currentX = currentXPercent !== null
+    ? padding + (svgWidth - padding * 2) * currentXPercent
+    : null
+  const currentY = currentXPercent !== null
+    ? getYPositionOnCurve(params.curveType, currentXPercent, svgHeight, padding)
+    : null
+
+  const curvePath = generateCurvePath(params.curveType, svgWidth, svgHeight, padding)
+
+  // Risk profile colors
+  const riskColors = {
+    safe: { bg: 'bg-emerald-500', text: 'text-emerald-100' },
+    caution: { bg: 'bg-amber-500', text: 'text-amber-100' },
+    risk: { bg: 'bg-rose-500', text: 'text-rose-100' },
+    optimize: { bg: 'bg-violet-500', text: 'text-violet-100' },
+  }
+
+  const severityColors = {
+    good: 'text-emerald-400',
+    moderate: 'text-amber-400',
+    poor: 'text-rose-400',
+  }
+
+  return (
+    <div
+      className={`relative ${className || ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+    >
+      <svg
+        width={width === '100%' ? '100%' : svgWidth}
+        height={svgHeight}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        preserveAspectRatio="xMidYMid meet"
+        className="overflow-visible cursor-help"
+      >
+        {/* Background grid */}
+        <defs>
+          <pattern id={`grid-${params.source}`} width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E5E7EB" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect x={padding} y={padding} width={svgWidth - padding * 2} height={svgHeight - padding * 2} fill={`url(#grid-${params.source})`} />
+
+        {/* Axes */}
+        <line x1={padding} y1={svgHeight - padding} x2={svgWidth - padding} y2={svgHeight - padding} stroke="#D1D5DB" strokeWidth="1" />
+        <line x1={padding} y1={padding} x2={padding} y2={svgHeight - padding} stroke="#D1D5DB" strokeWidth="1" />
+
+        {/* Fill under curve */}
+        <path
+          d={`${curvePath} L ${svgWidth - padding} ${svgHeight - padding} L ${padding} ${svgHeight - padding} Z`}
+          fill={colors.fill}
+        />
+
+        {/* Main curve */}
+        <path
+          d={curvePath}
+          fill="none"
+          stroke={colors.line}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+
+        {/* Threshold line */}
+        <line
+          x1={thetaX}
+          y1={padding}
+          x2={thetaX}
+          y2={svgHeight - padding}
+          stroke={colors.threshold}
+          strokeWidth="1.5"
+          strokeDasharray="4 2"
+        />
+
+        {/* Threshold point */}
+        <circle cx={thetaX} cy={thetaY} r="6" fill={colors.threshold} />
+        <circle cx={thetaX} cy={thetaY} r="3" fill="white" />
+
+        {/* Threshold confidence interval */}
+        {!compact && (
+          <>
+            <rect
+              x={thetaX - 15}
+              y={svgHeight - padding + 5}
+              width={30}
+              height={4}
+              rx={2}
+              fill={colors.threshold}
+              opacity={0.3}
+            />
+          </>
+        )}
+
+        {/* Current value marker */}
+        {showCurrentValue && currentX !== null && currentY !== null && (
+          <>
+            <line
+              x1={currentX}
+              y1={currentY}
+              x2={currentX}
+              y2={svgHeight - padding}
+              stroke="#F59E0B"
+              strokeWidth="1"
+              strokeDasharray="2 2"
+            />
+            <circle cx={currentX} cy={currentY} r="5" fill="#F59E0B" />
+            <circle cx={currentX} cy={currentY} r="2" fill="white" />
+          </>
+        )}
+
+        {/* Labels - moved inside SVG as overlays */}
+        {showLabels && !compact && (
+          <>
+            {/* Current value label */}
+            {currentX !== null && (
+              <text x={currentX} y={padding - 5} textAnchor="middle" className="text-[10px] fill-amber-600 font-bold">
+                You: {params.currentValue}
+              </text>
+            )}
+          </>
+        )}
+
+        {/* Curve type badge - inline in SVG for better space usage */}
+        {!compact && (
+          <g>
+            <rect
+              x={svgWidth - padding - 52}
+              y={padding + 2}
+              width={50}
+              height={16}
+              fill={shapeMeta.fill}
+              stroke={shapeMeta.color}
+              strokeWidth="1"
+            />
+            <text
+              x={svgWidth - padding - 27}
+              y={padding + 13}
+              textAnchor="middle"
+              className="text-[9px] font-bold uppercase"
+              fill={shapeMeta.color}
+            >
+              {shapeMeta.icon} {shapeMeta.shortName}
+            </text>
+          </g>
+        )}
+
+        {/* Theta label - positioned below threshold point */}
+        {showLabels && !compact && (
+          <text x={thetaX} y={svgHeight - 4} textAnchor="middle" className="text-[10px] fill-gray-600 font-bold">
+            θ={params.theta.displayValue}
+          </text>
+        )}
+      </svg>
+
+      {/* Hover Tooltip - Compact cursor-following tooltip (200x120px max) */}
+      {isHovered && !compact && (
+        <div
+          className="fixed z-[9999] bg-black text-white text-left border pointer-events-none shadow-lg"
+          style={{
+            left: tooltipX,
+            top: tooltipY,
+            width: tooltipWidth,
+            maxHeight: tooltipHeight,
+            borderColor: shapeMeta.color,
+          }}
+        >
+          {/* Header - Colored bar with name */}
+          <div
+            className="px-2 py-1 flex items-center justify-between"
+            style={{ backgroundColor: shapeMeta.color }}
+          >
+            <span className="text-[11px] font-black uppercase tracking-tight truncate">
+              {shapeMeta.icon} {shapeMeta.name}
+            </span>
+            <span className="text-[9px] font-mono opacity-80 ml-1 flex-shrink-0">{shapeMeta.shortName}</span>
+          </div>
+
+          {/* Content - Expanded for better readability */}
+          <div className="p-2.5 space-y-2">
+            {/* Geometry & Curvature */}
+            <div className="text-[10px] text-gray-400">
+              <span className="capitalize">{shapeMeta.curvature}</span>
+              <span className="mx-1">·</span>
+              <span>{shapeMeta.geometry}</span>
+            </div>
+
+            {/* Full interpretation */}
+            <p className="text-[11px] text-gray-300 leading-relaxed">
+              {shapeMeta.interpretation}
+            </p>
+
+            {/* Threshold meaning */}
+            <div className="text-[10px] text-gray-400 pt-1 border-t border-white/10">
+              <span className="text-gray-500 uppercase tracking-wider text-[9px]">At θ:</span>
+              <span className="ml-1">{shapeMeta.thresholdMeaning}</span>
+            </div>
+
+            {/* Parameters row */}
+            <div className="flex items-center gap-2 text-[10px] font-mono pt-1 border-t border-white/20">
+              <span className="text-white font-bold">θ={params.theta.displayValue}</span>
+              <span className="text-gray-500">n={params.observations}</span>
+              <span className={`ml-auto px-1 py-0.5 text-[9px] font-bold uppercase ${riskColors[shapeMeta.riskProfile].bg} ${riskColors[shapeMeta.riskProfile].text}`}>
+                {shapeMeta.riskProfile}
+              </span>
+            </div>
+
+            {/* Status (if available) */}
+            {params.currentStatus && (
+              <div className="flex items-center gap-1 text-[10px]">
+                <span className={`font-bold ${severityColors[statusInfo.severity]}`}>{statusInfo.label}</span>
+                {params.currentValue !== undefined && (
+                  <span className="text-gray-500">({params.currentValue})</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Compact version for lists
+export function DoseResponseCurveCompact({ params }: { params: CausalParameters }) {
+  return <DoseResponseCurve params={params} width={120} height={60} showLabels={false} compact />
+}
+
+// Effect size display component
+interface EffectSizeDisplayProps {
+  params: CausalParameters
+  variant?: 'full' | 'compact'
+}
+
+export function EffectSizeDisplay({ params, variant = 'full' }: EffectSizeDisplayProps) {
+  const isVShape = params.curveType === 'v_min' || params.curveType === 'v_max'
+
+  if (variant === 'compact') {
+    return (
+      <div className="flex items-center gap-2 text-sm">
+        <span className="font-mono font-bold text-black">θ={params.theta.displayValue}</span>
+        <span className="text-gray-400">|</span>
+        <span className={`font-mono font-bold ${params.betaAbove.value < 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
+          β={params.betaAbove.description}
+        </span>
+      </div>
+    )
+  }
+
+  // Clean design with subtle borders for internal elements
+  return (
+    <div className="grid grid-cols-2 gap-0">
+      <div className={`p-3 border border-r-0 ${isVShape ? 'bg-sky-50 border-sky-200' : 'bg-emerald-50 border-emerald-200'}`}>
+        <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+          {isVShape ? 'Below θ' : 'Below Threshold'}
+        </div>
+        <div className={`font-mono font-black text-lg ${
+          params.betaBelow.value > 0 ? 'text-emerald-600' : 'text-rose-600'
+        }`}>
+          {params.betaBelow.description}
+        </div>
+      </div>
+      <div className={`p-3 border ${isVShape ? 'bg-violet-50 border-violet-200' : 'bg-rose-50 border-rose-200'}`}>
+        <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+          {isVShape ? 'Above θ' : 'Above Threshold'}
+        </div>
+        <div className={`font-mono font-black text-lg ${
+          params.betaAbove.value > 0 ? 'text-emerald-600' : 'text-rose-600'
+        }`}>
+          {params.betaAbove.description}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Evidence bar component
+interface EvidenceBarProps {
+  personalPct: number
+  populationPct: number
+  observations: number
+  completePct: number
+}
+
+export function EvidenceBar({ personalPct, populationPct, observations, completePct }: EvidenceBarProps) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden flex">
+          <div
+            className="h-full bg-primary-500"
+            style={{ width: `${personalPct * 100}%` }}
+            title={`${Math.round(personalPct * 100)}% your data`}
+          />
+          <div
+            className="h-full bg-gray-300"
+            style={{ width: `${populationPct * 100}%` }}
+            title={`${Math.round(populationPct * 100)}% population`}
+          />
+        </div>
+      </div>
+      <div className="flex items-center justify-between text-xs text-gray-500">
+        <span>{Math.round(personalPct * 100)}% your data, {Math.round(populationPct * 100)}% population</span>
+        <span>{observations} obs · {completePct}% complete</span>
+      </div>
+    </div>
+  )
+}
+
+export default DoseResponseCurve
