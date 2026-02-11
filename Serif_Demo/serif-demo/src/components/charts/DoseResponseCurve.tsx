@@ -11,6 +11,51 @@ interface DoseResponseCurveProps {
   className?: string
 }
 
+// Convert snake_case variable names to readable axis labels
+function formatVariableLabel(varName: string): string {
+  const labelMap: Record<string, string> = {
+    sleep_efficiency_pct: 'Sleep Efficiency (%)',
+    deep_sleep_min: 'Deep Sleep (min)',
+    resting_hr: 'Resting HR (bpm)',
+    resting_hr_7d_mean: 'Resting HR 7d (bpm)',
+    hrv_daily_mean: 'HRV (ms)',
+    hrv_7d_mean: 'HRV 7d (ms)',
+    nlr: 'NLR',
+    hscrp_smoothed: 'hsCRP (mg/L)',
+    cortisol_smoothed: 'Cortisol',
+    vo2_peak_smoothed: 'VO2 Peak',
+    iron_total_smoothed: 'Iron',
+  }
+  if (labelMap[varName]) return labelMap[varName]
+  // Fallback: replace underscores, title-case
+  return varName
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .replace(/ Pct$/, ' (%)')
+    .replace(/ Min$/, ' (min)')
+    .replace(/ Hrs?$/, ' (hr)')
+}
+
+function formatSourceLabel(varName: string): string {
+  const labelMap: Record<string, string> = {
+    travel_load: 'Jet Lag Score',
+    acwr: 'ACWR',
+    sleep_duration_hrs: 'Sleep Duration (hr)',
+    omega3_index_derived: 'Omega-3 Index (%)',
+    last_workout_end_hour: 'Last Workout Hour',
+    bedtime_hour: 'Bedtime Hour',
+    caffeine_mg: 'Caffeine (mg)',
+    training_load_7d: 'Training Load 7d',
+    alcohol_units: 'Alcohol (units)',
+  }
+  if (labelMap[varName]) return labelMap[varName]
+  return varName
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .replace(/ Pct$/, ' (%)')
+    .replace(/ Hrs?$/, ' (hr)')
+}
+
 // ============================================================================
 // CURVE SHAPE TAXONOMY
 // Comprehensive naming system for dose-response curve shapes
@@ -187,11 +232,14 @@ const curveColors = {
 }
 
 // Generate SVG path for different curve types
+// betaBelow/betaAbove are used for linear curves to determine slope direction
 function generateCurvePath(
   curveType: CurveType,
   width: number,
   height: number,
-  padding: number
+  padding: number,
+  betaBelow?: number,
+  betaAbove?: number,
 ): string {
   const w = width - padding * 2
   const h = height - padding * 2
@@ -200,7 +248,6 @@ function generateCurvePath(
   const endX = width - padding
   const endY = padding
   const midX = width / 2
-  const midY = height / 2
 
   switch (curveType) {
     case 'plateau_up':
@@ -228,8 +275,20 @@ function generateCurvePath(
               Q ${midX + w * 0.25} ${endY + h * 0.1} ${endX} ${startY - h * 0.2}`
 
     case 'linear':
-    default:
+    default: {
+      // Use the dominant beta sign to determine slope direction
+      const avgBeta = (betaBelow !== undefined && betaAbove !== undefined)
+        ? (betaBelow + betaAbove) / 2
+        : undefined
+      // Positive beta → y increases as x increases → line goes up (startY → endY)
+      // Negative beta → y decreases as x increases → line goes down (endY → startY)
+      if (avgBeta !== undefined && avgBeta < 0) {
+        // Negative slope: high at left, low at right
+        return `M ${startX} ${endY} L ${endX} ${startY}`
+      }
+      // Positive slope: low at left, high at right (default)
       return `M ${startX} ${startY} L ${endX} ${endY}`
+    }
   }
 }
 
@@ -238,7 +297,9 @@ function getYPositionOnCurve(
   curveType: CurveType,
   xPercent: number,
   height: number,
-  padding: number
+  padding: number,
+  betaBelow?: number,
+  betaAbove?: number,
 ): number {
   const h = height - padding * 2
   const startY = height - padding
@@ -257,23 +318,34 @@ function getYPositionOnCurve(
       }
       return endY + h * 0.2 + ((xPercent - 0.5) * 2 * h * 0.6)
 
-    case 'v_min':
+    case 'v_min': {
       const distFromCenter = Math.abs(xPercent - 0.5) * 2
       return startY - h * 0.15 - (distFromCenter * h * 0.65)
+    }
 
-    case 'v_max':
+    case 'v_max': {
       const distFromPeak = Math.abs(xPercent - 0.5) * 2
       return endY + h * 0.15 + (distFromPeak * h * 0.65)
+    }
 
-    default:
+    default: {
+      const avgBeta = (betaBelow !== undefined && betaAbove !== undefined)
+        ? (betaBelow + betaAbove) / 2
+        : undefined
+      if (avgBeta !== undefined && avgBeta < 0) {
+        // Negative slope: high at left (endY), low at right (startY)
+        return endY + (xPercent * h)
+      }
+      // Positive slope: low at left (startY), high at right (endY)
       return startY - (xPercent * h)
+    }
   }
 }
 
 export function DoseResponseCurve({
   params,
   width = 280,
-  height = 140,
+  height = 200,
   showLabels = true,
   showCurrentValue = true,
   compact = false,
@@ -282,10 +354,18 @@ export function DoseResponseCurve({
   const [isHovered, setIsHovered] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
-  // Use fixed internal dimensions for SVG, scale via viewBox
-  const svgWidth = typeof width === 'number' ? width : 280
-  const svgHeight = height
-  const padding = compact ? 15 : 20
+  // Extra space for axis labels (Y-axis on left, X-axis on bottom)
+  const labelPadLeft = compact ? 0 : 14
+  const labelPadBottom = compact ? 0 : 22
+
+  // Internal chart dimensions (used by generateCurvePath / getYPositionOnCurve)
+  const chartW = typeof width === 'number' ? width : 340
+  const chartH = height
+  const padding = compact ? 15 : 24
+
+  // Total SVG dimensions include room for axis labels
+  const svgWidth = chartW + labelPadLeft
+  const svgHeight = chartH + labelPadBottom
 
   // Handle mouse move for cursor-following tooltip
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -309,10 +389,19 @@ export function DoseResponseCurve({
   const shapeMeta = curveShapeMetadata[params.curveType]
   const statusInfo = getStatusDescription(params.curveType, params.currentStatus)
 
-  // Calculate positions using svgWidth for internal calculations
+  // Derive axis labels from params
+  const yLabel = formatVariableLabel(params.target)
+  const xLabel = formatSourceLabel(params.source)
+
+  // Beta values for slope-aware rendering
+  const bBelow = params.betaBelow.value
+  const bAbove = params.betaAbove.value
+
+  // All chart element positions are computed in the chart's own coordinate system
+  // (0,0) to (chartW, chartH), offset into the SVG via <g transform>
   const thetaXPercent = 0.5 // Threshold at center
-  const thetaX = padding + (svgWidth - padding * 2) * thetaXPercent
-  const thetaY = getYPositionOnCurve(params.curveType, thetaXPercent, svgHeight, padding)
+  const thetaX = padding + (chartW - padding * 2) * thetaXPercent
+  const thetaY = getYPositionOnCurve(params.curveType, thetaXPercent, chartH, padding, bBelow, bAbove)
 
   // Calculate current value position if available
   const currentXPercent = useMemo(() => {
@@ -324,13 +413,13 @@ export function DoseResponseCurve({
   }, [params.currentValue, params.theta.value])
 
   const currentX = currentXPercent !== null
-    ? padding + (svgWidth - padding * 2) * currentXPercent
+    ? padding + (chartW - padding * 2) * currentXPercent
     : null
   const currentY = currentXPercent !== null
-    ? getYPositionOnCurve(params.curveType, currentXPercent, svgHeight, padding)
+    ? getYPositionOnCurve(params.curveType, currentXPercent, chartH, padding, bBelow, bAbove)
     : null
 
-  const curvePath = generateCurvePath(params.curveType, svgWidth, svgHeight, padding)
+  const curvePath = generateCurvePath(params.curveType, chartW, chartH, padding, bBelow, bAbove)
 
   // Risk profile colors
   const riskColors = {
@@ -360,100 +449,123 @@ export function DoseResponseCurve({
         preserveAspectRatio="xMidYMid meet"
         className="overflow-visible cursor-help"
       >
-        {/* Background grid */}
         <defs>
           <pattern id={`grid-${params.source}`} width="20" height="20" patternUnits="userSpaceOnUse">
             <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E5E7EB" strokeWidth="0.5" />
           </pattern>
         </defs>
-        <rect x={padding} y={padding} width={svgWidth - padding * 2} height={svgHeight - padding * 2} fill={`url(#grid-${params.source})`} />
 
-        {/* Axes */}
-        <line x1={padding} y1={svgHeight - padding} x2={svgWidth - padding} y2={svgHeight - padding} stroke="#D1D5DB" strokeWidth="1" />
-        <line x1={padding} y1={padding} x2={padding} y2={svgHeight - padding} stroke="#D1D5DB" strokeWidth="1" />
+        {/* Y-axis label (rotated, left side) */}
+        {showLabels && !compact && (
+          <text
+            x={10}
+            y={chartH / 2}
+            textAnchor="middle"
+            dominantBaseline="central"
+            transform={`rotate(-90, 10, ${chartH / 2})`}
+            className="fill-slate-500"
+            style={{ fontSize: '10px', fontWeight: 600 }}
+          >
+            {yLabel}
+          </text>
+        )}
 
-        {/* Fill under curve */}
-        <path
-          d={`${curvePath} L ${svgWidth - padding} ${svgHeight - padding} L ${padding} ${svgHeight - padding} Z`}
-          fill={colors.fill}
-        />
+        {/* X-axis label (bottom center) */}
+        {showLabels && !compact && (
+          <text
+            x={labelPadLeft + chartW / 2}
+            y={svgHeight - 3}
+            textAnchor="middle"
+            className="fill-slate-500"
+            style={{ fontSize: '10px', fontWeight: 600 }}
+          >
+            {xLabel}
+          </text>
+        )}
 
-        {/* Main curve */}
-        <path
-          d={curvePath}
-          fill="none"
-          stroke={colors.line}
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
+        {/* Chart area shifted right by labelPadLeft */}
+        <g transform={`translate(${labelPadLeft}, 0)`}>
+          {/* Background grid */}
+          <rect x={padding} y={padding} width={chartW - padding * 2} height={chartH - padding * 2} fill={`url(#grid-${params.source})`} />
 
-        {/* Threshold line */}
-        <line
-          x1={thetaX}
-          y1={padding}
-          x2={thetaX}
-          y2={svgHeight - padding}
-          stroke={colors.threshold}
-          strokeWidth="1.5"
-          strokeDasharray="4 2"
-        />
+          {/* Axes */}
+          <line x1={padding} y1={chartH - padding} x2={chartW - padding} y2={chartH - padding} stroke="#D1D5DB" strokeWidth="1" />
+          <line x1={padding} y1={padding} x2={padding} y2={chartH - padding} stroke="#D1D5DB" strokeWidth="1" />
 
-        {/* Threshold point */}
-        <circle cx={thetaX} cy={thetaY} r="7" fill={colors.threshold} />
-        <circle cx={thetaX} cy={thetaY} r="3.5" fill="white" />
+          {/* Fill under curve */}
+          <path
+            d={`${curvePath} L ${chartW - padding} ${chartH - padding} L ${padding} ${chartH - padding} Z`}
+            fill={colors.fill}
+          />
 
-        {/* Threshold confidence interval */}
-        {!compact && (
-          <>
+          {/* Main curve */}
+          <path
+            d={curvePath}
+            fill="none"
+            stroke={colors.line}
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+
+          {/* Threshold line */}
+          <line
+            x1={thetaX}
+            y1={padding}
+            x2={thetaX}
+            y2={chartH - padding}
+            stroke={colors.threshold}
+            strokeWidth="1.5"
+            strokeDasharray="4 2"
+          />
+
+          {/* Threshold point */}
+          <circle cx={thetaX} cy={thetaY} r="7" fill={colors.threshold} />
+          <circle cx={thetaX} cy={thetaY} r="3.5" fill="white" />
+
+          {/* Threshold confidence interval */}
+          {!compact && (
             <rect
               x={thetaX - 15}
-              y={svgHeight - padding + 5}
+              y={chartH - padding + 5}
               width={30}
               height={4}
               rx={2}
               fill={colors.threshold}
               opacity={0.3}
             />
-          </>
-        )}
+          )}
 
-        {/* Current value marker */}
-        {showCurrentValue && currentX !== null && currentY !== null && (
-          <>
-            <line
-              x1={currentX}
-              y1={currentY}
-              x2={currentX}
-              y2={svgHeight - padding}
-              stroke="#F59E0B"
-              strokeWidth="1"
-              strokeDasharray="2 2"
-            />
-            <circle cx={currentX} cy={currentY} r="5" fill="#F59E0B" />
-            <circle cx={currentX} cy={currentY} r="2" fill="white" />
-          </>
-        )}
+          {/* Current value marker */}
+          {showCurrentValue && currentX !== null && currentY !== null && (
+            <>
+              <line
+                x1={currentX}
+                y1={currentY}
+                x2={currentX}
+                y2={chartH - padding}
+                stroke="#F59E0B"
+                strokeWidth="1"
+                strokeDasharray="2 2"
+              />
+              <circle cx={currentX} cy={currentY} r="5" fill="#F59E0B" />
+              <circle cx={currentX} cy={currentY} r="2" fill="white" />
+            </>
+          )}
 
-        {/* Labels - moved inside SVG as overlays */}
-        {showLabels && !compact && (
-          <>
-            {/* Current value label */}
-            {currentX !== null && (
-              <text x={currentX} y={padding - 5} textAnchor="middle" className="text-[10px] fill-amber-600 font-bold">
-                You: {params.currentValue}
-              </text>
-            )}
-          </>
-        )}
+          {/* Current value label */}
+          {showLabels && !compact && currentX !== null && (
+            <text x={currentX} y={padding - 5} textAnchor="middle" className="fill-amber-600" style={{ fontSize: '10px', fontWeight: 700 }}>
+              You: {params.currentValue}
+            </text>
+          )}
 
-        {/* Curve type badge removed — too busy */}
-
-        {/* Theta label - positioned below threshold point */}
-        {showLabels && !compact && (
-          <text x={thetaX} y={svgHeight - 4} textAnchor="middle" className="text-[10px] fill-gray-600 font-bold">
-            θ={params.theta.displayValue}
-          </text>
-        )}
+          {/* Theta label - positioned below threshold point */}
+          {showLabels && !compact && (
+            <text x={thetaX} y={chartH - 4} textAnchor="middle" className="fill-gray-600" style={{ fontSize: '10px', fontWeight: 700 }}>
+              θ={params.theta.displayValue}
+            </text>
+          )}
+        </g>
       </svg>
 
       {/* Hover Tooltip - Compact cursor-following tooltip (200x120px max) */}

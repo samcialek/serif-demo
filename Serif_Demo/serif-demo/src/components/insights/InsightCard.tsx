@@ -411,11 +411,11 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
             {hasCausalParams && variant === 'detailed' && (
               <div className="mt-5">
                 <h4 className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-2">Dose-Response Curve</h4>
-                <div className="bg-slate-50/50 rounded-lg p-3">
+                <div className="bg-slate-50/50 rounded-lg p-4">
                   <DoseResponseCurve
                     params={insight.causalParams!}
                     width="100%"
-                    height={160}
+                    height={200}
                     showCurrentValue={showCurrentPosition}
                   />
                 </div>
