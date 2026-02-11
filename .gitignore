@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+deploy/
+
+# Sensitive health data — NEVER commit
+Oron_Akek_Data/
+
+# Root-level personal documents (resumes, meeting prep, workshop submissions, logos)
+/*.pdf
+/*.doc
+/*.docx
+/*.png
+/*.jpg
+/*.txt
+/*.html
+/*.json
+/.claude/
+/*.md
+/_build_notes.py
+/extract_pdf.py
+
+# Non-code files in Serif_Demo/ root
+/Serif_Demo/*.pdf
+/Serif_Demo/*.png
+/Serif_Demo/*.md
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp files
+nul
+tmpclaude-*
+~$*
+
+# Vite cache
+.vite/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/

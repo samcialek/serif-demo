@@ -1,0 +1,1283 @@
+Loading existing timeline: C:\Users\samci\Downloads\Serif_Demo\inference_engine\output_data\oron_daily_timeline.csv
+  Shape: (4001, 234)
+Scanning 234 columns against 65 mechanisms...
+  [OK] Running Volume -> Iron                     dose=daily_run_km                   resp=iron_total_smoothed       n=  452 window=28d/sum
+  [OK] Running Volume -> Ferritin                 dose=daily_run_km                   resp=ferritin_smoothed         n=  452 window=28d/sum
+  [OK] Running Volume -> Hemoglobin               dose=daily_run_km                   resp=hemoglobin_smoothed       n=  618 window=28d/sum
+  [OK] Training Hours -> Testosterone             dose=daily_duration_min             resp=testosterone_smoothed     n=  830 window=28d/sum
+  [OK] Training Hours -> Cortisol                 dose=daily_duration_min             resp=cortisol_smoothed         n=  452 window=28d/sum
+  [OK] Zone 2 Volume -> Triglycerides             dose=daily_zone2_min                resp=triglycerides_smoothed    n=  618 window=28d/sum
+  [OK] Zone 2 Volume -> HDL                       dose=daily_zone2_min                resp=hdl_smoothed              n=  618 window=28d/sum
+  [OK] Zone 2 Volume -> LDL                       dose=daily_zone2_min                resp=ldl_smoothed              n=  618 window=28d/sum
+  [OK] ACWR -> Inflammation                       dose=acwr                           resp=hscrp_smoothed            n=  618 window=1d/last
+  [OK] ACWR -> Resting HR Trend                   dose=acwr                           resp=resting_hr_7d_mean        n= 2400 window=1d/last
+  [OK] Training Consistency -> VO2peak            dose=training_consistency           resp=vo2_peak_smoothed         n= 1718 window=1d/last
+  [OK] Ferritin -> VO2peak                        dose=ferritin_smoothed              resp=vo2_peak_smoothed         n=  452 window=1d/last
+  [OK] Workout Time -> Sleep Efficiency           dose=last_workout_end_hour          resp=sleep_efficiency_pct      n= 1181 window=1d/last
+  [OK] Bedtime -> Sleep Quality                   dose=bedtime_hour                   resp=sleep_quality_score       n= 1181 window=1d/last
+  [OK] Bedtime -> Deep Sleep                      dose=bedtime_hour                   resp=deep_sleep_min            n= 1136 window=1d/last
+  [OK] Sleep Duration -> Next-Day HRV             dose=sleep_duration_hrs             resp=hrv_daily_mean            n= 2235 window=1d/last
+  [OK] Sleep Debt -> Resting HR                   dose=sleep_debt_14d                 resp=resting_hr                n= 1181 window=1d/last
+  [OK] Daily Training Load -> Next-Day HRV        dose=daily_trimp                    resp=hrv_daily_mean            n= 2391 window=1d/sum
+  [OK] Daily Training Load -> Next-Day Resting HR dose=daily_trimp                    resp=resting_hr                n= 2371 window=1d/sum
+  [OK] Daily Steps -> Sleep Efficiency            dose=steps                          resp=sleep_efficiency_pct      n= 1181 window=1d/sum
+  [OK] Active Energy -> Deep Sleep                dose=active_energy_kcal             resp=deep_sleep_min            n= 1136 window=1d/sum
+  [OK] Weekly Volume -> HRV Baseline              dose=daily_run_km                   resp=hrv_7d_mean               n= 2401 window=7d/sum
+  [OK] Travel Load -> Sleep Efficiency            dose=travel_load                    resp=sleep_efficiency_pct      n= 1181 window=1d/last
+  [OK] Travel Load -> Daily HRV                   dose=travel_load                    resp=hrv_daily_mean            n= 2384 window=1d/last
+  [OK] Travel Load -> Resting HR                  dose=travel_load                    resp=resting_hr                n= 2364 window=1d/last
+  [OK] Training Volume -> Body Fat                dose=daily_duration_min             resp=body_fat_pct              n=  160 window=28d/sum
+  [OK] Daily Activity -> Body Mass                dose=steps                          resp=body_mass_kg              n=  171 window=28d/mean
+  [OK] Running Volume -> RBC                      dose=daily_run_km                   resp=rbc_smoothed              n=  618 window=28d/sum
+  [OK] Running Volume -> MCV                      dose=daily_run_km                   resp=mcv_smoothed              n=  618 window=28d/sum
+  [OK] Running Volume -> RDW                      dose=daily_run_km                   resp=rdw_smoothed              n=  618 window=28d/sum
+  [OK] Training Hours -> AST                      dose=daily_duration_min             resp=ast_smoothed              n=  618 window=28d/sum
+  [OK] Training Hours -> ALT                      dose=daily_duration_min             resp=alt_smoothed              n=  618 window=28d/sum
+  [OK] Zone 2 Volume -> ApoB                      dose=daily_zone2_min                resp=apob_smoothed             n=  452 window=28d/sum
+  [OK] Zone 2 Volume -> Non-HDL Cholesterol       dose=daily_zone2_min                resp=non_hdl_cholesterol_smoothed n=  618 window=28d/sum
+  [OK] Zone 2 Volume -> Total Cholesterol         dose=daily_zone2_min                resp=total_cholesterol_smoothed n=  618 window=28d/sum
+  [OK] Training Hours -> Glucose                  dose=daily_duration_min             resp=glucose_smoothed          n=  618 window=28d/sum
+  [OK] Training Hours -> Insulin                  dose=daily_duration_min             resp=insulin_smoothed          n=  618 window=28d/sum
+  [OK] Training Hours -> Uric Acid                dose=daily_duration_min             resp=uric_acid_smoothed        n=  452 window=28d/sum
+  [OK] ACWR -> White Blood Cells                  dose=acwr                           resp=wbc_smoothed              n=  618 window=1d/last
+  [OK] ACWR -> Neutrophil-Lymphocyte Ratio        dose=acwr                           resp=nlr                       n=  618 window=1d/last
+  [OK] Running Volume -> Zinc                     dose=daily_run_km                   resp=zinc_smoothed             n=  830 window=28d/sum
+  [OK] Running Volume -> Magnesium                dose=daily_run_km                   resp=magnesium_rbc_smoothed    n=  452 window=28d/sum
+  [OK] Training Hours -> DHEA-S                   dose=daily_duration_min             resp=dhea_s_smoothed           n=  830 window=28d/sum
+  [OK] Training Hours -> SHBG                     dose=daily_duration_min             resp=shbg_smoothed             n=  830 window=28d/sum
+  [OK] Training Hours -> Homocysteine             dose=daily_duration_min             resp=homocysteine_smoothed     n=  830 window=28d/sum
+  [OK] Training Hours -> Creatinine               dose=daily_duration_min             resp=creatinine_smoothed       n=  618 window=28d/sum
+  [OK] Training Hours -> Estradiol                dose=daily_duration_min             resp=estradiol_smoothed        n=  830 window=28d/sum
+  [OK] Training Hours -> Platelet Count           dose=daily_duration_min             resp=platelets_smoothed        n=  618 window=28d/sum
+  [OK] Training Hours -> Albumin                  dose=daily_duration_min             resp=albumin_smoothed          n=  618 window=28d/sum
+  [OK] Sleep Duration -> Cortisol                 dose=sleep_duration_hrs             resp=cortisol_smoothed         n=  452 window=28d/mean
+  [OK] Sleep Duration -> Testosterone             dose=sleep_duration_hrs             resp=testosterone_smoothed     n=  830 window=28d/mean
+  [OK] Sleep Duration -> Glucose                  dose=sleep_duration_hrs             resp=glucose_smoothed          n=  618 window=28d/mean
+  [OK] Sleep Duration -> WBC                      dose=sleep_duration_hrs             resp=wbc_smoothed              n=  618 window=28d/mean
+  [OK] Iron Saturation -> Hemoglobin              dose=iron_saturation_pct_smoothed   resp=hemoglobin_smoothed       n=  452 window=1d/last
+  [OK] Vitamin D -> Testosterone                  dose=vitamin_d_smoothed             resp=testosterone_smoothed     n=  452 window=1d/last
+  [OK] Omega-3 Index -> hsCRP                     dose=omega3_index_derived           resp=hscrp_smoothed            n=  618 window=1d/last
+  [OK] Ferritin -> RBC                            dose=ferritin_smoothed              resp=rbc_smoothed              n=  452 window=1d/last
+  [OK] Ferritin -> Hemoglobin                     dose=ferritin_smoothed              resp=hemoglobin_smoothed       n=  452 window=1d/last
+  [OK] Homocysteine -> hsCRP                      dose=homocysteine_smoothed          resp=hscrp_smoothed            n=  618 window=1d/last
+  [OK] Dietary Protein -> Body Fat                dose=dietary_protein_g              resp=body_fat_pct              n=   28 window=28d/mean
+  [OK] Dietary Energy -> Body Mass                dose=dietary_energy_kcal            resp=body_mass_kg              n=   29 window=28d/mean
+  [OK] Travel Load -> NLR                         dose=travel_load                    resp=nlr                       n=  611 window=1d/last
+  [OK] Travel Load -> Deep Sleep                  dose=travel_load                    resp=deep_sleep_min            n= 1136 window=1d/last
+
+Discovery summary:
+  Testable edges:    63
+  No dose data:      1
+    - B12 -> Homocysteine
+  No response data:  1
+    - Training Hours -> HbA1c
+  Insufficient data: 0
+
+Computing backdoor adjustment sets...
+============================================================
+Computing backdoor adjustment sets
+============================================================
+
+DAG: 73 nodes, 100 edges
+  Observable: 64
+  Latent:     9
+
+  Running Volume -> Iron
+    running_volume -> iron_total
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+    Frontdoor: running_volume -> ground_contacts -> iron_total
+
+  Running Volume -> Ferritin
+    running_volume -> ferritin
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+    Frontdoor: running_volume -> iron_total -> ferritin
+    Frontdoor: running_volume -> ground_contacts -> iron_total -> ferritin
+
+  Running Volume -> Hemoglobin
+    running_volume -> hemoglobin
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+    Frontdoor: running_volume -> iron_total -> ferritin -> hemoglobin
+    Frontdoor: running_volume -> ferritin -> hemoglobin
+    Frontdoor: running_volume -> ground_contacts -> iron_total -> ferritin -> hemoglobin
+
+  Training Hours -> Testosterone
+    training_volume -> testosterone
+    Backdoor: adjust on ['is_weekend', 'season']
+    Reason: Backdoor requires conditioning on ['is_weekend', 'season']. Found 1 valid 2-variable sets.
+
+  Training Hours -> Cortisol
+    training_volume -> cortisol
+    Backdoor: adjust on ['sleep_duration_hrs']
+    Reason: Backdoor blocked by conditioning on ['sleep_duration']. Found 1 valid single-variable sets.
+
+  Zone 2 Volume -> Triglycerides
+    zone2_volume -> triglycerides
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Zone 2 Volume -> HDL
+    zone2_volume -> hdl
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Zone 2 Volume -> LDL
+    zone2_volume -> ldl
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  ACWR -> Inflammation
+    acwr -> hscrp
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  ACWR -> Resting HR Trend
+    acwr -> resting_hr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Consistency -> VO2peak
+    training_consistency -> vo2_peak
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Ferritin -> VO2peak
+    ferritin -> vo2_peak
+    Backdoor: adjust on ['daily_run_km']
+    Reason: Backdoor blocked by conditioning on ['running_volume']. Found 1 valid single-variable sets.
+
+  Workout Time -> Sleep Efficiency
+    workout_time -> sleep_efficiency
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Bedtime -> Sleep Quality
+    bedtime -> sleep_quality
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Bedtime -> Deep Sleep
+    bedtime -> deep_sleep
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Sleep Duration -> Next-Day HRV
+    sleep_duration -> hrv_daily
+    Backdoor: adjust on ['is_weekend']
+    Reason: Backdoor blocked by conditioning on ['is_weekend']. Found 2 valid single-variable sets.
+
+  Sleep Debt -> Resting HR
+    sleep_debt -> resting_hr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Daily Training Load -> Next-Day HRV
+    training_load -> hrv_daily
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Daily Training Load -> Next-Day Resting HR
+    training_load -> resting_hr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Daily Steps -> Sleep Efficiency
+    steps -> sleep_efficiency
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Active Energy -> Deep Sleep
+    active_energy -> deep_sleep
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Weekly Volume -> HRV Baseline
+    running_volume -> hrv_7d_mean
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Travel Load -> Sleep Efficiency
+    travel_load -> sleep_efficiency
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Travel Load -> Daily HRV
+    travel_load -> hrv_daily
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Travel Load -> Resting HR
+    travel_load -> resting_hr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Volume -> Body Fat
+    training_volume -> body_fat_pct
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Daily Activity -> Body Mass
+    steps -> body_mass
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Running Volume -> RBC
+    running_volume -> rbc
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+    Frontdoor: running_volume -> iron_total -> ferritin -> rbc
+    Frontdoor: running_volume -> ferritin -> rbc
+    Frontdoor: running_volume -> ground_contacts -> iron_total -> ferritin -> rbc
+
+  Running Volume -> MCV
+    running_volume -> mcv
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Running Volume -> RDW
+    running_volume -> rdw
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> AST
+    training_volume -> ast
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> ALT
+    training_volume -> alt
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Zone 2 Volume -> ApoB
+    zone2_volume -> apob
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Zone 2 Volume -> Non-HDL Cholesterol
+    zone2_volume -> non_hdl_cholesterol
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Zone 2 Volume -> Total Cholesterol
+    zone2_volume -> total_cholesterol
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Glucose
+    training_volume -> glucose
+    Backdoor: adjust on ['sleep_duration_hrs']
+    Reason: Backdoor blocked by conditioning on ['sleep_duration']. Found 1 valid single-variable sets.
+
+  Training Hours -> Insulin
+    training_volume -> insulin
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Uric Acid
+    training_volume -> uric_acid
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  ACWR -> White Blood Cells
+    acwr -> wbc
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  ACWR -> Neutrophil-Lymphocyte Ratio
+    acwr -> nlr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Running Volume -> Zinc
+    running_volume -> zinc
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Running Volume -> Magnesium
+    running_volume -> magnesium_rbc
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> DHEA-S
+    training_volume -> dhea_s
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> SHBG
+    training_volume -> shbg
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Homocysteine
+    training_volume -> homocysteine
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Creatinine
+    training_volume -> creatinine
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Estradiol
+    training_volume -> estradiol
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Platelet Count
+    training_volume -> platelets
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Training Hours -> Albumin
+    training_volume -> albumin
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Sleep Duration -> Cortisol
+    sleep_duration -> cortisol
+    Backdoor: adjust on ['daily_distance_km']
+    Reason: Backdoor blocked by conditioning on ['training_volume']. Found 1 valid single-variable sets.
+
+  Sleep Duration -> Testosterone
+    sleep_duration -> testosterone
+    Backdoor: adjust on ['is_weekend', 'season']
+    Reason: Backdoor requires conditioning on ['is_weekend', 'season']. Found 1 valid 2-variable sets.
+
+  Sleep Duration -> Glucose
+    sleep_duration -> glucose
+    Backdoor: adjust on ['daily_distance_km']
+    Reason: Backdoor blocked by conditioning on ['training_volume']. Found 1 valid single-variable sets.
+
+  Sleep Duration -> WBC
+    sleep_duration -> wbc
+    Backdoor: adjust on ['daily_distance_km']
+    Reason: Backdoor blocked by conditioning on ['training_volume']. Found 1 valid single-variable sets.
+
+  Iron Saturation -> Hemoglobin
+    iron_saturation_pct_smoothed -> hemoglobin
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Vitamin D -> Testosterone
+    vitamin_d -> testosterone
+    Backdoor: adjust on ['season']
+    Reason: Backdoor blocked by conditioning on ['season']. Found 1 valid single-variable sets.
+
+  Omega-3 Index -> hsCRP
+    omega3_index -> hscrp
+    Backdoor: adjust on ['season']
+    Reason: Backdoor blocked by conditioning on ['season']. Found 3 valid single-variable sets.
+
+  Ferritin -> RBC
+    ferritin -> rbc
+    Backdoor: adjust on ['daily_run_km']
+    Reason: Backdoor blocked by conditioning on ['running_volume']. Found 1 valid single-variable sets.
+
+  Ferritin -> Hemoglobin
+    ferritin -> hemoglobin
+    Backdoor: adjust on ['daily_run_km']
+    Reason: Backdoor blocked by conditioning on ['running_volume']. Found 1 valid single-variable sets.
+
+  Homocysteine -> hsCRP
+    homocysteine -> hscrp
+    Backdoor: adjust on ['season']
+    Reason: Backdoor blocked by conditioning on ['season']. Found 3 valid single-variable sets.
+
+  Dietary Protein -> Body Fat
+    dietary_protein_g -> body_fat_pct
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Dietary Energy -> Body Mass
+    dietary_energy_kcal -> body_mass
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Travel Load -> NLR
+    travel_load -> nlr
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+  Travel Load -> Deep Sleep
+    travel_load -> deep_sleep
+    Backdoor: adjust on []
+    Reason: No backdoor paths exist; no adjustment needed.
+
+============================================================
+Summary: 63/63 edges have valid backdoor sets
+         4/63 edges have frontdoor paths
+
+Frontdoor paths found for 4 edges
+
+============================================================
+Running BCEL on 63 edges
+============================================================
+
+  [metabolic ] Running Volume -> Iron
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: iron_total_smoothed (lag=7d)
+    Data: 452 observations, dose range [70.6, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 178.38 ± 19.89
+    Beta below: -0.042, above: -0.320
+    Converged: True
+    Shape: linear, CP prob: 0.23, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> Ferritin
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: ferritin_smoothed (lag=14d)
+    Data: 452 observations, dose range [61.4, 212.2]
+    Prior scaled: theta 35.0 -> 140.0 (km/wk -> km/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 131.02 ± 20.71
+    Beta below: 0.056, above: 0.193
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> Hemoglobin
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: hemoglobin_smoothed (lag=14d)
+    Data: 618 observations, dose range [20.1, 212.2]
+    Prior scaled: theta 45.0 -> 180.0 (km/wk -> km/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 156.28 ± 32.00
+    Beta below: -0.002, above: -0.006
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Testosterone
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: testosterone_smoothed (lag=14d)
+    Data: 830 observations, dose range [141.7, 1243.4]
+    Adjusting for 4 covariate(s): ['is_weekend', 'season']
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 1273.67 ± 15.77
+    Beta below: 0.460, above: -1.858
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Cortisol
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: cortisol_smoothed (lag=14d)
+    Data: 451 observations, dose range [407.0, 1243.4]
+    Adjusting for 1 covariate(s): ['sleep_duration_hrs']
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=451)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 1213.58 ± 50.68
+    Beta below: -0.028, above: -0.002
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> Triglycerides
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: triglycerides_smoothed (lag=14d)
+    Data: 618 observations, dose range [0.0, 110.8]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 207.79 ± 27.72
+    Beta below: 0.228, above: -0.017
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> HDL
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: hdl_smoothed (lag=14d)
+    Data: 618 observations, dose range [0.0, 110.8]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 129.76 ± 12.27
+    Beta below: 0.116, above: 0.102
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> LDL
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: ldl_smoothed (lag=14d)
+    Data: 618 observations, dose range [0.0, 110.8]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 201.49 ± 29.65
+    Beta below: 0.155, above: -0.077
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [recovery  ] ACWR -> Inflammation
+    Dose: acwr (window=1d, agg=last)
+    Response: hscrp_smoothed (lag=7d)
+    Wearable->Lab: using 4 raw draw dates (not 618 interpolated)
+    Data: 4 observations, dose range [0.5, 1.0]
+    Grid-conditional Laplace (effectiveN=4, lw=1.000)
+    Theta: 1.02 ± 0.01
+    Beta below: 0.167, above: 0.003
+    Converged: True
+    Shape: linear, CP prob: 0.56, Size: large, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] ACWR -> Resting HR Trend
+    Dose: acwr (window=1d, agg=last)
+    Response: resting_hr_7d_mean (lag=0d)
+    Data: 2400 observations, dose range [0.0, 2.3]
+    Likelihood weight: 0.142 (effectiveN=342, rawN=2400)
+    Grid-conditional Laplace (effectiveN=342, lw=0.142)
+    Theta: 1.79 ± 0.09
+    Beta below: -4.342, above: 0.672
+    Converged: True
+    Shape: linear, CP prob: 0.76, Size: large, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Training Consistency -> VO2peak
+    Dose: training_consistency (window=1d, agg=last)
+    Response: vo2_peak_smoothed (lag=0d)
+    Data: 1718 observations, dose range [0.0, 0.8]
+    Likelihood weight: 0.012 (effectiveN=20, rawN=1718)
+    Grid-conditional Laplace (effectiveN=20, lw=0.012)
+    Theta: 0.82 ± 0.03
+    Beta below: 23.547, above: 0.687
+    Converged: True
+    WARNING: theta at data boundary (0.82) — fit may be degenerate
+    Shape: plateau_up, CP prob: 0.85, Size: large, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Ferritin -> VO2peak
+    Dose: ferritin_smoothed (window=1d, agg=last)
+    Response: vo2_peak_smoothed (lag=0d)
+    Data: 452 observations, dose range [24.0, 46.0]
+    Adjusting for 1 covariate(s): ['daily_run_km']
+    Likelihood weight: 0.044 (effectiveN=20, rawN=452)
+    Grid-conditional Laplace (effectiveN=20, lw=0.044)
+    Theta: 35.63 ± 4.15
+    Beta below: 0.227, above: 0.125
+    Converged: True
+    Shape: linear, CP prob: 0.44, Size: medium, Status: above_optimal
+    (0.1s)
+
+  [sleep     ] Workout Time -> Sleep Efficiency
+    Dose: last_workout_end_hour (window=1d, agg=last)
+    Response: sleep_efficiency_pct (lag=0d)
+    Data: 1181 observations, dose range [0.0, 23.0]
+    Likelihood weight: 0.333 (effectiveN=393, rawN=1181)
+    Grid-conditional Laplace (effectiveN=393, lw=0.333)
+    Theta: 19.73 ± 1.15
+    Beta below: -0.076, above: -1.795
+    Converged: True
+    Shape: linear, CP prob: 0.36, Size: medium, Status: at_optimal
+    (0.1s)
+
+  [sleep     ] Bedtime -> Sleep Quality
+    Dose: bedtime_hour (window=1d, agg=last)
+    Response: sleep_quality_score (lag=0d)
+    Data: 1181 observations, dose range [0.0, 24.0]
+    Likelihood weight: 0.333 (effectiveN=393, rawN=1181)
+    Grid-conditional Laplace (effectiveN=393, lw=0.333)
+    Theta: 24.37 ± 0.30
+    Beta below: 2.157, above: -3.841
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: N/A
+    (0.1s)
+
+  [sleep     ] Bedtime -> Deep Sleep
+    Dose: bedtime_hour (window=1d, agg=last)
+    Response: deep_sleep_min (lag=0d)
+    Data: 1136 observations, dose range [0.0, 24.0]
+    Likelihood weight: 0.333 (effectiveN=378, rawN=1136)
+    Grid-conditional Laplace (effectiveN=378, lw=0.333)
+    Theta: 24.37 ± 0.29
+    Beta below: 0.007, above: -2.013
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: N/A
+    (0.1s)
+
+  [recovery  ] Sleep Duration -> Next-Day HRV
+    Dose: sleep_duration_hrs (window=1d, agg=last)
+    Response: hrv_daily_mean (lag=1d)
+    Data: 2235 observations, dose range [0.5, 33.5]
+    Adjusting for 1 covariate(s): ['is_weekend']
+    Likelihood weight: 0.333 (effectiveN=745, rawN=2235)
+    Grid-conditional Laplace (effectiveN=745, lw=0.333)
+    Theta: 7.13 ± 0.84
+    Beta below: 0.284, above: 0.222
+    Converged: True
+    Shape: linear, CP prob: 0.23, Size: small, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Sleep Debt -> Resting HR
+    Dose: sleep_debt_14d (window=1d, agg=last)
+    Response: resting_hr (lag=0d)
+    Data: 1181 observations, dose range [-32.9, 19.5]
+    Likelihood weight: 0.333 (effectiveN=393, rawN=1181)
+    Grid-conditional Laplace (effectiveN=393, lw=0.333)
+    Theta: 4.44 ± 2.62
+    Beta below: 0.049, above: -0.029
+    Converged: True
+    Shape: linear, CP prob: 0.26, Size: small, Status: N/A
+    (0.1s)
+
+  [recovery  ] Daily Training Load -> Next-Day HRV
+    Dose: daily_trimp (window=1d, agg=sum)
+    Response: hrv_daily_mean (lag=1d)
+    Data: 2391 observations, dose range [0.0, 78.2]
+    Likelihood weight: 0.333 (effectiveN=797, rawN=2391)
+    Grid-conditional Laplace (effectiveN=797, lw=0.333)
+    Theta: 0.00 ± 0.00
+    Beta below: -0.148, above: 0.091
+    Converged: True
+    WARNING: theta at data boundary (0.00) — fit may be degenerate
+    Shape: linear, CP prob: 0.19, Size: small, Status: at_optimal
+    (0.1s)
+
+  [recovery  ] Daily Training Load -> Next-Day Resting HR
+    Dose: daily_trimp (window=1d, agg=sum)
+    Response: resting_hr (lag=1d)
+    Data: 2371 observations, dose range [0.0, 78.2]
+    Likelihood weight: 0.333 (effectiveN=790, rawN=2371)
+    Grid-conditional Laplace (effectiveN=790, lw=0.333)
+    Theta: 0.00 ± 0.00
+    Beta below: 0.201, above: 0.279
+    Converged: True
+    WARNING: theta at data boundary (0.00) — fit may be degenerate
+    Shape: linear, CP prob: 0.20, Size: small, Status: at_optimal
+    (0.1s)
+
+  [sleep     ] Daily Steps -> Sleep Efficiency
+    Dose: steps (window=1d, agg=sum)
+    Response: sleep_efficiency_pct (lag=0d)
+    Data: 1181 observations, dose range [903.0, 59508.0]
+    Likelihood weight: 0.333 (effectiveN=393, rawN=1181)
+    Grid-conditional Laplace (effectiveN=393, lw=0.333)
+    Theta: 9653.39 ± 3000.47
+    Beta below: 0.000, above: -0.000
+    Converged: True
+    Shape: linear, CP prob: 0.26, Size: small, Status: below_optimal
+    (0.1s)
+
+  [sleep     ] Active Energy -> Deep Sleep
+    Dose: active_energy_kcal (window=1d, agg=sum)
+    Response: deep_sleep_min (lag=0d)
+    Data: 1136 observations, dose range [10.6, 4666.2]
+    Likelihood weight: 0.333 (effectiveN=378, rawN=1136)
+    Grid-conditional Laplace (effectiveN=378, lw=0.333)
+    Theta: 502.18 ± 149.59
+    Beta below: 0.003, above: 0.008
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [recovery  ] Weekly Volume -> HRV Baseline
+    Dose: daily_run_km (window=7d, agg=sum)
+    Response: hrv_7d_mean (lag=0d)
+    Data: 2401 observations, dose range [0.0, 69.8]
+    Likelihood weight: 0.143 (effectiveN=343, rawN=2401)
+    Grid-conditional Laplace (effectiveN=343, lw=0.143)
+    Theta: 23.30 ± 7.10
+    Beta below: 0.192, above: -0.001
+    Converged: True
+    Shape: v_max, CP prob: 0.47, Size: small, Status: below_optimal
+    (0.1s)
+
+  [sleep     ] Travel Load -> Sleep Efficiency
+    Dose: travel_load (window=1d, agg=last)
+    Response: sleep_efficiency_pct (lag=0d)
+    Data: 1181 observations, dose range [0.0, 1.0]
+    Likelihood weight: 0.333 (effectiveN=393, rawN=1181)
+    Grid-conditional Laplace (effectiveN=393, lw=0.333)
+    Theta: 0.57 ± 0.00
+    Beta below: 4.243, above: -30.365
+    Converged: True
+    Shape: v_max, CP prob: 0.98, Size: large, Status: below_optimal
+    (0.1s)
+
+  [recovery  ] Travel Load -> Daily HRV
+    Dose: travel_load (window=1d, agg=last)
+    Response: hrv_daily_mean (lag=0d)
+    Data: 2384 observations, dose range [0.0, 1.0]
+    Likelihood weight: 0.333 (effectiveN=794, rawN=2384)
+    Grid-conditional Laplace (effectiveN=794, lw=0.333)
+    Theta: -0.01 ± 0.10
+    Beta below: -0.320, above: 2.211
+    Converged: True
+    WARNING: theta at data boundary (-0.01) — fit may be degenerate
+    Shape: linear, CP prob: 0.35, Size: medium, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Travel Load -> Resting HR
+    Dose: travel_load (window=1d, agg=last)
+    Response: resting_hr (lag=0d)
+    Data: 2364 observations, dose range [0.0, 1.0]
+    Likelihood weight: 0.333 (effectiveN=788, rawN=2364)
+    Grid-conditional Laplace (effectiveN=788, lw=0.333)
+    Theta: -0.02 ± 0.02
+    Beta below: 0.033, above: -3.634
+    Converged: True
+    Shape: linear, CP prob: 0.46, Size: large, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Training Volume -> Body Fat
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: body_fat_pct (lag=0d)
+    Data: 160 observations, dose range [0.0, 1259.6]
+    Prior scaled: theta 8.0 -> 1920.0 (hrs/week -> min/28d)
+    Likelihood weight: 0.125 (effectiveN=20, rawN=160)
+    Grid-conditional Laplace (effectiveN=20, lw=0.125)
+    Theta: 216.69 ± 198.86
+    Beta below: -0.000, above: -0.000
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Daily Activity -> Body Mass
+    Dose: steps (window=28d, agg=mean)
+    Response: body_mass_kg (lag=0d)
+    Data: 171 observations, dose range [9802.4, 34214.8]
+    Likelihood weight: 0.117 (effectiveN=20, rawN=171)
+    Grid-conditional Laplace (effectiveN=20, lw=0.117)
+    Theta: 13054.72 ± 2175.11
+    Beta below: -0.039, above: 0.024
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> RBC
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: rbc_smoothed (lag=7d)
+    Data: 618 observations, dose range [20.1, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 150.29 ± 31.73
+    Beta below: -0.001, above: -0.003
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> MCV
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: mcv_smoothed (lag=14d)
+    Data: 618 observations, dose range [20.1, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 147.19 ± 38.85
+    Beta below: 0.016, above: 0.004
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> RDW
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: rdw_smoothed (lag=14d)
+    Data: 618 observations, dose range [20.1, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 146.24 ± 37.24
+    Beta below: -0.001, above: -0.001
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.2s)
+
+  [metabolic ] Training Hours -> AST
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: ast_smoothed (lag=7d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 753.74 ± 398.87
+    Beta below: -0.001, above: -0.022
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> ALT
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: alt_smoothed (lag=7d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 976.15 ± 247.57
+    Beta below: -0.014, above: 0.022
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> ApoB
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: apob_smoothed (lag=14d)
+    Data: 452 observations, dose range [0.0, 46.1]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 62.52 ± 11.85
+    Beta below: 0.044, above: 0.055
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> Non-HDL Cholesterol
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: non_hdl_cholesterol_smoothed (lag=14d)
+    Data: 618 observations, dose range [0.0, 110.8]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 202.85 ± 29.10
+    Beta below: -0.114, above: 0.082
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [cardio    ] Zone 2 Volume -> Total Cholesterol
+    Dose: daily_zone2_min (window=28d, agg=sum)
+    Response: total_cholesterol_smoothed (lag=14d)
+    Data: 618 observations, dose range [0.0, 110.8]
+    Prior scaled: theta 150.0 -> 600.0 (min/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 151.88 ± 26.67
+    Beta below: 0.371, above: -0.058
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Glucose
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: glucose_smoothed (lag=14d)
+    Data: 617 observations, dose range [141.7, 1243.4]
+    Adjusting for 1 covariate(s): ['sleep_duration_hrs']
+    Prior scaled: theta 10.0 -> 2400.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=617)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 1273.10 ± 16.61
+    Beta below: 0.143, above: -0.185
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Insulin
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: insulin_smoothed (lag=14d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 10.0 -> 2400.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 1271.34 ± 16.66
+    Beta below: -0.004, above: -0.024
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Uric Acid
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: uric_acid_smoothed (lag=14d)
+    Data: 452 observations, dose range [407.0, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 951.84 ± 179.82
+    Beta below: -0.002, above: -0.001
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [recovery  ] ACWR -> White Blood Cells
+    Dose: acwr (window=1d, agg=last)
+    Response: wbc_smoothed (lag=7d)
+    Wearable->Lab: using 4 raw draw dates (not 618 interpolated)
+    Data: 4 observations, dose range [0.5, 1.0]
+    Grid-conditional Laplace (effectiveN=4, lw=1.000)
+    Theta: 1.02 ± 0.01
+    Beta below: -0.433, above: 0.004
+    Converged: True
+    Shape: linear, CP prob: 0.71, Size: large, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] ACWR -> Neutrophil-Lymphocyte Ratio
+    Dose: acwr (window=1d, agg=last)
+    Response: nlr (lag=7d)
+    Data: 618 observations, dose range [0.0, 2.2]
+    Likelihood weight: 0.032 (effectiveN=20, rawN=618)
+    Grid-conditional Laplace (effectiveN=20, lw=0.032)
+    Theta: 1.19 ± 0.13
+    Beta below: -0.038, above: 0.144
+    Converged: True
+    Shape: v_min, CP prob: 0.99, Size: large, Status: at_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> Zinc
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: zinc_smoothed (lag=14d)
+    Data: 830 observations, dose range [20.1, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 142.77 ± 36.56
+    Beta below: -0.032, above: -0.026
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Running Volume -> Magnesium
+    Dose: daily_run_km (window=28d, agg=sum)
+    Response: magnesium_rbc_smoothed (lag=14d)
+    Data: 452 observations, dose range [61.4, 212.2]
+    Prior scaled: theta 40.0 -> 160.0 (km/wk -> km/28d)
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 152.27 ± 33.72
+    Beta below: -0.002, above: -0.002
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> DHEA-S
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: dhea_s_smoothed (lag=14d)
+    Data: 830 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 184.10 ± 54.53
+    Beta below: -0.543, above: -0.421
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> SHBG
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: shbg_smoothed (lag=14d)
+    Data: 830 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.001 (effectiveN=1, rawN=830)
+    Grid-conditional Laplace (effectiveN=1, lw=0.001)
+    Theta: 1108.55 ± 147.54
+    Beta below: 0.000, above: 0.000
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Homocysteine
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: homocysteine_smoothed (lag=14d)
+    Data: 830 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 10.0 -> 2400.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 730.51 ± 332.24
+    Beta below: 0.001, above: -0.007
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Creatinine
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: creatinine_smoothed (lag=14d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 257.90 ± 155.96
+    Beta below: -0.000, above: 0.000
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Estradiol
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: estradiol_smoothed (lag=14d)
+    Data: 830 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 672.52 ± 293.75
+    Beta below: 0.035, above: -0.002
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Platelet Count
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: platelets_smoothed (lag=14d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 987.73 ± 275.88
+    Beta below: 0.080, above: -0.108
+    Converged: True
+    Shape: linear, CP prob: 0.19, Size: small, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Training Hours -> Albumin
+    Dose: daily_duration_min (window=28d, agg=sum)
+    Response: albumin_smoothed (lag=14d)
+    Data: 618 observations, dose range [141.7, 1243.4]
+    Prior scaled: theta 12.0 -> 2880.0 (hr/wk -> min/28d)
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 139.03 ± 105.40
+    Beta below: 0.002, above: -0.004
+    Converged: True
+    WARNING: theta at data boundary (139.03) — fit may be degenerate
+    Shape: linear, CP prob: 0.20, Size: small, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Sleep Duration -> Cortisol
+    Dose: sleep_duration_hrs (window=28d, agg=mean)
+    Response: cortisol_smoothed (lag=0d)
+    Data: 452 observations, dose range [12.7, 22.1]
+    Adjusting for 1 covariate(s): ['daily_distance_km']
+    Likelihood weight: 0.004 (effectiveN=2, rawN=452)
+    Grid-conditional Laplace (effectiveN=2, lw=0.004)
+    Theta: 10.30 ± 0.28
+    Beta below: -0.011, above: -0.337
+    Converged: True
+    Shape: linear, CP prob: 0.38, Size: medium, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Sleep Duration -> Testosterone
+    Dose: sleep_duration_hrs (window=28d, agg=mean)
+    Response: testosterone_smoothed (lag=0d)
+    Data: 830 observations, dose range [12.7, 22.1]
+    Adjusting for 4 covariate(s): ['is_weekend', 'season']
+    Likelihood weight: 0.004 (effectiveN=3, rawN=830)
+    Grid-conditional Laplace (effectiveN=3, lw=0.004)
+    Theta: 10.28 ± 0.26
+    Beta below: 0.093, above: -2.828
+    Converged: True
+    Shape: linear, CP prob: 0.23, Size: small, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Sleep Duration -> Glucose
+    Dose: sleep_duration_hrs (window=28d, agg=mean)
+    Response: glucose_smoothed (lag=0d)
+    Wearable->Lab: using 4 raw draw dates (not 618 interpolated)
+    Data: 4 observations, dose range [11.3, 15.0]
+    Grid-conditional Laplace (effectiveN=4, lw=1.000)
+    Theta: 10.26 ± 0.22
+    Beta below: -0.388, above: -1.102
+    Converged: True
+    Shape: linear, CP prob: 0.21, Size: small, Status: above_optimal
+    (0.1s)
+
+  [recovery  ] Sleep Duration -> WBC
+    Dose: sleep_duration_hrs (window=28d, agg=mean)
+    Response: wbc_smoothed (lag=0d)
+    Wearable->Lab: using 4 raw draw dates (not 618 interpolated)
+    Data: 4 observations, dose range [11.3, 15.0]
+    Grid-conditional Laplace (effectiveN=4, lw=1.000)
+    Theta: 10.28 ± 0.25
+    Beta below: -0.016, above: 0.023
+    Converged: True
+    Shape: linear, CP prob: 0.22, Size: small, Status: above_optimal
+    (0.1s)
+
+  [metabolic ] Iron Saturation -> Hemoglobin
+    Dose: iron_saturation_pct_smoothed (window=1d, agg=last)
+    Response: hemoglobin_smoothed (lag=0d)
+    Marker->Marker: using 2 raw draw dates (not 452 interpolated)
+    Data: 2 observations, dose range [9.0, 14.0]
+    Grid-conditional Laplace (effectiveN=2, lw=1.000)
+    Theta: 14.12 ± 0.08
+    Beta below: 0.240, above: -0.000
+    Converged: True
+    Shape: v_max, CP prob: 0.99, Size: large, Status: below_optimal
+    (0.1s)
+
+  [metabolic ] Vitamin D -> Testosterone
+    Dose: vitamin_d_smoothed (window=1d, agg=last)
+    Response: testosterone_smoothed (lag=0d)
+    No variance in dose variable
+    SKIPPED: insufficient data
+    (0.0s)
+
+  [metabolic ] Omega-3 Index -> hsCRP
+    Dose: omega3_index_derived (window=1d, agg=last)
+    Response: hscrp_smoothed (lag=0d)
+    Wearable->Lab: using 4 raw draw dates (not 618 interpolated)
+    Data: 4 observations, dose range [1.8, 2.7]
+    Grid-conditional Laplace (effectiveN=4, lw=1.000)
+    Theta: 2.72 ± 0.01
+    Beta below: 0.206, above: -0.008
+    Converged: True
+    Shape: linear, CP prob: 0.69, Size: large, Status: at_optimal
+    (0.1s)
+
+  [metabolic ] Ferritin -> RBC
+    Dose: ferritin_smoothed (window=1d, agg=last)
+    Response: rbc_smoothed (lag=0d)
+    Marker->Marker: using 2 raw draw dates (not 452 interpolated)
+    Data: 2 observations, dose range [24.0, 46.0]
+    Grid-conditional Laplace (effectiveN=2, lw=1.000)
+    Theta: 46.52 ± 0.35
+    Beta below: -0.020, above: -0.000
+    Converged: True
+    Shape: plateau_down, CP prob: 0.99, Size: large, Status: at_optimal
+    (0.1s)
+
+  [metabolic ] Ferritin -> Hemoglobin
+    Dose: ferritin_smoothed (window=1d, agg=last)
+    Response: hemoglobin_smoothed (lag=0d)
+    Marker->Marker: using 2 raw draw dates (not 452 interpolated)
+    Data: 2 observations, dose range [24.0, 46.0]
+    Grid-conditional Laplace (effectiveN=2, lw=1.000)
+    Theta: 45.62 ± 4.48
+    Beta below: -0.052, above: -0.002
+    Converged: True
+    Shape: plateau_down, CP prob: 0.99, Size: large, Status: at_optimal
+    (0.1s)
+
+  [metabolic ] Homocysteine -> hsCRP
+    Dose: homocysteine_smoothed (window=1d, agg=last)
+    Response: hscrp_smoothed (lag=0d)
+    Data: 618 observations, dose range [7.7, 8.8]
+    Adjusting for 3 covariate(s): ['season']
+    Likelihood weight: 0.006 (effectiveN=4, rawN=618)
+    Grid-conditional Laplace (effectiveN=4, lw=0.006)
+    Theta: 8.09 ± 0.56
+    Beta below: -0.008, above: -0.008
+    Converged: True
+    Shape: linear, CP prob: 0.26, Size: small, Status: at_optimal
+    (0.1s)
+
+  [metabolic ] Dietary Protein -> Body Fat
+    Dose: dietary_protein_g (window=28d, agg=mean)
+    Response: body_fat_pct (lag=0d)
+    Data: 28 observations, dose range [30.6, 48.7]
+    Likelihood weight: 0.714 (effectiveN=20, rawN=28)
+    Grid-conditional Laplace (effectiveN=20, lw=0.714)
+    Theta: 42.13 ± 4.95
+    Beta below: 0.000, above: 0.000
+    Converged: True
+    Shape: linear, CP prob: 0.25, Size: small, Status: N/A
+    (0.1s)
+
+  [metabolic ] Dietary Energy -> Body Mass
+    Dose: dietary_energy_kcal (window=28d, agg=mean)
+    Response: body_mass_kg (lag=0d)
+    Data: 29 observations, dose range [1113.2, 1463.7]
+    Likelihood weight: 0.690 (effectiveN=20, rawN=29)
+    Grid-conditional Laplace (effectiveN=20, lw=0.690)
+    Theta: 1119.46 ± 55.72
+    Beta below: 0.022, above: -0.022
+    Converged: True
+    Shape: linear, CP prob: 0.20, Size: small, Status: N/A
+    (0.1s)
+
+  [recovery  ] Travel Load -> NLR
+    Dose: travel_load (window=1d, agg=last)
+    Response: nlr (lag=0d)
+    Data: 611 observations, dose range [0.0, 1.0]
+    Likelihood weight: 0.142 (effectiveN=87, rawN=611)
+    Grid-conditional Laplace (effectiveN=87, lw=0.142)
+    Theta: 0.52 ± 0.19
+    Beta below: 0.001, above: 0.020
+    Converged: True
+    Shape: linear, CP prob: 0.33, Size: medium, Status: below_optimal
+    (0.1s)
+
+  [sleep     ] Travel Load -> Deep Sleep
+    Dose: travel_load (window=1d, agg=last)
+    Response: deep_sleep_min (lag=0d)
+    Data: 1136 observations, dose range [0.0, 1.0]
+    Likelihood weight: 0.333 (effectiveN=378, rawN=1136)
+    Grid-conditional Laplace (effectiveN=378, lw=0.333)
+    Theta: 0.57 ± 0.00
+    Beta below: 36.582, above: -58.029
+    Converged: True
+    Shape: linear, CP prob: 0.81, Size: large, Status: below_optimal
+    (0.1s)
+
+============================================================
+Results: 62 fitted, 1 skipped, 0 errors, 5 degenerate
+  Skipped: Vitamin D -> Testosterone
+  Degenerate: Training Consistency -> VO2peak, Daily Training Load -> Next-Day HRV, Daily Training Load -> Next-Day Resting HR, Travel Load -> Daily HRV, Training Hours -> Albumin
+
+Saved insights to: C:\Users\samci\Downloads\Serif_Demo\inference_engine\output_data\oron_insights.json
+
+============================================================
+Pipeline complete.
+  62 insights generated
+  - Running Volume -> Iron                   linear         theta=   178.4 CP=0.23
+  - Running Volume -> Ferritin               linear         theta=   131.0 CP=0.21
+  - Running Volume -> Hemoglobin             linear         theta=   156.3 CP=0.19
+  - Training Hours -> Testosterone           linear         theta=  1273.7 CP=0.21
+  - Training Hours -> Cortisol               linear         theta=  1213.6 CP=0.20
+  - Zone 2 Volume -> Triglycerides           linear         theta=   207.8 CP=0.20
+  - Zone 2 Volume -> HDL                     linear         theta=   129.8 CP=0.19
+  - Zone 2 Volume -> LDL                     linear         theta=   201.5 CP=0.20
+  - ACWR -> Inflammation                     linear         theta=     1.0 CP=0.56
+  - ACWR -> Resting HR Trend                 linear         theta=     1.8 CP=0.76
+  - Training Consistency -> VO2peak          plateau_up     theta=     0.8 CP=0.85
+  - Ferritin -> VO2peak                      linear         theta=    35.6 CP=0.44
+  - Workout Time -> Sleep Efficiency         linear         theta=    19.7 CP=0.36
+  - Bedtime -> Sleep Quality                 linear         theta=    24.4 CP=0.21
+  - Bedtime -> Deep Sleep                    linear         theta=    24.4 CP=0.20
+  - Sleep Duration -> Next-Day HRV           linear         theta=     7.1 CP=0.23
+  - Sleep Debt -> Resting HR                 linear         theta=     4.4 CP=0.26
+  - Daily Training Load -> Next-Day HRV      linear         theta=     0.0 CP=0.19
+  - Daily Training Load -> Next-Day Resting HR linear         theta=     0.0 CP=0.20
+  - Daily Steps -> Sleep Efficiency          linear         theta=  9653.4 CP=0.26
+  - Active Energy -> Deep Sleep              linear         theta=   502.2 CP=0.20
+  - Weekly Volume -> HRV Baseline            v_max          theta=    23.3 CP=0.47
+  - Travel Load -> Sleep Efficiency          v_max          theta=     0.6 CP=0.98
+  - Travel Load -> Daily HRV                 linear         theta=    -0.0 CP=0.35
+  - Travel Load -> Resting HR                linear         theta=    -0.0 CP=0.46
+  - Training Volume -> Body Fat              linear         theta=   216.7 CP=0.21
+  - Daily Activity -> Body Mass              linear         theta= 13054.7 CP=0.19
+  - Running Volume -> RBC                    linear         theta=   150.3 CP=0.21
+  - Running Volume -> MCV                    linear         theta=   147.2 CP=0.20
+  - Running Volume -> RDW                    linear         theta=   146.2 CP=0.19
+  - Training Hours -> AST                    linear         theta=   753.7 CP=0.19
+  - Training Hours -> ALT                    linear         theta=   976.1 CP=0.19
+  - Zone 2 Volume -> ApoB                    linear         theta=    62.5 CP=0.19
+  - Zone 2 Volume -> Non-HDL Cholesterol     linear         theta=   202.8 CP=0.19
+  - Zone 2 Volume -> Total Cholesterol       linear         theta=   151.9 CP=0.20
+  - Training Hours -> Glucose                linear         theta=  1273.1 CP=0.20
+  - Training Hours -> Insulin                linear         theta=  1271.3 CP=0.19
+  - Training Hours -> Uric Acid              linear         theta=   951.8 CP=0.19
+  - ACWR -> White Blood Cells                linear         theta=     1.0 CP=0.71
+  - ACWR -> Neutrophil-Lymphocyte Ratio      v_min          theta=     1.2 CP=0.99
+  - Running Volume -> Zinc                   linear         theta=   142.8 CP=0.19
+  - Running Volume -> Magnesium              linear         theta=   152.3 CP=0.20
+  - Training Hours -> DHEA-S                 linear         theta=   184.1 CP=0.19
+  - Training Hours -> SHBG                   linear         theta=  1108.5 CP=0.19
+  - Training Hours -> Homocysteine           linear         theta=   730.5 CP=0.19
+  - Training Hours -> Creatinine             linear         theta=   257.9 CP=0.19
+  - Training Hours -> Estradiol              linear         theta=   672.5 CP=0.19
+  - Training Hours -> Platelet Count         linear         theta=   987.7 CP=0.19
+  - Training Hours -> Albumin                linear         theta=   139.0 CP=0.20
+  - Sleep Duration -> Cortisol               linear         theta=    10.3 CP=0.38
+  - Sleep Duration -> Testosterone           linear         theta=    10.3 CP=0.23
+  - Sleep Duration -> Glucose                linear         theta=    10.3 CP=0.21
+  - Sleep Duration -> WBC                    linear         theta=    10.3 CP=0.22
+  - Iron Saturation -> Hemoglobin            v_max          theta=    14.1 CP=0.99
+  - Omega-3 Index -> hsCRP                   linear         theta=     2.7 CP=0.69
+  - Ferritin -> RBC                          plateau_down   theta=    46.5 CP=0.99
+  - Ferritin -> Hemoglobin                   plateau_down   theta=    45.6 CP=0.99
+  - Homocysteine -> hsCRP                    linear         theta=     8.1 CP=0.26
+  - Dietary Protein -> Body Fat              linear         theta=    42.1 CP=0.25
+  - Dietary Energy -> Body Mass              linear         theta=  1119.5 CP=0.20
+  - Travel Load -> NLR                       linear         theta=     0.5 CP=0.33
+  - Travel Load -> Deep Sleep                linear         theta=     0.6 CP=0.81
