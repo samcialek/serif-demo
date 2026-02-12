@@ -507,23 +507,29 @@ export function DoseResponseCurve({
             strokeLinecap="round"
           />
 
-          {/* Threshold line */}
-          <line
-            x1={thetaX}
-            y1={padding}
-            x2={thetaX}
-            y2={chartH - padding}
-            stroke={colors.threshold}
-            strokeWidth="1.5"
-            strokeDasharray="4 2"
-          />
+          {/* Threshold line - hidden for linear curves (no real changepoint) */}
+          {params.curveType !== 'linear' && (
+            <line
+              x1={thetaX}
+              y1={padding}
+              x2={thetaX}
+              y2={chartH - padding}
+              stroke={colors.threshold}
+              strokeWidth="1.5"
+              strokeDasharray="4 2"
+            />
+          )}
 
-          {/* Threshold point */}
-          <circle cx={thetaX} cy={thetaY} r="7" fill={colors.threshold} />
-          <circle cx={thetaX} cy={thetaY} r="3.5" fill="white" />
+          {/* Threshold point - hidden for linear curves */}
+          {params.curveType !== 'linear' && (
+            <>
+              <circle cx={thetaX} cy={thetaY} r="7" fill={colors.threshold} />
+              <circle cx={thetaX} cy={thetaY} r="3.5" fill="white" />
+            </>
+          )}
 
-          {/* Threshold confidence interval */}
-          {!compact && (
+          {/* Threshold confidence interval - hidden for linear curves */}
+          {!compact && params.curveType !== 'linear' && (
             <rect
               x={thetaX - 15}
               y={chartH - padding + 5}
@@ -559,8 +565,8 @@ export function DoseResponseCurve({
             </text>
           )}
 
-          {/* Theta label - positioned below threshold point */}
-          {showLabels && !compact && (
+          {/* Theta label - hidden for linear curves */}
+          {showLabels && !compact && params.curveType !== 'linear' && (
             <text x={thetaX} y={chartH - 4} textAnchor="middle" className="fill-gray-600" style={{ fontSize: '10px', fontWeight: 700 }}>
               θ={params.theta.displayValue}
             </text>
@@ -605,15 +611,19 @@ export function DoseResponseCurve({
               {shapeMeta.interpretation}
             </p>
 
-            {/* Threshold meaning */}
-            <div className="text-[10px] text-gray-400 pt-1 border-t border-white/10">
-              <span className="text-gray-500 uppercase tracking-wider text-[9px]">At θ:</span>
-              <span className="ml-1">{shapeMeta.thresholdMeaning}</span>
-            </div>
+            {/* Threshold meaning - hidden for linear curves */}
+            {params.curveType !== 'linear' && (
+              <div className="text-[10px] text-gray-400 pt-1 border-t border-white/10">
+                <span className="text-gray-500 uppercase tracking-wider text-[9px]">At θ:</span>
+                <span className="ml-1">{shapeMeta.thresholdMeaning}</span>
+              </div>
+            )}
 
             {/* Parameters row */}
             <div className="flex items-center gap-2 text-[10px] font-mono pt-1 border-t border-white/20">
-              <span className="text-white font-bold">θ={params.theta.displayValue}</span>
+              {params.curveType !== 'linear' && (
+                <span className="text-white font-bold">θ={params.theta.displayValue}</span>
+              )}
               <span className="text-gray-500">n={params.observations}</span>
               <span className={`ml-auto px-1 py-0.5 text-[9px] font-bold uppercase ${riskColors[shapeMeta.riskProfile].bg} ${riskColors[shapeMeta.riskProfile].text}`}>
                 {shapeMeta.riskProfile}

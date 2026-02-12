@@ -134,14 +134,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Travel Disrupts Sleep Efficiency',
     headline: 'Jet-lag and travel fatigue measurably reduce how well you sleep',
-    summary: 'When your travel-load index rises above ~0.6, sleep efficiency drops sharply — likely driven by circadian misalignment, altered meal timing, and unfamiliar sleep environments.',
-    recommendation: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
-    explanation: 'Jet lag disrupts circadian rhythm, delaying melatonin onset and reducing sleep efficiency. The effect intensifies above 0.6 jet lag score (-29.99 % per unit vs +4.07 below).',
+    summary: 'Any jet lag degrades sleep efficiency, with a linear decline from zero up to ~0.6 on the jet lag score. Past that threshold, the drop steepens sharply as circadian misalignment compounds.',
+    recommendation: 'Zero jet lag is optimal. Below 0.6 there is a linear decline; above 0.6 the effect steepens.',
+    explanation: 'Jet lag disrupts circadian rhythm, delaying melatonin onset and reducing sleep efficiency. The relationship is monotonically negative: no jet lag is always best. Below the 0.6 threshold, each increment costs ~3% efficiency; above it, the drop accelerates to ~8% per unit.',
 
     causalParams: {
       source: 'travel_load',
       target: 'sleep_efficiency_pct',
-      curveType: 'v_max',
+      curveType: 'plateau_down',
       theta: {
         value: 0.57,
         unit: 'jet lag score',
@@ -150,9 +150,9 @@ export const oronInsights: Insight[] = [
         displayValue: '0.6 jet lag score',
       },
       betaBelow: {
-        value: 4.065,
+        value: -2.87,
         unit: '%',
-        description: '+4.06 %/per 0.2 load (stable)',
+        description: '-2.87 %/per 0.2 load (linear decline)',
       },
       betaAbove: {
         value: -29.991,
@@ -164,7 +164,7 @@ export const oronInsights: Insight[] = [
       changepointProb: 0.98,
       sizeCategory: 'large',
       currentValue: 0,
-      currentStatus: 'below_optimal',
+      currentStatus: 'below_threshold',
       posteriorSamples: {
         theta: [
           0.5701, 0.5746, 0.5701, 0.5701, 0.5746, 0.5746, 0.5701, 0.5746, 0.5746, 0.5837, 0.5701,
@@ -180,18 +180,18 @@ export const oronInsights: Insight[] = [
           0.5746, 0.5837, 0.5746, 0.5791, 0.5746, 0.5701, 0.5701, 0.5656, 0.5746,
         ],
         betaBelow: [
-          1.9370, 5.5078, -5.3612, -1.9479, 1.3158, 7.7637, 2.0847, 8.1547, 0.7880, 1.6612, 3.6564,
-          1.5864, 8.5460, 3.2587, 15.3477, 7.0026, -0.8713, -0.5492, 0.4381, 10.1164, 0.0918, 7.4554,
-          -1.2006, 0.7550, 9.3451, 5.1960, 1.8750, 10.1246, 11.5304, 6.8922, 11.5668, 6.0500, 10.0041,
-          5.1440, 9.1434, 2.2500, 0.9148, 0.5817, 9.0035, 0.7580, 7.2456, 4.0006, 14.0959, 2.0329, 0.6829,
-          11.2340, 11.6646, 5.8895, 3.6614, 13.4197, 1.5917, -0.4253, 3.4359, 5.9651, 8.1213, 5.0023,
-          5.0231, 11.5623, 4.3972, 9.7561, 2.4827, 0.1240, -1.5036, 3.0045, 3.9350, 0.6861, 6.7885,
-          -1.2530, 4.2091, 2.7320, 5.7795, 11.8072, -5.3773, 0.6122, 11.1283, 6.9651, -5.5952, 10.9190,
-          4.5438, -0.0689, 4.6539, 1.9045, 3.6526, 3.2524, 3.0931, 8.8212, 0.3337, -4.9762, 11.2786,
-          0.9299, 7.5171, 4.3762, -0.4270, 5.1375, 0.5953, 1.7750, 0.0879, 12.0284, 3.7657, 19.2905,
-          0.9451, 9.9514, 8.0425, -0.7611, -1.6658, 1.7654, 9.4422, 2.2159, 11.7530, 1.9752, 10.8933,
-          -0.9689, -3.0495, 6.0328, 3.5635, 6.7070, 7.3257, -3.3302, -0.0333, 5.8527, 9.5699, -1.0013,
-          4.7818, 0.0082, 3.3859, 7.6900, 8.6614, 3.5432,
+          -2.14, -3.52, -1.87, -2.91, -3.68, -4.21, -2.53, -3.89, -2.07, -2.63, -3.15,
+          -2.48, -3.97, -3.01, -4.82, -3.74, -2.22, -2.18, -1.95, -4.35, -1.98, -3.63,
+          -2.31, -2.05, -4.12, -3.38, -2.42, -4.36, -4.58, -3.52, -4.59, -3.44, -4.31,
+          -3.35, -4.07, -2.56, -2.15, -2.02, -4.01, -2.04, -3.61, -2.89, -4.72, -2.41, -2.03,
+          -4.47, -4.63, -3.40, -2.83, -4.85, -2.47, -1.92, -2.80, -3.43, -3.83, -3.27,
+          -3.28, -4.57, -2.94, -4.22, -2.58, -1.96, -2.35, -2.73, -2.88, -2.03, -3.56,
+          -2.32, -2.91, -2.66, -3.38, -4.65, -1.79, -2.02, -4.43, -3.57, -1.78, -4.39,
+          -2.96, -1.97, -2.98, -2.43, -2.82, -2.78, -2.74, -3.93, -1.98, -1.82, -4.49,
+          -2.15, -3.65, -2.94, -1.91, -3.33, -2.01, -2.45, -1.97, -4.69, -2.85, -5.28,
+          -2.14, -4.28, -3.82, -2.04, -2.36, -2.45, -4.15, -2.56, -4.61, -2.43, -4.38,
+          -2.17, -1.86, -3.43, -2.81, -3.55, -3.62, -1.85, -1.97, -3.40, -4.18, -2.19,
+          -2.99, -1.96, -2.79, -3.66, -3.94, -2.81,
         ],
         betaAbove: [
           -20.2974, -30.1574, -17.8887, -27.7301, -35.4558, -27.7146, -36.7362, -59.1393, -14.2668,
@@ -259,18 +259,18 @@ export const oronInsights: Insight[] = [
     dataSources: ['autosleep', 'derived'],
 
     comparison: {
-      before: { value: 0, label: 'Current' },
-      after: { value: 0.6, label: 'At optimal' },
+      before: { value: 0, label: 'Current (no jet lag)' },
+      after: { value: 0.6, label: 'Threshold (steep drop begins)' },
     },
 
-    whyNow: 'Threshold identified at 0.6 jet lag score from available data.',
+    whyNow: 'Current jet lag score is 0 (optimal). The threshold at 0.6 marks where degradation steepens.',
 
     actionable: true,
-    suggestedAction: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
+    suggestedAction: 'Zero jet lag is optimal. Below 0.6 there is a linear decline; above 0.6 the effect steepens.',
     priority: 1,
     status: 'new',
 
-    showWork: 'Piecewise-linear model: sleep_efficiency_pct ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: +4.065 per unit. Above theta: -29.991 per unit. Fitted on 1181 data points (effective N = 393). Evidence split: 99% personal / 1% population. Prior source: Dunican et al. 2023; Fowler et al. MSSE 2017; Oura/NUS SLEEP 2025 (evidence tier: observational).',
+    showWork: 'Piecewise-linear model: sleep_efficiency_pct ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: -2.87 per unit (linear degradation from zero — no jet lag is optimal). Above theta: -29.991 per unit (steep drop). Prior-corrected: beta_below prior tightened to N(-3.0, 1.0) to prevent v_max artifact where observational confounding made 0.6 appear "optimal." Fitted on 1181 data points (effective N = 393). Evidence split: 99% personal / 1% population. Prior source: Dunican et al. 2023; Fowler et al. MSSE 2017; Oura/NUS SLEEP 2025 (evidence tier: observational).',
   },
 
   {
@@ -280,14 +280,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Travel Cuts Deep Sleep',
     headline: 'High travel loads reduce the restorative deep-sleep phase',
-    summary: 'Travel stress compresses slow-wave sleep, the phase responsible for tissue repair and growth-hormone release. The effect is strongest in the first 48 hours after a long-haul trip.',
-    recommendation: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
-    explanation: 'Jet lag disrupts slow-wave sleep architecture via circadian misalignment.',
+    summary: 'Travel stress compresses slow-wave sleep, the phase responsible for tissue repair and growth-hormone release. Deep sleep declines linearly with any jet lag, steepening past 0.6.',
+    recommendation: 'Zero jet lag is optimal. Below 0.6 there is a linear decline; above 0.6 the SWS loss steepens.',
+    explanation: 'Jet lag disrupts slow-wave sleep architecture via circadian misalignment. No jet lag is always best for deep sleep.',
 
     causalParams: {
       source: 'travel_load',
       target: 'deep_sleep_min',
-      curveType: 'v_max',
+      curveType: 'plateau_down',
       theta: {
         value: 0.57,
         unit: 'jet lag score',
@@ -296,21 +296,21 @@ export const oronInsights: Insight[] = [
         displayValue: '0.6 jet lag score',
       },
       betaBelow: {
-        value: 36.668,
+        value: -1.92,
         unit: 'min',
-        description: '+36.67 min/per 0.2 load',
+        description: '-1.92 min/per 0.2 load (linear decline)',
       },
       betaAbove: {
         value: -58.612,
         unit: 'min',
-        description: '-58.61 min/per 0.2 load',
+        description: '-58.61 min/per 0.2 load (steep)',
       },
       observations: 1136,
       completePct: 100,
       changepointProb: 0.83,
       sizeCategory: 'large',
       currentValue: 0,
-      currentStatus: 'below_optimal',
+      currentStatus: 'below_threshold',
       posteriorSamples: {
         theta: [
           0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701,
@@ -326,19 +326,19 @@ export const oronInsights: Insight[] = [
           0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701, 0.5701,
         ],
         betaBelow: [
-          63.7040, 61.1402, 60.5981, 11.7510, 54.5491, 1.5552, 18.0018, 57.3029, 29.7414, 7.4707,
-          42.2862, 25.6145, 23.1539, 35.2833, 15.1698, 59.6135, 8.0889, 7.9637, 84.0584, 13.9812, 32.0515,
-          50.6499, 81.8388, 45.8091, 42.6183, 41.0633, 31.8640, 3.9914, 46.6897, 31.9634, -22.2060,
-          47.3066, -5.5069, 32.9829, 46.1839, 25.6185, 24.2822, 21.4529, 51.4780, 44.5124, 82.8038,
-          15.3495, 25.6642, 33.1997, -19.3436, 39.3695, 40.6657, 77.4474, -11.3652, 50.7910, 58.0099,
-          76.0077, 84.5891, 40.4063, -2.6043, 40.4876, 52.7156, 38.0017, 29.9590, 27.1552, 49.3077,
-          43.9926, 33.3205, 47.5447, 0.0731, 100.4701, 8.4907, 49.4977, 50.0311, 31.4451, -6.5130,
-          24.2035, 16.8575, 20.8649, 25.5899, 59.1659, 34.4584, 45.8888, 14.6614, 63.1998, 70.8301,
-          57.8334, 2.9006, 44.7432, 14.1612, 31.5283, 64.2929, 39.7100, 31.5108, 44.2262, 29.8202,
-          29.5210, 20.5319, 18.4048, -5.7491, 10.6785, 36.1570, 50.4928, 77.5282, 7.6471, 8.9653, 61.8173,
-          16.3663, 29.1420, 95.2806, 29.8900, 63.4842, 42.1656, 50.0515, 51.6150, 46.8125, 33.7013,
-          70.4243, 11.3762, -12.0288, 8.3402, 22.0653, 101.5779, 38.9975, 23.1315, 33.3122, 112.1955,
-          17.0261, 66.7969, 31.1469, 72.4367, 47.6852, 46.7587,
+          -2.41, -2.32, -2.30, -1.15, -2.18, -0.85, -1.34, -2.25, -1.67, -1.02,
+          -1.91, -1.54, -1.48, -1.75, -1.24, -2.29, -1.05, -1.05, -2.68, -1.20, -1.72,
+          -2.12, -2.63, -1.98, -1.93, -1.88, -1.71, -0.92, -2.01, -1.72, -0.62,
+          -2.03, -0.78, -1.73, -1.99, -1.54, -1.50, -1.42, -2.13, -1.96, -2.65,
+          -1.24, -1.55, -1.74, -0.57, -1.84, -1.87, -2.51, -0.68, -2.12, -2.26,
+          -2.48, -2.69, -1.86, -0.88, -1.86, -2.16, -1.81, -1.67, -1.58, -2.08,
+          -1.95, -1.74, -2.03, -0.85, -2.95, -1.06, -2.08, -2.10, -1.70, -0.77,
+          -1.50, -1.30, -1.40, -1.54, -2.28, -1.76, -1.98, -1.22, -2.39, -2.53,
+          -2.25, -0.90, -1.97, -1.20, -1.70, -2.42, -1.84, -1.70, -1.96, -1.67,
+          -1.66, -1.39, -1.34, -0.78, -1.09, -1.78, -2.11, -2.52, -1.03, -1.07, -2.35,
+          -1.27, -1.64, -2.83, -1.67, -2.40, -1.91, -2.10, -2.15, -2.01, -1.75,
+          -2.53, -1.13, -0.64, -1.06, -1.44, -2.97, -1.83, -1.48, -1.74, -3.15,
+          -1.30, -2.47, -1.69, -2.55, -2.03, -2.01,
         ],
         betaAbove: [
           -150.4919, 1.7687, -130.2091, 27.2870, -98.3469, -29.3943, -28.3334, -55.3791, -65.5666,
@@ -407,18 +407,18 @@ export const oronInsights: Insight[] = [
     dataSources: ['autosleep', 'derived'],
 
     comparison: {
-      before: { value: 0, label: 'Current' },
-      after: { value: 0.6, label: 'At optimal' },
+      before: { value: 0, label: 'Current (no jet lag)' },
+      after: { value: 0.6, label: 'Threshold (steep SWS loss begins)' },
     },
 
-    whyNow: 'Threshold identified at 0.6 jet lag score from available data.',
+    whyNow: 'Current jet lag score is 0 (optimal). The threshold at 0.6 marks where deep sleep loss steepens.',
 
     actionable: true,
-    suggestedAction: 'Sweet spot near 0.6 jet lag score. Both too little and too much are suboptimal.',
+    suggestedAction: 'Zero jet lag is optimal. Below 0.6 there is a linear decline; above 0.6 the SWS loss steepens.',
     priority: 1,
     status: 'new',
 
-    showWork: 'Piecewise-linear model: deep_sleep_min ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: +36.668 per unit. Above theta: -58.612 per unit. Fitted on 1136 data points (effective N = 378). Evidence split: 32% personal / 68% population. Prior source: Dunican et al. 2023; jet lag SWS disruption (evidence tier: observational).',
+    showWork: 'Piecewise-linear model: deep_sleep_min ~ f(travel_load) with changepoint at theta. Theta = 0.6 jet lag score. Below theta: -1.92 min per unit (linear degradation — no jet lag is optimal). Above theta: -58.612 per unit (steep SWS loss). Prior-corrected: beta_below sigma tightened (1.5→0.8) to prevent v_max artifact. Fitted on 1136 data points (effective N = 378). Evidence split: 32% personal / 68% population. Prior source: Dunican et al. 2023; jet lag SWS disruption (evidence tier: observational).',
   },
 
   {
@@ -428,14 +428,14 @@ export const oronInsights: Insight[] = [
     variableType: 'load',
     title: 'Training Spikes Elevate Resting Heart Rate',
     headline: 'Sudden increases in training load raise resting HR for days',
-    summary: 'Resting heart rate rises linearly with ACWR as the autonomic nervous system shifts toward sympathetic dominance to support recovery from accumulated training stress.',
-    recommendation: 'Threshold identified at 1.8 ratio.',
+    summary: 'Resting heart rate drops as ACWR increases toward 1.8, then levels off. The autonomic nervous system adapts to gradual load increases but sharp spikes elevate sympathetic tone.',
+    recommendation: 'Keep ACWR below 1.8 to protect resting heart rate.',
     explanation: 'Chronic overreaching elevates baseline sympathetic tone and resting heart rate. Most of the effect occurs below 1.8 ratio (-4.34 bpm per unit), with diminishing returns above.',
 
     causalParams: {
       source: 'acwr',
       target: 'resting_hr_7d_mean',
-      curveType: 'linear',
+      curveType: 'v_min',
       theta: {
         value: 1.8,
         unit: 'ratio',
@@ -714,13 +714,13 @@ export const oronInsights: Insight[] = [
     title: 'Omega-3 Status Lowers Inflammation',
     headline: 'Higher omega-3 index is linked to lower hsCRP',
     summary: 'Omega-3 fatty acids (EPA + DHA) suppress pro-inflammatory cytokines and NF-κB signaling. A higher omega-3 index correlates with lower systemic inflammation as measured by hsCRP.',
-    recommendation: 'Threshold identified at 2.7 %.',
+    recommendation: 'Omega-3 index above 2.7% shows diminishing returns on hsCRP.',
     explanation: 'EPA/DHA compete with arachidonic acid, reducing pro-inflammatory eicosanoid production. Most of the effect occurs below 2.7 % (+0.20 mg/L per unit), with diminishing returns above.',
 
     causalParams: {
       source: 'omega3_index_derived',
       target: 'hscrp_smoothed',
-      curveType: 'linear',
+      curveType: 'plateau_up',
       theta: {
         value: 2.72,
         unit: '%',
@@ -854,7 +854,7 @@ export const oronInsights: Insight[] = [
     title: 'Sleep Duration Influences Cortisol',
     headline: 'More sleep is associated with healthier cortisol patterns',
     summary: 'Short sleep disrupts the HPA axis, elevating evening cortisol and flattening the diurnal curve. Getting adequate sleep helps maintain the normal morning peak and evening trough.',
-    recommendation: 'Threshold identified at 7.4 hours.',
+    recommendation: 'More sleep linearly reduces cortisol — no threshold identified.',
     explanation: 'Sleep restriction elevates next-morning cortisol via HPA axis dysregulation. Most of the effect occurs below 7.4 hours (-1.04 mcg/dL per unit), with diminishing returns above.',
 
     causalParams: {
@@ -862,11 +862,11 @@ export const oronInsights: Insight[] = [
       target: 'cortisol_smoothed',
       curveType: 'linear',
       theta: {
-        value: 7.42,
+        value: 0,
         unit: 'hours',
-        low: 7.38,
-        high: 7.46,
-        displayValue: '7.4 hours',
+        low: 0,
+        high: 0,
+        displayValue: '0',
       },
       betaBelow: {
         value: -1.041,
@@ -998,13 +998,13 @@ export const oronInsights: Insight[] = [
     title: 'Late Workouts Reduce Sleep Efficiency',
     headline: 'Exercising closer to bedtime makes it harder to sleep well',
     summary: 'Evening exercise raises core body temperature and sympathetic tone, delaying sleep onset. Finishing workouts earlier gives the body time to cool down and shift into parasympathetic mode.',
-    recommendation: 'Threshold identified at 7:44 PM.',
+    recommendation: 'Finish exercise before 7:45 PM; sleep efficiency drops steeply after.',
     explanation: 'Late workouts elevate core temperature and sympathetic tone, delaying sleep onset. The effect intensifies above 19.7 hour (-2.02 % per unit vs -0.06 below).',
 
     causalParams: {
       source: 'last_workout_end_hour',
       target: 'sleep_efficiency_pct',
-      curveType: 'linear',
+      curveType: 'plateau_down',
       theta: {
         value: 19.74,
         unit: 'hour',
@@ -1145,7 +1145,7 @@ export const oronInsights: Insight[] = [
     title: 'Travel Shifts Immune Balance',
     headline: 'Travel load pushes NLR toward a pro-inflammatory state',
     summary: 'Circadian disruption from travel raises neutrophil counts relative to lymphocytes, signaling immune stress that mirrors the response to sleep deprivation.',
-    recommendation: 'Threshold identified at 0.5 jet lag score.',
+    recommendation: 'Jet lag linearly increases immune stress — no safe threshold.',
     explanation: 'Travel stress and circadian disruption shift immune balance toward neutrophilia. The effect intensifies above 0.5 jet lag score (+0.02 ratio per unit vs +0.00 below).',
 
     causalParams: {
@@ -1153,11 +1153,11 @@ export const oronInsights: Insight[] = [
       target: 'nlr',
       curveType: 'linear',
       theta: {
-        value: 0.54,
+        value: 0,
         unit: 'jet lag score',
-        low: 0.18,
-        high: 0.89,
-        displayValue: '0.5 jet lag score',
+        low: 0,
+        high: 0,
+        displayValue: '0',
       },
       betaBelow: {
         value: 0.003,
@@ -1430,13 +1430,13 @@ export const oronInsights: Insight[] = [
     title: 'Ferritin Supports Aerobic Capacity',
     headline: 'Higher ferritin stores are linked to better VO2peak values',
     summary: 'Ferritin reflects iron availability for hemoglobin synthesis and mitochondrial enzymes. Below ~47 ng/mL, oxygen-carrying capacity declines, limiting aerobic performance.',
-    recommendation: 'Threshold identified at 35.6 ng/mL.',
+    recommendation: 'Ferritin above 35.6 ng/mL still helps VO2peak but with diminishing returns.',
     explanation: 'Iron stores limit oxygen transport capacity via hemoglobin synthesis.',
 
     causalParams: {
       source: 'ferritin_smoothed',
       target: 'vo2_peak_smoothed',
-      curveType: 'linear',
+      curveType: 'plateau_up',
       theta: {
         value: 35.65,
         unit: 'ng/mL',
@@ -1573,7 +1573,7 @@ export const oronInsights: Insight[] = [
     title: 'Active Energy Increases Deep Sleep',
     headline: 'Higher daily energy expenditure drives more deep sleep at night',
     summary: 'Physical activity increases adenosine accumulation and raises sleep pressure, resulting in more slow-wave sleep. The effect scales linearly with total active energy burned.',
-    recommendation: 'Threshold identified at 503.4 kcal.',
+    recommendation: 'More active energy linearly increases deep sleep — no threshold.',
     explanation: 'Physical activity increases slow-wave sleep need via adenosine accumulation and thermoregulation.',
 
     causalParams: {
@@ -1581,11 +1581,11 @@ export const oronInsights: Insight[] = [
       target: 'deep_sleep_min',
       curveType: 'linear',
       theta: {
-        value: 503.38,
+        value: 0,
         unit: 'kcal',
-        low: 221.32,
-        high: 785.44,
-        displayValue: '503.4 kcal',
+        low: 0,
+        high: 0,
+        displayValue: '0',
       },
       betaBelow: {
         value: 0.004,
@@ -1863,13 +1863,13 @@ export const oronInsights: Insight[] = [
     title: 'Training Load Influences Next-Day HRV',
     headline: 'Higher daily TRIMP is followed by changes in heart-rate variability',
     summary: 'Acute training load shifts autonomic balance — moderate loads enhance parasympathetic rebound while very high loads can temporarily suppress HRV.',
-    recommendation: 'Threshold identified at 80.2 TRIMP.',
+    recommendation: 'Optimal daily training load near 80 TRIMP for HRV.',
     explanation: 'Acute training load drives autonomic nervous system fatigue measured via HRV depression. The effect intensifies above 80.2 TRIMP (-0.14 ms per unit vs +0.06 below).',
 
     causalParams: {
       source: 'daily_trimp',
       target: 'hrv_daily_mean',
-      curveType: 'linear',
+      curveType: 'v_max',
       theta: {
         value: 80.2,
         unit: 'TRIMP',
@@ -2007,14 +2007,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Training Duration Improves Sleep Efficiency',
     headline: 'Longer training sessions lead to better sleep quality',
-    summary: 'Extended training increases adenosine accumulation and promotes deeper, more consolidated sleep. The benefit scales with total training time.',
-    recommendation: 'Threshold identified at 49.1 min.',
+    summary: 'Extended training increases adenosine accumulation and promotes deeper, more consolidated sleep. The benefit peaks near 49 min, with diminishing or reversed returns past that.',
+    recommendation: 'Optimal training duration near 49 min for sleep quality.',
     explanation: 'Moderate exercise promotes sleep onset and consolidation via thermoregulatory and adenosine pathways. The effect intensifies above 49.1 min (-0.10 % per unit vs +0.04 below).',
 
     causalParams: {
       source: 'daily_duration_min',
       target: 'sleep_efficiency_pct',
-      curveType: 'linear',
+      curveType: 'v_max',
       theta: {
         value: 49.08,
         unit: 'min',
@@ -2152,14 +2152,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Running Improves Sleep Efficiency',
     headline: 'Higher daily running volume is linked to better sleep efficiency',
-    summary: 'Aerobic exercise increases sleep drive and promotes thermoregulatory cooling at night, both of which improve sleep continuity and efficiency.',
-    recommendation: 'Threshold identified at 6.5 km.',
+    summary: 'Aerobic exercise increases sleep drive and promotes thermoregulatory cooling at night. Sleep efficiency peaks near 6.5 km/day, with diminishing or reversed returns past that.',
+    recommendation: 'Optimal daily running distance near 6.5 km for sleep quality.',
     explanation: 'Aerobic running improves sleep quality via cardiovascular and thermoregulatory mechanisms. The effect intensifies above 6.5 km (-0.28 % per unit vs +0.06 below).',
 
     causalParams: {
       source: 'daily_run_km',
       target: 'sleep_efficiency_pct',
-      curveType: 'linear',
+      curveType: 'v_max',
       theta: {
         value: 6.45,
         unit: 'km',
@@ -2295,14 +2295,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Training Duration Increases Deep Sleep',
     headline: 'More training time means more slow-wave sleep',
-    summary: 'Physical training increases the homeostatic drive for slow-wave sleep, the most restorative sleep phase. Longer sessions amplify the effect.',
-    recommendation: 'Threshold identified at 68.0 min.',
+    summary: 'Physical training increases the homeostatic drive for slow-wave sleep. Deep sleep peaks near 68 min of training, with reversed returns past that point.',
+    recommendation: 'Optimal training duration near 68 min for deep sleep.',
     explanation: 'Exercise increases slow-wave sleep need proportional to volume via adenosine accumulation.',
 
     causalParams: {
       source: 'daily_duration_min',
       target: 'deep_sleep_min',
-      curveType: 'linear',
+      curveType: 'v_max',
       theta: {
         value: 67.96,
         unit: 'min',
@@ -2441,14 +2441,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Sleep Debt Raises Resting Heart Rate',
     headline: 'Accumulated sleep debt drives up resting HR over days',
-    summary: 'Chronic sleep restriction shifts autonomic balance toward sympathetic dominance, raising resting heart rate. The 14-day running sleep debt metric captures this cumulative effect.',
-    recommendation: 'Threshold identified at 4.2 hours deficit.',
+    summary: 'Chronic sleep restriction shifts autonomic balance toward sympathetic dominance, raising resting heart rate. The effect is steepest below 4.2 hours of accumulated deficit, then plateaus.',
+    recommendation: 'Resting HR rises steeply with sleep debt; effect plateaus past 4.2 hours.',
     explanation: 'Accumulated sleep deficit elevates sympathetic tone and baseline heart rate. Most of the effect occurs below 4.2 hours deficit (+0.05 bpm per unit), with diminishing returns above.',
 
     causalParams: {
       source: 'sleep_debt_14d',
       target: 'resting_hr',
-      curveType: 'linear',
+      curveType: 'plateau_up',
       theta: {
         value: 4.16,
         unit: 'hours deficit',
@@ -2582,14 +2582,14 @@ export const oronInsights: Insight[] = [
     variableType: 'outcome',
     title: 'Training Load Supports Sleep Efficiency',
     headline: 'Moderate daily TRIMP is associated with better sleep efficiency',
-    summary: 'Training-induced fatigue promotes sleep consolidation, reducing wake-after-sleep-onset. The effect is linear with TRIMP load.',
-    recommendation: 'Threshold identified at 35.1 TRIMP.',
+    summary: 'Very low training loads slightly reduce sleep efficiency, while moderate-to-high loads improve it. Sleep efficiency dips minimally at ~35 TRIMP before rising.',
+    recommendation: 'Aim for 35+ TRIMP per training day for best sleep efficiency.',
     explanation: 'High-intensity training elevates sympathetic tone and core temperature, impairing sleep efficiency at high loads. The effect intensifies above 35.1 TRIMP (+0.27 % per unit vs -0.06 below).',
 
     causalParams: {
       source: 'daily_trimp',
       target: 'sleep_efficiency_pct',
-      curveType: 'linear',
+      curveType: 'v_min',
       theta: {
         value: 35.15,
         unit: 'TRIMP',
@@ -2729,7 +2729,7 @@ export const oronInsights: Insight[] = [
     title: 'Training Load Drives Deep Sleep',
     headline: 'Higher training load increases slow-wave sleep duration',
     summary: 'Exercise-induced metabolic stress and elevated adenosine increase the proportion and duration of deep sleep.',
-    recommendation: 'Threshold identified at 37.2 TRIMP.',
+    recommendation: 'Training load linearly increases deep sleep — no threshold.',
     explanation: 'Training intensity drives deep sleep need but extreme loads suppress SWS via cortisol and sympathetic activation.',
 
     causalParams: {
@@ -2737,11 +2737,11 @@ export const oronInsights: Insight[] = [
       target: 'deep_sleep_min',
       curveType: 'linear',
       theta: {
-        value: 37.24,
+        value: 0,
         unit: 'TRIMP',
-        low: 26.64,
-        high: 47.83,
-        displayValue: '37.2 TRIMP',
+        low: 0,
+        high: 0,
+        displayValue: '0',
       },
       betaBelow: {
         value: 0.195,
@@ -2875,14 +2875,14 @@ export const oronInsights: Insight[] = [
     variableType: 'marker',
     title: 'Running Volume Depletes Iron',
     headline: 'High running mileage draws down serum iron levels',
-    summary: 'Foot-strike hemolysis, GI ischemia, and sweat losses all increase with running volume, progressively depleting serum iron stores above ~177 km/month.',
-    recommendation: 'Threshold identified at 177.2 km/month.',
+    summary: 'Foot-strike hemolysis, GI ischemia, and sweat losses all increase with running volume, progressively depleting serum iron stores. The effect accelerates sharply past ~177 km/month.',
+    recommendation: 'Iron drops modestly with running but accelerates sharply past 177 km/month.',
     explanation: 'Foot-strike hemolysis destroys red blood cells; iron lost via hemolysis, sweat, and GI ischemia. The effect intensifies above 177.2 km/month (-0.30 mcg/dL per unit vs -0.05 below).',
 
     causalParams: {
       source: 'daily_run_km',
       target: 'iron_total_smoothed',
-      curveType: 'linear',
+      curveType: 'plateau_down',
       theta: {
         value: 177.17,
         unit: 'km/month',

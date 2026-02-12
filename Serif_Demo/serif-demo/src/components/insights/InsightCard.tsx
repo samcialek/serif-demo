@@ -5,8 +5,6 @@ import { ChevronDown, ChevronUp, Target, Sparkles, Code, X, Copy, Check } from '
 import { Card, CategoryBadge, CertaintyBadge, Button } from '@/components/common'
 import { DoseResponseCurve, EffectSizeDisplay } from '@/components/charts'
 import type { Insight, CurveType } from '@/types'
-import { oronPersona } from '@/data/personas/oron'
-import { LoadLeverPanel } from '@/components/protocols/LoadLeverPanel'
 
 export interface InsightCardProps extends React.HTMLAttributes<HTMLDivElement> {
   insight: Insight
@@ -247,7 +245,7 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
                   </button>
                 </div>
                 <p className="text-sm font-medium text-slate-800 line-clamp-2">{insight.title}</p>
-                {hasCausalParams && (
+                {hasCausalParams && insight.causalParams!.curveType !== 'linear' && (
                   <p className="text-xs text-slate-500 mt-1.5 font-mono">
                     θ = {insight.causalParams!.theta.displayValue}
                   </p>
@@ -277,34 +275,34 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
         >
           {/* Header - Clinical Precision */}
           <div className="p-5 pb-4">
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex items-start justify-between mb-2.5">
               <div className="flex items-center gap-2">
-                <span className="text-xl">{icon}</span>
+                <span className="text-lg">{icon}</span>
                 <CategoryBadge category={insight.category as any} />
                 {hasCausalParams && (
                   <span
-                    className="px-2 py-0.5 text-[10px] text-slate-500 bg-slate-50 rounded-full"
+                    className="px-2 py-0.5 text-[10px] text-slate-500 bg-slate-100/80 rounded-full font-mono"
                     title={`Curve type: ${insight.causalParams!.curveType}`}
                   >
                     {curveTypeLabels[insight.causalParams!.curveType]}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setShowCode(true)}
-                  className="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                  className="p-1.5 text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                   title="View JSON"
                 >
-                  <Code className="w-4 h-4" />
+                  <Code className="w-3.5 h-3.5" />
                 </button>
                 <CertaintyBadge certainty={insight.certainty} />
               </div>
             </div>
 
             {/* Title - Clinical Precision */}
-            <h3 className="text-base font-semibold text-slate-800 tracking-tight mb-1">{insight.title}</h3>
-            <p className="text-sm text-slate-500">{insight.headline}</p>
+            <h3 className="text-[15px] font-semibold text-slate-800 tracking-tight leading-snug mb-1">{insight.title}</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">{insight.headline}</p>
 
             {/* Data Source Indicators - Color-coded badges showing multi-source integration */}
             {insight.dataSources && insight.dataSources.length > 0 && (
@@ -344,30 +342,14 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
             )}
 
             {/* Recommendation - Clinical Precision with cyan accent */}
-            <div className="mt-4 p-4 bg-primary-50/50 rounded-lg border-l-[3px] border-l-serif-cyan">
+            <div className="mt-4 p-4 bg-primary-50/40 rounded-lg border-l-[3px] border-l-serif-cyan">
               <div className="flex items-start gap-3">
                 <Target className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-slate-800">{insight.recommendation}</p>
-                  <p className="text-xs text-slate-500 mt-1">{insight.explanation}</p>
+                  <p className="text-[13px] font-medium text-slate-800 leading-snug">{insight.recommendation}</p>
+                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{insight.explanation}</p>
                 </div>
               </div>
-              {/* Lever panel for load-related insights */}
-              {(() => {
-                const matchingLoad = oronPersona.loads?.find(
-                  (load) => load.affectedInsightIds?.includes(insight.id) && load.levers
-                )
-                if (!matchingLoad?.levers) return null
-                return (
-                  <div className="mt-3 pt-3 border-t border-primary-100/50">
-                    <LoadLeverPanel
-                      levers={matchingLoad.levers}
-                      loadLabel={matchingLoad.label}
-                      decreaseIsGood={matchingLoad.strategy === 'recover'}
-                    />
-                  </div>
-                )
-              })()}
             </div>
 
             {/* Causal Analysis — collapsible */}
@@ -430,8 +412,8 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               </div>
             )}
 
-            {/* Current Status - Only show for Loads and Markers (not Outcomes) */}
-            {hasCausalParams && insight.causalParams!.currentStatus && showCurrentPosition && (
+            {/* Current Status - Only show for Loads and Markers (not Outcomes), hidden for linear (no threshold) */}
+            {hasCausalParams && insight.causalParams!.curveType !== 'linear' && insight.causalParams!.currentStatus && showCurrentPosition && (
               <div className="mt-4 flex items-center gap-2">
                 <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Status:</span>
                 <span className={cn(
@@ -452,8 +434,8 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               </div>
             )}
 
-            {/* Population vs Individual Threshold Comparison */}
-            {insight.populationThreshold && Math.abs(Number(insight.populationThreshold.value) - Number(insight.cause.threshold)) > 0.01 && (
+            {/* Population vs Individual Threshold Comparison — only when they differ, hidden for linear (no threshold) */}
+            {insight.populationThreshold && (!hasCausalParams || insight.causalParams!.curveType !== 'linear') && Math.abs(Number(insight.populationThreshold.value) - Number(insight.cause.threshold)) > 0.01 && (
               <div className="mt-5 p-4 bg-gradient-to-r from-slate-50 to-primary-50/30 rounded-lg border border-primary-100">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-[10px] font-bold text-primary-600 uppercase tracking-wider">Your Threshold vs Population</span>
@@ -497,39 +479,46 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
 
           {/* Evidence bar - Clinical Precision */}
           <div className="px-5 pb-4">
-            {(() => { const personalPct = Math.min(99, Math.round(insight.evidence.personalWeight * 100)); const populationPct = Math.max(1, 100 - personalPct); return (
-            <div className="flex items-center gap-4 text-xs">
-              <div className="flex-1">
-                <div className="flex justify-between mb-1.5">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Personal</span>
-                  <span className="font-medium text-primary-600">{personalPct}%</span>
+            {(() => {
+              const personalPct = Math.min(99, Math.round(insight.evidence.personalWeight * 100))
+              const populationPct = Math.max(1, 100 - personalPct)
+              return (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Evidence Split</span>
+                {hasCausalParams && (
+                  <span className="font-mono text-slate-400 text-[10px]">
+                    n={insight.causalParams!.observations}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3 text-xs">
+                <div className="flex-1">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-[10px] font-medium text-primary-600">Personal {personalPct}%</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-serif-cyan rounded-full transition-all duration-500"
+                      style={{ width: `${personalPct}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-serif-cyan rounded-full"
-                    style={{ width: `${personalPct}%` }}
-                  />
+                <div className="flex-1">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-[10px] font-medium text-slate-500">Population {populationPct}%</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-slate-300 rounded-full transition-all duration-500"
+                      style={{ width: `${populationPct}%` }}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex-1">
-                <div className="flex justify-between mb-1.5">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Population</span>
-                  <span className="font-medium text-slate-500">{populationPct}%</span>
-                </div>
-                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-slate-300 rounded-full"
-                    style={{ width: `${populationPct}%` }}
-                  />
-                </div>
-              </div>
-              {hasCausalParams && (
-                <div className="font-mono text-slate-400 text-[10px]">
-                  n={insight.causalParams!.observations}
-                </div>
-              )}
             </div>
-            ) })()}
+              )
+            })()}
           </div>
 
           {/* Expandable evidence section - Clinical Precision */}

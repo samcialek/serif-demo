@@ -245,7 +245,7 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
                   </button>
                 </div>
                 <p className="text-sm font-medium text-slate-800 line-clamp-2">{insight.title}</p>
-                {hasCausalParams && (
+                {hasCausalParams && insight.causalParams!.curveType !== 'linear' && (
                   <p className="text-xs text-slate-500 mt-1.5 font-mono">
                     θ = {insight.causalParams!.theta.displayValue}
                   </p>
@@ -412,8 +412,8 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               </div>
             )}
 
-            {/* Current Status - Only show for Loads and Markers (not Outcomes) */}
-            {hasCausalParams && insight.causalParams!.currentStatus && showCurrentPosition && (
+            {/* Current Status - Only show for Loads and Markers (not Outcomes), hidden for linear (no threshold) */}
+            {hasCausalParams && insight.causalParams!.curveType !== 'linear' && insight.causalParams!.currentStatus && showCurrentPosition && (
               <div className="mt-4 flex items-center gap-2">
                 <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Status:</span>
                 <span className={cn(
@@ -434,8 +434,8 @@ export const InsightCard = forwardRef<HTMLDivElement, InsightCardProps>(
               </div>
             )}
 
-            {/* Population vs Individual Threshold Comparison — only when they differ */}
-            {insight.populationThreshold && Math.abs(Number(insight.populationThreshold.value) - Number(insight.cause.threshold)) > 0.01 && (
+            {/* Population vs Individual Threshold Comparison — only when they differ, hidden for linear (no threshold) */}
+            {insight.populationThreshold && (!hasCausalParams || insight.causalParams!.curveType !== 'linear') && Math.abs(Number(insight.populationThreshold.value) - Number(insight.cause.threshold)) > 0.01 && (
               <div className="mt-5 p-4 bg-gradient-to-r from-slate-50 to-primary-50/30 rounded-lg border border-primary-100">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-[10px] font-bold text-primary-600 uppercase tracking-wider">Your Threshold vs Population</span>
