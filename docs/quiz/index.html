@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISM Political Profile Quiz</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --muted: #9ca3af;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #eab308;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .container { max-width: 720px; width: 100%; padding: 20px; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+  h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; }
+  .subtitle { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+
+  /* Progress */
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .q-section { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .q-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; }
+  .q-subtext { color: var(--muted); font-size: 0.88rem; margin-top: -12px; margin-bottom: 18px; }
+
+  /* Option buttons */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .option-btn:hover { border-color: var(--accent); background: rgba(99,102,241,0.08); }
+  .option-btn.selected { border-color: var(--accent); background: rgba(99,102,241,0.15); }
+
+  /* Slider */
+  .slider-container { padding: 10px 0; }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+  .slider-value {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 12px;
+    color: var(--accent);
+  }
+
+  /* Allocation */
+  .alloc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .alloc-label { flex: 1; font-size: 0.9rem; min-width: 120px; }
+  .alloc-slider { flex: 2; }
+  .alloc-val { width: 50px; text-align: right; font-weight: 600; font-size: 0.9rem; }
+  .alloc-total {
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+  .alloc-total.valid { background: rgba(34,197,94,0.1); color: var(--green); }
+  .alloc-total.invalid { background: rgba(239,68,68,0.1); color: var(--red); }
+
+  /* Ranking */
+  .ranking-items { list-style: none; }
+  .ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: grab;
+    user-select: none;
+  }
+  .ranking-item:active { cursor: grabbing; }
+  .rank-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .rank-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: auto;
+  }
+  .rank-arrow {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 28px;
+    height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rank-arrow:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Pairwise */
+  .pair-group { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .pair-group:last-child { border-bottom: none; }
+  .pair-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
+  .pair-options { display: flex; gap: 10px; }
+  .pair-options .option-btn { flex: 1; text-align: center; }
+
+  /* Multi select */
+  .multi-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .multi-option:hover { border-color: var(--accent); }
+  .multi-option.selected { border-color: var(--accent); background: rgba(99,102,241,0.12); }
+  .multi-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: all 0.15s;
+  }
+  .multi-option.selected .multi-check {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* Submit button */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 16px;
+  }
+  .submit-btn:hover { background: var(--accent-hover); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Results */
+  .results-section { margin-bottom: 32px; }
+  .results-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .archetype-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .archetype-name { flex: 1; font-size: 0.92rem; }
+  .archetype-bar-bg {
+    flex: 2;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .archetype-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .archetype-pct { width: 50px; text-align: right; font-size: 0.85rem; color: var(--muted); }
+
+  .node-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .node-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .node-name { font-weight: 600; font-size: 0.95rem; }
+  .node-salience {
+    font-size: 0.78rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(99,102,241,0.12);
+    color: var(--accent);
+  }
+  .node-position-bar {
+    position: relative;
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    margin-bottom: 6px;
+  }
+  .node-marker {
+    position: absolute;
+    top: -3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateX(-50%);
+    transition: left 0.5s ease;
+  }
+  .node-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .cat-dist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .cat-chip {
+    font-size: 0.78rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--border);
+  }
+  .cat-chip.top { background: var(--accent); color: white; }
+
+  .winner-card {
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1));
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .winner-card h2 { color: var(--accent); margin-bottom: 4px; }
+  .winner-card .pct { font-size: 2rem; font-weight: 700; color: var(--accent); }
+
+  .restart-btn {
+    display: block;
+    width: 200px;
+    margin: 24px auto;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .restart-btn:hover { border-color: var(--accent); }
+
+  .intro-card {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .intro-card h1 { font-size: 2.2rem; margin-bottom: 12px; }
+  .intro-card p { color: var(--muted); line-height: 1.7; margin-bottom: 20px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .start-btn {
+    display: inline-block;
+    padding: 14px 48px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .start-btn:hover { background: var(--accent-hover); }
+
+  #intro, #quiz, #results { display: none; }
+  .active { display: block !important; }
+
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    .question-card { padding: 20px; }
+    .pair-options { flex-direction: column; }
+    h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- INTRO -->
+<div id="intro" class="active">
+  <div class="question-card intro-card">
+    <h1>PRISM</h1>
+    <p class="subtitle" style="margin-bottom:16px;">Political Respondent Inference & Segmentation Model</p>
+    <p>This quiz uses adaptive Bayesian inference to identify your political archetype from 109 possible profiles across 15 dimensions of political belief.</p>
+    <p>The quiz dynamically selects questions based on your previous answers, typically asking 30-45 questions to reach a confident classification.</p>
+    <button class="start-btn" onclick="startQuiz()">Begin Quiz</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text">
+    <span id="progressLabel">Question 1</span>
+    <span id="progressViable"></span>
+  </div>
+  <div id="questionArea"></div>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <div id="resultsContent"></div>
+  <button class="restart-btn" onclick="location.reload()">Take Quiz Again</button>
+</div>
+
+</div>
+
+<script src="prism-engine.js"></script>
+<script>
+// =========================================================================
+// Question text database — maps engine question IDs to display content
+// =========================================================================
+const QUESTIONS = {
+  1: {
+    text: "In a typical week, how often do you actively seek out political news (not just see headlines in passing)?",
+    options: [
+      { key: "never", label: "Never" },
+      { key: "few_days", label: "A few days a week" },
+      { key: "most_days", label: "Most days" },
+      { key: "every_day", label: "Every day" }
+    ]
+  },
+  2: {
+    text: "How central is politics to your sense of who you are?",
+    slider: { left: "Not at all central", right: "Core to my identity" }
+  },
+  3: {
+    text: "On cultural and social issues (immigration, LGBTQ+ rights, abortion, role of religion, family structures), where would you place your own views?",
+    slider: { left: "Strongly progressive / liberal", right: "Strongly traditional / conservative" }
+  },
+  4: {
+    text: "How much do cultural and social issues matter to you when deciding how to vote?",
+    slider: { left: "Not important at all", right: "The most important factor" }
+  },
+  5: {
+    text: "What MOST motivates your political engagement? (Select up to 2)",
+    multiMax: 2,
+    options: [
+      { key: "civic_duty", label: "Civic responsibility — participating is important regardless of outcome" },
+      { key: "protect_values", label: "Protecting the values and way of life I care about" },
+      { key: "help_community", label: "Helping my community and the people around me" },
+      { key: "fight_injustice", label: "Fighting injustice and standing up for the vulnerable" },
+      { key: "self_interest", label: "Protecting my own interests and those of my family" },
+      { key: "intellectual_challenge", label: "The intellectual challenge — I enjoy understanding complex issues" }
+    ]
+  },
+  6: {
+    text: "When it comes to surveillance, enforcement, and due process, which best describes your priority?",
+    options: [
+      { key: "due_process_priority", label: "Due process and civil liberties should come first, even if some guilty people go free" },
+      { key: "balanced_security", label: "We need a balance — some surveillance is acceptable with proper oversight" },
+      { key: "security_priority", label: "Security should come first — we need strong enforcement to keep people safe" }
+    ]
+  },
+  7: {
+    text: "Your preferred candidate reaches out to a group whose views you strongly oppose on core values, in order to win an important election. Do you support this?",
+    options: [
+      { key: "principle_first", label: "Never — some principles shouldn't be compromised for political gain" },
+      { key: "coalition_first", label: "Yes — winning matters more, and you have to build broad coalitions" },
+      { key: "depends_on_issue", label: "It depends on which values are at stake" }
+    ]
+  },
+  8: {
+    text: "A policy can save 100 lives. How much does it matter whether those lives are in your country vs. abroad?",
+    slider: { left: "Domestic lives matter much more", right: "All lives matter equally regardless of nationality" }
+  },
+  9: {
+    text: "At a social gathering with people of mixed political views, which best describes you?",
+    options: [
+      { key: "avoid_entirely", label: "I avoid political topics entirely" },
+      { key: "discuss_if_comes_up", label: "I'll discuss if it comes up, but I don't bring it up" },
+      { key: "actively_bring_up", label: "I actively bring up political topics — it's important to engage" }
+    ]
+  },
+  10: {
+    text: "On climate and energy policy, which comes closest to your view?",
+    options: [
+      { key: "aggressive_transition", label: "We need aggressive government action to transition away from fossil fuels immediately" },
+      { key: "gradual_transition", label: "A gradual transition with government support makes sense" },
+      { key: "market_led", label: "Markets should lead the transition — government mandates cause more harm than good" },
+      { key: "no_action_needed", label: "Climate change is not a serious enough problem to justify major policy changes" }
+    ]
+  },
+  11: {
+    text: "You have 30 minutes to read one article. Which headline do you click?",
+    options: [
+      { key: "timeless_principles", label: "\"The proven principles that have guided successful societies for centuries\"" },
+      { key: "weird_science", label: "\"A strange new study challenges everything we thought we knew about...\"" },
+      { key: "practical_tips", label: "\"5 evidence-based steps you can take today to improve your...\"" },
+      { key: "other_side_bad", label: "\"Exposed: How the other side is destroying America from within\"" }
+    ]
+  },
+  12: {
+    text: "The US top federal income tax bracket kicks in at $609,351. What do you think the current top rate is?",
+    slider: { left: "0%", right: "100%", unit: "%" }
+  },
+  13: {
+    text: "If you had your way, what should the top federal income tax rate be?",
+    slider: { left: "0%", right: "100%", unit: "%" }
+  },
+  14: {
+    text: "A competitive university must choose an admissions approach. Which do you prefer?",
+    options: [
+      { key: "strict_merit", label: "Strict merit — admit solely based on test scores and grades" },
+      { key: "holistic_review", label: "Holistic review — consider background, character, and experiences alongside academics" },
+      { key: "affirmative_action", label: "Active equity — give preference to underrepresented groups to correct systemic disadvantage" },
+      { key: "lottery", label: "Lottery among qualified applicants — fairest way to avoid human bias" }
+    ]
+  },
+  15: {
+    text: "In your view, what explains differences between rich and poor?",
+    subtext: "Allocate 100 points across factors.",
+    allocation: [
+      { key: "effort_choices", label: "Individual effort and choices" },
+      { key: "family_background", label: "Family background and inherited advantage" },
+      { key: "discrimination_bias", label: "Discrimination and systemic bias" },
+      { key: "luck_random", label: "Luck and random circumstances" }
+    ]
+  },
+  16: {
+    text: "On criminal justice, which approach do you favor?",
+    options: [
+      { key: "rehabilitation_focus", label: "Rehabilitation — focus on reforming offenders and addressing root causes" },
+      { key: "balanced_approach", label: "Balanced — both punishment and rehabilitation have their place" },
+      { key: "punishment_focus", label: "Punishment — consequences must be serious enough to deter crime" }
+    ]
+  },
+  17: {
+    text: "A company must decide between pay structures. Which do you prefer?",
+    options: [
+      { key: "ratio_10_to_1", label: "Narrow range: CEO makes 10x the lowest-paid worker" },
+      { key: "ratio_50_to_1", label: "Moderate range: CEO makes 50x the lowest-paid worker" },
+      { key: "ratio_200_to_1", label: "Wide range: CEO makes 200x — market rate for top talent" },
+      { key: "market_decides", label: "No limit — pay should be whatever the market decides" }
+    ]
+  },
+  18: {
+    text: "When you think about human progress over the next 50 years, which comes closest to your view?",
+    options: [
+      { key: "steady_improvement", label: "Humanity will make major progress — science and cooperation will solve our biggest problems" },
+      { key: "gradual_progress", label: "Things will slowly improve, but major challenges will remain" },
+      { key: "cyclical", label: "Things will stay roughly the same — progress in some areas, decline in others" },
+      { key: "decline", label: "Things will likely get worse — we're heading in the wrong direction" }
+    ]
+  },
+  19: {
+    text: "How much does your view of humanity's future trajectory shape your political views?",
+    slider: { left: "Doesn't affect my views at all", right: "Strongly shapes how I think about politics" }
+  },
+  20: {
+    text: "When bad things happen in society (economic downturns, social problems), what's usually the cause?",
+    subtext: "Allocate 100 points across explanations.",
+    allocation: [
+      { key: "complex_forces", label: "Complex systemic forces no one fully controls" },
+      { key: "powerful_incompetent", label: "Powerful people making incompetent decisions" },
+      { key: "powerful_selfish", label: "Powerful people acting selfishly at others' expense" },
+      { key: "ordinary_choices", label: "Accumulated choices of ordinary people" },
+      { key: "random_luck", label: "Random events and bad luck" }
+    ]
+  },
+  21: {
+    text: "A speaker known for controversial and offensive views (but who does not incite violence) is invited to speak at a public university. What should happen?",
+    options: [
+      { key: "cancel", label: "The event should be cancelled — harmful speech shouldn't have a platform" },
+      { key: "restricted", label: "Allow with significant restrictions (small venue, no media, trigger warnings)" },
+      { key: "allow_with_counterspeech", label: "Allow the event but organize a counter-event or rebuttal" },
+      { key: "allow_no_restrictions", label: "Allow with no restrictions — free speech is paramount" }
+    ]
+  },
+  22: {
+    text: "A new study contradicts something you believed. How much weight would you give to each factor in deciding whether to update your belief?",
+    subtext: "Allocate 100 points across factors.",
+    allocation: [
+      { key: "methodology", label: "The study's methodology and sample size" },
+      { key: "researcher_credentials", label: "The researchers' credentials and institution" },
+      { key: "personal_experience", label: "Whether it matches your personal experience" },
+      { key: "trusted_people", label: "Whether people you trust find it convincing" },
+      { key: "gut_feeling", label: "Your gut feeling about whether it's right" }
+    ]
+  },
+  23: {
+    text: "A new law needs to be shaped for your community. Rank who should have the most influence:",
+    ranking: [
+      { key: "researchers", label: "Academic researchers and subject-matter experts" },
+      { key: "organized_residents", label: "Organized community residents" },
+      { key: "elected_officials", label: "Elected officials and their staff" },
+      { key: "elders_religious", label: "Community elders and religious leaders" },
+      { key: "business_stakeholders", label: "Business owners and economic stakeholders" }
+    ]
+  },
+  24: {
+    text: "Which trait is more important to teach children?",
+    pairwise: [
+      { id: "independence_vs_elders", left: { key: "independence", label: "Independence and questioning authority" }, right: { key: "respect_for_elders", label: "Respect for elders and tradition" } },
+      { id: "obedience_vs_self_reliance", left: { key: "obedience", label: "Obedience and discipline" }, right: { key: "self_reliance", label: "Self-reliance and initiative" } }
+    ]
+  },
+  25: {
+    text: "In a criminal trial, which error is worse?",
+    options: [
+      { key: "rather_free_guilty", label: "Convicting an innocent person is far worse — better 10 guilty go free" },
+      { key: "balance_both_errors", label: "Both errors are serious — we need to balance carefully" },
+      { key: "rather_convict_innocent", label: "Freeing the guilty is worse — public safety must come first" }
+    ]
+  },
+  26: {
+    text: "For your next vacation, which appeals more?",
+    options: [
+      { key: "new_place", label: "Somewhere completely new and unfamiliar — the more exotic, the better" },
+      { key: "mix_both", label: "A mix — new destination but with familiar comforts" },
+      { key: "familiar_place", label: "A familiar favorite — I know I'll enjoy it" }
+    ]
+  },
+  27: {
+    text: "A welfare system will inevitably have some errors. Which is the worse outcome?",
+    options: [
+      { key: "rather_help_undeserving", label: "Better to help some who don't deserve it than to miss anyone who truly needs help" },
+      { key: "balanced_errors", label: "Both errors are about equally bad" },
+      { key: "rather_miss_needy", label: "Better to miss a few deserving people than to waste resources on those who don't need help" }
+    ]
+  },
+  28: {
+    text: "Assuming indoor mask use reduces virus spread during a pandemic surge, how acceptable is a mask mandate for indoor public spaces?",
+    options: [
+      { key: "accept_mandate", label: "Fully support — public health requires collective action" },
+      { key: "comply_reluctantly", label: "Reluctantly accept as a temporary measure" },
+      { key: "resist_mandate", label: "Oppose — individual liberty trumps collective mandates" }
+    ]
+  },
+  29: {
+    text: "A major factory in a community closes. Rank the likely causes from most to least responsible:",
+    ranking: [
+      { key: "global_competition", label: "Globalization and cheaper labor abroad" },
+      { key: "automation", label: "Automation and technological change" },
+      { key: "corporate_decisions", label: "Corporate decisions prioritizing profit over workers" },
+      { key: "government_policy", label: "Government policy failures" },
+      { key: "worker_choices", label: "Worker demands and labor costs" }
+    ]
+  },
+  30: {
+    text: "When it comes to controlling harmful information online, what's the right approach?",
+    options: [
+      { key: "remove_immediately", label: "Remove harmful content immediately — preventing harm is the priority" },
+      { key: "allow_with_labels", label: "Allow but add labels and context — let people decide for themselves" },
+      { key: "allow_fully", label: "Allow fully — censorship is more dangerous than misinformation" }
+    ]
+  },
+  31: {
+    text: "A new trade agreement will create more total wealth but some industries will suffer. Which best describes your view?",
+    options: [
+      { key: "strongly_support", label: "Support — more total wealth benefits everyone eventually" },
+      { key: "support_with_aid", label: "Support, but only if there's serious help for displaced workers" },
+      { key: "skeptical", label: "Skeptical — the gains go to the wealthy while workers suffer" },
+      { key: "oppose", label: "Oppose — protecting existing jobs matters more than theoretical gains" }
+    ]
+  },
+  32: {
+    text: "What percentage of mainstream news reporting do you think is substantially accurate?",
+    slider: { left: "0% (none is accurate)", right: "100% (all is accurate)", unit: "%" }
+  },
+  33: {
+    text: "On immigration policy, which approach do you favor?",
+    options: [
+      { key: "open_borders", label: "Open borders — free movement of people is a fundamental right" },
+      { key: "generous_policy", label: "Generous policy — welcome many immigrants with a path to citizenship" },
+      { key: "balanced_approach", label: "Balanced — controlled immigration with clear legal pathways" },
+      { key: "strict_enforcement", label: "Strict enforcement — significantly reduce immigration levels" }
+    ]
+  },
+  34: {
+    text: "Which is a bigger threat to America today?",
+    options: [
+      { key: "external_threats", label: "External threats — foreign adversaries, terrorism, economic competition" },
+      { key: "both_equally", label: "Both are equally threatening" },
+      { key: "internal_division", label: "Internal threats — division, institutional decay, domestic extremism" }
+    ]
+  },
+  35: {
+    text: "What percentage of people who disagree with you politically do you think genuinely want what's best for the country?",
+    slider: { left: "0% — almost none of them", right: "100% — almost all of them" }
+  },
+  36: {
+    text: "The FDA must choose between approving drugs faster (saving lives sooner but risking unsafe drugs) vs. slower (safer but delaying access). Which error is worse?",
+    options: [
+      { key: "approve_unsafe", label: "Approving an unsafe drug — patient safety must come first" },
+      { key: "slight_lean_safety", label: "Approving unsafe is slightly worse" },
+      { key: "equally_bad", label: "Both errors are equally bad" },
+      { key: "delay_effective", label: "Delaying an effective drug — people die waiting" }
+    ]
+  },
+  37: {
+    text: "Your workplace has a rule that you think is stupid but not harmful. What do you do?",
+    options: [
+      { key: "follow_always", label: "Follow it — rules exist for reasons, even when I disagree" },
+      { key: "follow_then_advocate", label: "Follow it but work through proper channels to change it" },
+      { key: "ignore_quietly", label: "Quietly ignore it when no one is watching" },
+      { key: "openly_challenge", label: "Openly challenge it — bad rules shouldn't be followed" }
+    ]
+  },
+  38: {
+    text: "How much do rules, procedures, and institutional processes matter to you in politics?",
+    slider: { left: "Results matter — process is just a means", right: "Process is sacred — legitimate outcomes require legitimate processes" }
+  },
+  39: {
+    text: "Think about people who oppose your political views. What best explains why they hold those views?",
+    subtext: "Allocate 100 points across explanations.",
+    allocation: [
+      { key: "legitimate_values", label: "They have legitimate values and priorities that differ from mine" },
+      { key: "misinformed", label: "They're misinformed or lack relevant knowledge" },
+      { key: "self_interest", label: "They're acting in rational self-interest" },
+      { key: "bad_motives", label: "They have bad motives — selfishness, hatred, or desire for power" }
+    ]
+  },
+  40: {
+    text: "How much does having political opponents (people or groups you're against) shape your political identity?",
+    slider: { left: "Not at all — I define myself by what I'm FOR", right: "Very much — knowing what I oppose is central to who I am politically" }
+  },
+  41: {
+    text: "Election systems involve tradeoffs between access and security. What's the right balance?",
+    options: [
+      { key: "easier_access", label: "Make voting as easy as possible — access is the priority" },
+      { key: "balanced_approach", label: "Balance access and security — both matter equally" },
+      { key: "tighter_security", label: "Tighten security — election integrity is the priority" }
+    ]
+  },
+  42: {
+    text: "You discover that one of your closest friends voted for a candidate you strongly oppose. How do you react?",
+    options: [
+      { key: "no_big_deal", label: "No big deal — friendship transcends politics" },
+      { key: "keep_friendship", label: "Disappointed, but I'd keep the friendship" },
+      { key: "distance_somewhat", label: "I'd probably distance myself somewhat" },
+      { key: "end_friendship", label: "The friendship would be over" }
+    ]
+  },
+  43: {
+    text: "You will be randomly assigned to a position in one of these societies. Which do you choose?",
+    subtext: "You could end up anywhere in the income distribution.",
+    options: [
+      { key: "equal_society", label: "Most equal: Average income $45K. Everyone earns $40K-$50K. Low growth but very equal." },
+      { key: "safety_net_society", label: "Safety net: Average $60K. Strong floor at $35K, top earners at $120K." },
+      { key: "opportunity_society", label: "Opportunity: Average $75K. Wide range ($20K-$250K) but high mobility." },
+      { key: "free_market_society", label: "Free market: Average $90K. Top 10% earns $300K+, bottom 10% earns $15K. High growth." }
+    ]
+  },
+  44: {
+    text: "How much have your political views changed in the last 10 years?",
+    slider: { left: "Not at all — my views are consistent", right: "Dramatically — I've changed my mind on major issues" }
+  },
+  45: {
+    text: "What has historically been the most powerful force for changing minds and beliefs?",
+    options: [
+      { key: "evidence_and_argument", label: "Evidence and rational argument" },
+      { key: "moral_movements", label: "Moral and social movements" },
+      { key: "economic_interests", label: "Economic interests and material conditions" },
+      { key: "power_struggles", label: "Power struggles — whoever wins writes the narrative" }
+    ]
+  },
+  46: {
+    text: "Growing up, how emotionally available were your primary caregivers?",
+    slider: { left: "Not available — distant or absent", right: "Very available — warm and engaged" }
+  },
+  47: {
+    text: "When you have a political disagreement with someone close to you, what do you typically do?",
+    options: [
+      { key: "avoid_if_possible", label: "Avoid the topic entirely to preserve the relationship" },
+      { key: "engage_carefully", label: "Engage carefully — share my view but respect the relationship" },
+      { key: "stand_ground", label: "Stand my ground — it's important to be honest about where I stand" },
+      { key: "enjoy_debate", label: "I enjoy the debate — a good argument sharpens both sides" }
+    ]
+  },
+  48: {
+    text: "Looking at the long arc of history, are societies generally getting better or worse at treating people well?",
+    options: [
+      { key: "continuous_improvement", label: "Clearly better — more rights, less violence, better quality of life" },
+      { key: "gradual_improvement", label: "Somewhat better overall, but with serious ongoing problems" },
+      { key: "stagnation", label: "Mixed — better in some ways, worse in others" },
+      { key: "decline", label: "Getting worse — we've lost important values and social cohesion" }
+    ]
+  },
+  49: {
+    text: "How important is the question of whether humanity is progressing or declining to your political worldview?",
+    slider: { left: "Not important to my views", right: "Central to how I think about politics" }
+  },
+  50: {
+    text: "What should a newcomer demonstrate to be considered a full member of your national community? Rank from most to least important:",
+    ranking: [
+      { key: "language_fluency", label: "Fluency in the national language" },
+      { key: "follow_laws", label: "Following the law and paying taxes" },
+      { key: "cultural_values", label: "Adopting core cultural values and customs" },
+      { key: "economic_contribution", label: "Contributing economically" },
+      { key: "born_here", label: "Being born in the country or having ancestry here" }
+    ]
+  },
+  51: {
+    text: "How important are immigration and national identity issues to you?",
+    slider: { left: "Not important at all", right: "Among the most important issues" }
+  },
+  52: {
+    text: "What should define who belongs to the political community (who gets full citizenship rights)?",
+    options: [
+      { key: "civic_participation", label: "Anyone who lives here, follows laws, and participates in civic life" },
+      { key: "shared_values", label: "Those who share our core cultural values" },
+      { key: "cultural_heritage", label: "Those with cultural heritage and deep roots here" },
+      { key: "born_here", label: "Those born here or with generational ties" }
+    ]
+  },
+  53: {
+    text: "Growing up, how would you describe your parents' political views?",
+    options: [
+      { key: "very_conservative", label: "Very conservative / traditional" },
+      { key: "moderate_household", label: "Moderate or mixed" },
+      { key: "very_progressive", label: "Very progressive / liberal" },
+      { key: "not_political", label: "Apolitical — politics wasn't discussed" }
+    ]
+  },
+  54: {
+    text: "How important was religion in your upbringing?",
+    options: [
+      { key: "very_religious", label: "Central to daily life and values" },
+      { key: "somewhat_religious", label: "Present and meaningful but not all-consuming" },
+      { key: "not_religious", label: "Not important — secular or non-religious upbringing" }
+    ]
+  },
+  55: {
+    text: "Think of a time you changed your mind on something important. What caused the change? (Select all that apply)",
+    multiMax: 3,
+    options: [
+      { key: "personal_experience", label: "A personal experience that shifted my perspective" },
+      { key: "data_evidence", label: "New data or research I found convincing" },
+      { key: "trusted_authority", label: "A trusted authority figure or mentor" },
+      { key: "religious_moral", label: "Religious or moral conviction" },
+      { key: "never_changed", label: "I rarely change my mind on important things" }
+    ]
+  },
+  56: {
+    text: "Which political leader style is most effective?",
+    options: [
+      { key: "channel_anger", label: "Channel people's anger and frustration into action" },
+      { key: "paint_vision", label: "Paint an inspiring vision of what we could become" },
+      { key: "fight_to_win", label: "Fight relentlessly against opponents until we win" },
+      { key: "master_policy_details", label: "Master policy details and deliver results through expertise" },
+      { key: "build_expert_coalitions", label: "Build broad consensus through negotiation and compromise" }
+    ]
+  },
+  57: {
+    text: "How politically engaged were your parents?",
+    options: [
+      { key: "very_engaged", label: "Very engaged — voted, volunteered, discussed politics regularly" },
+      { key: "occasionally_discussed", label: "Somewhat engaged — voted but politics wasn't a big topic" },
+      { key: "never_discussed", label: "Not engaged — politics was rarely or never discussed" }
+    ]
+  },
+  58: {
+    text: "Growing up, how safe did you feel in your neighborhood?",
+    options: [
+      { key: "very_safe", label: "Very safe — never worried about safety" },
+      { key: "mostly_safe", label: "Mostly safe with occasional concerns" },
+      { key: "somewhat_unsafe", label: "Somewhat unsafe — I was aware of dangers" },
+      { key: "very_unsafe", label: "Very unsafe — safety was a constant concern" }
+    ]
+  },
+  59: {
+    text: "What matters more in a political leader?",
+    options: [
+      { key: "competence_record", label: "Track record of competence and getting things done" },
+      { key: "shared_values", label: "Shares my values and moral vision" },
+      { key: "fights_for_us", label: "Fights for people like me against powerful interests" },
+      { key: "unifying_vision", label: "Unifying vision that brings people together" }
+    ]
+  },
+  60: {
+    text: "Which aspects of identity are most important to your political views? Rank from most to least important:",
+    ranking: [
+      { key: "national_identity", label: "My country and national identity" },
+      { key: "ideological_identity", label: "My ideological/political beliefs" },
+      { key: "religious_identity", label: "My religious or spiritual identity" },
+      { key: "class_identity", label: "My economic class" },
+      { key: "ethnic_racial_identity", label: "My race or ethnicity" },
+      { key: "global_citizen", label: "Being a global citizen" }
+    ]
+  },
+  61: {
+    text: "Which political pitch resonates most with you?",
+    options: [
+      { key: "evidence_pitch", label: "\"Here are the numbers — the evidence clearly shows this policy works.\"" },
+      { key: "tradition_pitch", label: "\"We need to return to the values that made this country great.\"" },
+      { key: "fight_pitch", label: "\"They've been screwing us over. It's time to fight back.\"" },
+      { key: "unity_pitch", label: "\"We're all Americans. Let's find common ground and move forward together.\"" }
+    ]
+  },
+  62: {
+    text: "Which type of political campaign event appeals to you most?",
+    options: [
+      { key: "fiery_rally", label: "A fiery rally with passionate speeches and high energy" },
+      { key: "measured_rally", label: "A measured town hall with substantive policy discussion" },
+      { key: "grassroots_community", label: "A grassroots community organizing event" },
+      { key: "data_driven_campaign", label: "A data-driven policy briefing with expert speakers" }
+    ]
+  },
+  63: {
+    text: "Which political values matter MOST and LEAST to you?",
+    bestWorst: [
+      { key: "fairness", label: "Fairness — everyone treated equally" },
+      { key: "procedural_integrity", label: "Procedural integrity — following rules and institutions" },
+      { key: "national_strength", label: "National strength and security" },
+      { key: "community_bonds", label: "Community bonds and social cohesion" },
+      { key: "individual_freedom", label: "Individual freedom and personal liberty" },
+      { key: "tradition_continuity", label: "Tradition and cultural continuity" }
+    ]
+  }
+};
+
+// =========================================================================
+// Quiz Controller
+// =========================================================================
+let engine;
+let currentQuestion;
+
+function startQuiz() {
+  document.getElementById('intro').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
+  engine = new PRISM.QuizEngine();
+  nextQuestion();
+}
+
+function nextQuestion() {
+  currentQuestion = engine.getNextQuestion();
+  if (!currentQuestion || engine.isDone()) {
+    showResults();
+    return;
+  }
+  renderQuestion(currentQuestion);
+  updateProgress();
+}
+
+function updateProgress() {
+  const asked = engine.questionsAsked;
+  const pct = Math.min(100, (asked / 40) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Question ${asked + 1}`;
+  const prog = engine.getProgress();
+  const viable = prog.viable;
+  document.getElementById('progressViable').textContent =
+    prog.topArchetype ? `Top: ${prog.topArchetype.name} (${prog.topArchetype.posterior}%)` : `${viable} archetypes viable`;
+}
+
+function renderQuestion(q) {
+  const area = document.getElementById('questionArea');
+  const qData = QUESTIONS[q.id];
+  if (!qData) {
+    // Fallback for unmapped questions
+    submitAnswer(q.id, q.uiType === 'slider' ? 50 : 'unknown', q.uiType === 'multi' ? 'multi' : q.uiType);
+    return;
+  }
+
+  const uiType = q.uiType;
+  let html = `<div class="question-card">`;
+  html += `<div class="q-section">Section ${q.section}</div>`;
+  html += `<div class="q-text">${qData.text}</div>`;
+  if (qData.subtext) html += `<div class="q-subtext">${qData.subtext}</div>`;
+
+  if (uiType === 'single_choice' && qData.options) {
+    html += renderSingleChoice(q.id, qData.options);
+  } else if (uiType === 'slider') {
+    html += renderSlider(q.id, qData.slider || { left: 'Low', right: 'High' });
+  } else if (uiType === 'allocation' && qData.allocation) {
+    html += renderAllocation(q.id, qData.allocation);
+  } else if (uiType === 'ranking' && qData.ranking) {
+    html += renderRanking(q.id, qData.ranking);
+  } else if (uiType === 'pairwise' && qData.pairwise) {
+    html += renderPairwise(q.id, qData.pairwise);
+  } else if (uiType === 'multi' && qData.options) {
+    html += renderMulti(q.id, qData.options, qData.multiMax || 3);
+  } else if (uiType === 'best_worst' && qData.bestWorst) {
+    html += renderBestWorst(q.id, qData.bestWorst);
+  } else {
+    // Fallback: treat as single choice
+    html += `<p style="color:var(--muted)">This question type (${uiType}) uses a simplified interface.</p>`;
+    html += renderSlider(q.id, { left: 'Low', right: 'High' });
+  }
+
+  html += `</div>`;
+  area.innerHTML = html;
+}
+
+// ---- Renderers ----
+
+function renderSingleChoice(qId, options) {
+  let h = '<div class="options">';
+  for (const opt of options) {
+    h += `<button class="option-btn" onclick="submitAnswer(${qId}, '${opt.key}', 'single_choice')">${opt.label}</button>`;
+  }
+  h += '</div>';
+  return h;
+}
+
+function renderSlider(qId, slider) {
+  const unit = slider.unit || '';
+  return `
+    <div class="slider-container">
+      <div class="slider-labels"><span>${slider.left}</span><span>${slider.right}</span></div>
+      <input type="range" min="0" max="100" value="50" id="slider_${qId}"
+        oninput="document.getElementById('sval_${qId}').textContent = this.value + '${unit}'">
+      <div class="slider-value" id="sval_${qId}">50${unit}</div>
+      <button class="submit-btn" onclick="submitAnswer(${qId}, parseInt(document.getElementById('slider_${qId}').value), 'slider')">Continue</button>
+    </div>`;
+}
+
+function renderAllocation(qId, items) {
+  let h = '<div id="alloc_container">';
+  for (const item of items) {
+    h += `<div class="alloc-row">
+      <div class="alloc-label">${item.label}</div>
+      <input type="range" min="0" max="100" value="0" class="alloc-slider"
+        data-key="${item.key}" oninput="updateAllocTotal(${qId})">
+      <div class="alloc-val" id="av_${item.key}">0</div>
+    </div>`;
+  }
+  h += `<div class="alloc-total invalid" id="alloc_total">Total: 0 / 100</div>`;
+  h += `<button class="submit-btn" id="alloc_submit" disabled onclick="submitAllocation(${qId})">Continue</button>`;
+  h += '</div>';
+  return h;
+}
+
+function updateAllocTotal(qId) {
+  const sliders = document.querySelectorAll('#alloc_container .alloc-slider');
+  let total = 0;
+  sliders.forEach(s => {
+    const val = parseInt(s.value);
+    total += val;
+    document.getElementById('av_' + s.dataset.key).textContent = val;
+  });
+  const el = document.getElementById('alloc_total');
+  el.textContent = `Total: ${total} / 100`;
+  el.className = 'alloc-total ' + (total === 100 ? 'valid' : 'invalid');
+  document.getElementById('alloc_submit').disabled = total !== 100;
+}
+
+function submitAllocation(qId) {
+  const sliders = document.querySelectorAll('#alloc_container .alloc-slider');
+  const answer = {};
+  sliders.forEach(s => { answer[s.dataset.key] = parseInt(s.value) / 100; });
+  submitAnswer(qId, answer, 'allocation');
+}
+
+function renderRanking(qId, items) {
+  window._rankItems = items.map((it, i) => ({ ...it, rank: i }));
+  return renderRankingHTML(qId);
+}
+
+function renderRankingHTML(qId) {
+  let h = '<div class="ranking-items" id="rank_list">';
+  for (let i = 0; i < window._rankItems.length; i++) {
+    const item = window._rankItems[i];
+    h += `<div class="ranking-item">
+      <div class="rank-num">${i + 1}</div>
+      <span>${item.label}</span>
+      <div class="rank-arrows">
+        <button class="rank-arrow" onclick="moveRank(${i}, -1, ${qId})">&#9650;</button>
+        <button class="rank-arrow" onclick="moveRank(${i}, 1, ${qId})">&#9660;</button>
+      </div>
+    </div>`;
+  }
+  h += '</div>';
+  h += `<button class="submit-btn" onclick="submitRanking(${qId})">Continue</button>`;
+  return h;
+}
+
+function moveRank(idx, dir, qId) {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= window._rankItems.length) return;
+  const tmp = window._rankItems[idx];
+  window._rankItems[idx] = window._rankItems[newIdx];
+  window._rankItems[newIdx] = tmp;
+  // Re-render just the ranking list
+  const list = document.getElementById('rank_list');
+  if (list) {
+    list.outerHTML = renderRankingHTML(qId).split('<button class="submit-btn"')[0];
+  }
+}
+
+function submitRanking(qId) {
+  const answer = window._rankItems.map(it => it.key);
+  submitAnswer(qId, answer, 'ranking');
+}
+
+function renderPairwise(qId, pairs) {
+  window._pairAnswers = {};
+  let h = '';
+  for (const pair of pairs) {
+    h += `<div class="pair-group">
+      <div class="pair-label">${pair.id.replace(/_/g, ' ')}</div>
+      <div class="pair-options">
+        <button class="option-btn" id="pw_${pair.id}_l" onclick="selectPair('${pair.id}', '${pair.left.key}', ${qId}, ${pairs.length})">${pair.left.label}</button>
+        <button class="option-btn" id="pw_${pair.id}_r" onclick="selectPair('${pair.id}', '${pair.right.key}', ${qId}, ${pairs.length})">${pair.right.label}</button>
+      </div>
+    </div>`;
+  }
+  h += `<button class="submit-btn" id="pair_submit" disabled onclick="submitPairwise(${qId})">Continue</button>`;
+  return h;
+}
+
+function selectPair(pairId, key, qId, total) {
+  window._pairAnswers[pairId] = key;
+  // Update UI
+  document.getElementById('pw_' + pairId + '_l').classList.remove('selected');
+  document.getElementById('pw_' + pairId + '_r').classList.remove('selected');
+  const suffix = key === pairId.split('_vs_')[0] ? '_l' :
+    (document.getElementById('pw_' + pairId + '_l').textContent.toLowerCase().includes(key.replace(/_/g, ' ')) ? '_l' : '_r');
+  // Just highlight the clicked one
+  event.target.classList.add('selected');
+  // Enable submit if all pairs answered
+  if (Object.keys(window._pairAnswers).length >= total) {
+    document.getElementById('pair_submit').disabled = false;
+  }
+}
+
+function submitPairwise(qId) {
+  submitAnswer(qId, window._pairAnswers, 'pairwise');
+}
+
+function renderMulti(qId, options, maxSelect) {
+  window._multiSelected = new Set();
+  let h = `<div id="multi_container">`;
+  for (const opt of options) {
+    h += `<div class="multi-option" id="mo_${opt.key}" onclick="toggleMulti('${opt.key}', ${maxSelect}, ${qId})">
+      <div class="multi-check" id="mc_${opt.key}"></div>
+      <span>${opt.label}</span>
+    </div>`;
+  }
+  h += '</div>';
+  h += `<button class="submit-btn" id="multi_submit" disabled onclick="submitMulti(${qId})">Continue</button>`;
+  return h;
+}
+
+function toggleMulti(key, maxSelect, qId) {
+  if (window._multiSelected.has(key)) {
+    window._multiSelected.delete(key);
+    document.getElementById('mo_' + key).classList.remove('selected');
+    document.getElementById('mc_' + key).textContent = '';
+  } else {
+    if (window._multiSelected.size >= maxSelect) return;
+    window._multiSelected.add(key);
+    document.getElementById('mo_' + key).classList.add('selected');
+    document.getElementById('mc_' + key).textContent = '✓';
+  }
+  document.getElementById('multi_submit').disabled = window._multiSelected.size === 0;
+}
+
+function submitMulti(qId) {
+  submitAnswer(qId, Array.from(window._multiSelected), 'multi');
+}
+
+function renderBestWorst(qId, items) {
+  window._bwBest = null;
+  window._bwWorst = null;
+  let h = `<div id="bw_container">`;
+  h += `<p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px;">Click to select MOST important, then LEAST important.</p>`;
+  for (const item of items) {
+    h += `<div class="multi-option" id="bw_${item.key}" onclick="selectBW('${item.key}')">
+      <div class="multi-check" id="bwc_${item.key}"></div>
+      <span>${item.label}</span>
+    </div>`;
+  }
+  h += '</div>';
+  h += `<button class="submit-btn" id="bw_submit" disabled onclick="submitBestWorst(${qId})">Continue</button>`;
+  return h;
+}
+
+function selectBW(key) {
+  if (!window._bwBest) {
+    window._bwBest = key;
+    document.getElementById('bw_' + key).classList.add('selected');
+    document.getElementById('bwc_' + key).textContent = 'MOST';
+    document.getElementById('bwc_' + key).style.fontSize = '0.65rem';
+  } else if (!window._bwWorst && key !== window._bwBest) {
+    window._bwWorst = key;
+    document.getElementById('bw_' + key).style.borderColor = 'var(--red)';
+    document.getElementById('bw_' + key).style.background = 'rgba(239,68,68,0.1)';
+    document.getElementById('bwc_' + key).textContent = 'LEAST';
+    document.getElementById('bwc_' + key).style.fontSize = '0.65rem';
+    document.getElementById('bw_submit').disabled = false;
+  } else {
+    // Reset
+    if (window._bwBest) {
+      const be = document.getElementById('bw_' + window._bwBest);
+      if (be) { be.classList.remove('selected'); document.getElementById('bwc_' + window._bwBest).textContent = ''; }
+    }
+    if (window._bwWorst) {
+      const we = document.getElementById('bw_' + window._bwWorst);
+      if (we) { we.style.borderColor = ''; we.style.background = ''; document.getElementById('bwc_' + window._bwWorst).textContent = ''; }
+    }
+    window._bwBest = key;
+    window._bwWorst = null;
+    document.getElementById('bw_' + key).classList.add('selected');
+    document.getElementById('bwc_' + key).textContent = 'MOST';
+    document.getElementById('bwc_' + key).style.fontSize = '0.65rem';
+    document.getElementById('bw_submit').disabled = true;
+  }
+}
+
+function submitBestWorst(qId) {
+  // Convert to ranking: best first, then others, worst last
+  const qData = QUESTIONS[qId];
+  const allKeys = qData.bestWorst.map(i => i.key);
+  const ranked = [window._bwBest, ...allKeys.filter(k => k !== window._bwBest && k !== window._bwWorst), window._bwWorst];
+  submitAnswer(qId, ranked, 'best_worst');
+}
+
+// ---- Core submit ----
+
+function submitAnswer(qId, answer, answerType) {
+  engine.applyAnswer(qId, answer, answerType);
+  nextQuestion();
+}
+
+// =========================================================================
+// Results
+// =========================================================================
+
+function showResults() {
+  document.getElementById('quiz').classList.remove('active');
+  document.getElementById('results').classList.add('active');
+
+  const r = engine.getResults();
+  let html = '';
+
+  // Winner
+  if (r.winner) {
+    html += `<div class="winner-card">
+      <h2>Your Political Archetype</h2>
+      <div class="pct" style="font-size:1.6rem; margin-bottom:4px;">${r.winner.name}</div>
+      <div style="color:var(--muted);font-size:0.9rem;">${r.winner.posterior}% match · ${r.questionsAsked} questions asked</div>
+    </div>`;
+  }
+
+  // Top archetypes
+  html += `<div class="results-section"><h3>Top Archetypes</h3>`;
+  const maxP = r.topArchetypes[0]?.posterior || 1;
+  for (const a of r.topArchetypes) {
+    html += `<div class="archetype-row">
+      <div class="archetype-name">${a.name}</div>
+      <div class="archetype-bar-bg"><div class="archetype-bar" style="width:${(a.posterior / maxP) * 100}%"></div></div>
+      <div class="archetype-pct">${a.posterior}%</div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Continuous nodes
+  html += `<div class="results-section"><h3>Political Dimensions</h3>`;
+  for (const n of r.continuousNodes) {
+    const pct = ((n.position - 1) / 4) * 100;
+    const salLabel = n.salience > 2 ? 'High' : n.salience > 1.2 ? 'Medium' : 'Low';
+    const salClass = n.salience > 2 ? 'color:var(--green)' : n.salience > 1.2 ? '' : 'color:var(--muted)';
+    html += `<div class="node-card">
+      <div class="node-header">
+        <div class="node-name">${n.name}</div>
+        <div class="node-salience" style="${salClass}">Salience: ${n.salience.toFixed(1)} (${salLabel})</div>
+      </div>
+      <div class="node-position-bar"><div class="node-marker" style="left:${pct}%"></div></div>
+      <div class="node-labels"><span>${n.lowLabel}</span><span>${n.highLabel}</span></div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Categorical nodes
+  html += `<div class="results-section"><h3>Political Style</h3>`;
+  for (const n of r.categoricalNodes) {
+    html += `<div class="node-card">
+      <div class="node-header">
+        <div class="node-name">${n.name}</div>
+        <div class="node-salience">Salience: ${n.salience.toFixed(1)}</div>
+      </div>
+      <div class="cat-dist">`;
+    for (const d of n.distribution) {
+      const isTop = d.label === n.topCategory;
+      html += `<div class="cat-chip ${isTop ? 'top' : ''}">${d.label}: ${d.prob}%</div>`;
+    }
+    html += `</div></div>`;
+  }
+  html += `</div>`;
+
+  // Tribal anchor
+  html += `<div class="results-section"><h3>Identity Anchor</h3>`;
+  html += `<div class="node-card"><div class="cat-dist">`;
+  for (const a of r.trbAnchor) {
+    const isTop = r.trbAnchor.indexOf(a) === r.trbAnchor.reduce((mi, c, i, arr) => c.prob > arr[mi].prob ? i : mi, 0);
+    html += `<div class="cat-chip ${isTop ? 'top' : ''}">${a.label}: ${a.prob}%</div>`;
+  }
+  html += `</div></div></div>`;
+
+  document.getElementById('resultsContent').innerHTML = html;
+}
+</script>
+</body>
+</html>
