@@ -136,7 +136,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     true,
     [
       t("PRO", "continuous", "position", 0.70, "policy_bundle"),
-      t("H", "categorical", "category", 0.15, "policy_bundle"),
+
       t("ONT_H", "continuous", "position", 0.10, "policy_bundle")
     ],
     {
@@ -288,7 +288,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("MAT", "continuous", "position", 0.65, "fairness_design"),
-      t("MOR", "continuous", "position", 0.20, "fairness_design"),
+      t("MOR", "continuous", "position", 0.35, "fairness_design"),
       t("PRO", "continuous", "position", 0.15, "allocation_rule")
     ],
     {
@@ -308,7 +308,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     [
       t("MAT", "continuous", "position", 0.85, "causal_allocation"),
       t("ONT_S", "continuous", "position", 0.55, "causal_allocation"),
-      t("H", "categorical", "category", 0.20, "merit_structure_proxy")
+
     ],
     {
       goodFollowupsIfUnresolved: [29, 13, 17]
@@ -325,7 +325,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     true,
     [
       t("PRO", "continuous", "position", 0.60, "policy_bundle"),
-      t("H", "categorical", "category", 0.25, "policy_bundle"),
+
       t("ONT_H", "continuous", "position", 0.10, "policy_bundle")
     ],
     {
@@ -344,7 +344,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("MAT", "continuous", "position", 0.90, "fairness_threshold"),
-      t("H", "categorical", "category", 0.15, "market_hierarchy_proxy")
     ],
     {
       eligibleIf: ["MAT_live_or_unresolved"],
@@ -456,7 +455,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("EPS", "categorical", "category", 0.70, "authority_ranking"),
-      t("H", "categorical", "category", 0.45, "authority_ranking"),
       t("PRO", "continuous", "position", 0.25, "governance_priority")
     ],
     {
@@ -473,11 +471,10 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     0.90,
     false,
     [
-      t("H", "categorical", "category", 0.85, "socialization_pair"),
       t("ONT_H", "continuous", "position", 0.20, "human_nature_proxy")
     ],
     {
-      eligibleIf: ["H_live_or_unresolved"],
+      eligibleIf: [],
       goodFollowupsIfUnresolved: [25, 59, 36]
     }
   ),
@@ -492,11 +489,10 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("PRO", "continuous", "position", 0.75, "error_asymmetry"),
-      t("H", "categorical", "category", 0.30, "punishment_order_proxy"),
       t("ONT_H", "continuous", "position", 0.15, "human_motive_proxy")
     ],
     {
-      eligibleIf: ["PRO_live_or_unresolved", "H_live_or_unresolved"],
+      eligibleIf: ["PRO_live_or_unresolved"],
       goodFollowupsIfUnresolved: [36, 41, 16]
     }
   ),
@@ -530,7 +526,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     [
       t("MAT", "continuous", "position", 0.70, "error_asymmetry"),
       t("PRO", "continuous", "position", 0.25, "error_asymmetry"),
-      t("MOR", "continuous", "position", 0.20, "deservingness_proxy")
+      t("MOR", "continuous", "position", 0.35, "deservingness_proxy")
     ],
     {
       eligibleIf: ["MAT_live_or_unresolved", "PRO_live_or_unresolved"],
@@ -549,7 +545,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     [
       t("PRO", "continuous", "position", 0.55, "public_health_authority"),
       t("CU", "continuous", "position", 0.25, "collective_uniformity"),
-      t("H", "categorical", "category", 0.10, "authority_proxy"),
       t("COM", "continuous", "position", 0.10, "collective_action_proxy")
     ],
     {
@@ -570,7 +565,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
       t("MAT", "continuous", "position", 0.70, "economic_attribution"),
       t("ONT_S", "continuous", "position", 0.65, "economic_attribution"),
       t("ZS", "continuous", "position", 0.40, "conflict_attribution"),
-      t("H", "categorical", "category", 0.15, "labor_order_proxy")
     ],
     {
       eligibleIf: ["MAT_live_or_unresolved", "ONT_S_live_or_unresolved", "ZS_live_or_unresolved"],
@@ -682,7 +676,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     [
       t("TRB", "continuous", "position", 0.80, "outgroup_trust_estimate"),
       t("COM", "continuous", "position", 0.35, "outgroup_trust_estimate"),
-      t("ZS", "continuous", "position", 0.15, "outgroup_trust_estimate")
+      t("ZS", "continuous", "position", 0.30, "outgroup_trust_estimate")
     ],
     {
       eligibleIf: ["TRB_live_or_unresolved", "COM_live_or_unresolved"],
@@ -707,7 +701,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
       t("ONT_H", "continuous", "position", 0.10, "risk_humanity_proxy")
     ],
     {
-      eligibleIf: ["PRO_live_or_unresolved", "H_live_or_unresolved"],
+      eligibleIf: ["PRO_live_or_unresolved"],
       goodFollowupsIfUnresolved: [25, 59]
     }
   ),
@@ -831,7 +825,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("MAT", "continuous", "position", 0.70, "distributive_choice"),
-      t("MOR", "continuous", "position", 0.25, "fairness_scope"),
+      t("MOR", "continuous", "position", 0.35, "fairness_scope"),
       t("ZS", "continuous", "position", 0.15, "distributional_worldview"),
       t("ONT_S", "continuous", "position", 0.15, "structural_choice")
     ],
@@ -925,7 +919,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     [
       t("ONT_H", "continuous", "position", 0.85, "progress_worldview"),
       t("ONT_S", "continuous", "position", 0.20, "progress_worldview"),
-      t("CD", "continuous", "position", 0.10, "progress_worldview")
+      t("CD", "continuous", "position", 0.30, "progress_worldview")
     ],
     {
       eligibleIf: ["ONT_H_live_or_unresolved"],
@@ -961,7 +955,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("CU", "continuous", "position", 0.80, "membership_expectation"),
-      t("CD", "continuous", "position", 0.15, "membership_expectation"),
+      t("CD", "continuous", "position", 0.35, "membership_expectation"),
       t("MOR", "continuous", "position", 0.15, "membership_expectation"),
       t("TRB", "continuous", "position", 0.15, "boundary_identity")
     ],
@@ -981,7 +975,7 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("CU", "continuous", "salience", 0.90, "direct_salience"),
-      t("CD", "continuous", "salience", 0.25, "direct_salience"),
+      t("CD", "continuous", "salience", 0.35, "direct_salience"),
       t("TRB", "continuous", "salience", 0.20, "identity_salience"),
       t("TRB_ANCHOR", "derived", "anchor", 0.25, "nationality_anchor")
     ],
@@ -1117,7 +1111,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
     false,
     [
       t("ZS", "continuous", "position", 0.05, "background_context"),
-      t("H", "categorical", "category", 0.05, "background_context"),
       t("TRB", "continuous", "position", 0.05, "background_context")
     ],
     {
@@ -1137,11 +1130,10 @@ export const FULL_QUESTIONS: QuestionDef[] = [
       t("PRO", "continuous", "position", 0.35, "leader_evaluation"),
       t("AES", "categorical", "category", 0.45, "leader_evaluation"),
       t("EPS", "categorical", "category", 0.20, "leader_evaluation"),
-      t("H", "categorical", "category", 0.20, "leader_evaluation"),
       t("ENG", "continuous", "position", 0.10, "leader_evaluation")
     ],
     {
-      eligibleIf: ["AES_live_or_unresolved", "H_live_or_unresolved", "PRO_live_or_unresolved"],
+      eligibleIf: ["AES_live_or_unresolved", "PRO_live_or_unresolved"],
       goodFollowupsIfUnresolved: [56, 61, 25]
     }
   ),
@@ -1228,7 +1220,6 @@ export const FULL_QUESTIONS: QuestionDef[] = [
       t("AES", "categorical", "salience", 0.30, "best_worst"),
       t("COM", "continuous", "salience", 0.30, "best_worst"),
       t("ZS", "continuous", "salience", 0.20, "best_worst"),
-      t("H", "categorical", "salience", 0.25, "best_worst"),
       t("ONT_H", "continuous", "salience", 0.20, "best_worst"),
       t("ONT_S", "continuous", "salience", 0.20, "best_worst"),
       t("PF", "continuous", "salience", 0.35, "best_worst"),

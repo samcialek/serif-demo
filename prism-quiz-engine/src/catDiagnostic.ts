@@ -104,6 +104,15 @@ function scoreAllocationBucket(archetype: Archetype, map: any): number {
       score += (signal as number) * (template.pos - 3);
     }
   }
+  if (map?.categorical) {
+    for (const [nodeId, catDist] of Object.entries(map.categorical)) {
+      const template = archetype.nodes[nodeId as NodeId];
+      if (!template || template.kind !== "categorical") continue;
+      let dot = 0;
+      for (let i = 0; i < 6; i++) dot += ((catDist as number[])[i] ?? 0) * (template.probs[i] ?? 0);
+      score += Math.log(Math.max(dot, 0.01));
+    }
+  }
   return score;
 }
 
@@ -178,15 +187,7 @@ function generateAnswer(archetype: Archetype, q: QuestionDef): SimulatedAnswer {
         const optKeys = Object.keys(options);
         const scores = optKeys.map(k => {
           const map = options[k];
-          let s = 0;
-          if (map?.continuous) {
-            for (const [nodeId, signal] of Object.entries(map.continuous)) {
-              const template = archetype.nodes[nodeId as NodeId];
-              if (!template || template.kind !== "continuous") continue;
-              s += (signal as number) * (template.pos - 3);
-            }
-          }
-          return s;
+          return scoreAllocationBucket(archetype, map);
         });
         const best = scores.indexOf(Math.max(...scores));
         result[pairId] = optKeys[best]!;
@@ -236,7 +237,7 @@ function archetypesDisagreeOnNode(nodeId: NodeId, archetypes: Archetype[]): bool
 // ---------------------------------------------------------------------------
 // Types for per-question categorical node snapshot
 // ---------------------------------------------------------------------------
-const CAT_NODES: CategoricalNodeId[] = ["EPS", "AES", "H"];
+const CAT_NODES: CategoricalNodeId[] = ["EPS", "AES"];
 
 interface CatSnapshot {
   qCount: number;        // how many questions answered so far
@@ -273,10 +274,10 @@ for (const trueArchetype of ARCHETYPES) {
 
   const state = createInitialState();
   const snapshots: Record<CategoricalNodeId, CatSnapshot[]> = {
-    EPS: [], AES: [], H: []
+    EPS: [], AES: []
   };
   const firstResolved: Record<CategoricalNodeId, number | null> = {
-    EPS: null, AES: null, H: null
+    EPS: null, AES: null
   };
 
   // Helper: take a snapshot of all categorical nodes at current question count
@@ -371,7 +372,7 @@ function percentile(arr: number[], p: number): number {
 }
 
 console.log("=".repeat(100));
-console.log("CATEGORICAL NODE DIAGNOSTIC: Resolution timing for EPS, AES, H");
+console.log("CATEGORICAL NODE DIAGNOSTIC: Resolution timing for EPS, AES");
 console.log("=".repeat(100));
 
 console.log("\n" + "=".repeat(80));
@@ -581,8 +582,7 @@ console.log(
   "ID".padEnd(6) +
   "Name".padEnd(42) +
   "EPS".padStart(5) +
-  "AES".padStart(5) +
-  "H".padStart(5)
+  "AES".padStart(5)
 );
 console.log("  " + "-".repeat(63));
 
@@ -600,8 +600,7 @@ for (const r of sortedResults) {
     r.id.padEnd(6) +
     r.name.slice(0, 42).padEnd(42) +
     fmt(r.firstResolved.EPS) + " " +
-    fmt(r.firstResolved.AES) + " " +
-    fmt(r.firstResolved.H)
+    fmt(r.firstResolved.AES)
   );
 }
 

@@ -12,7 +12,7 @@ export type ContinuousNodeId =
   | "TRB"
   | "ENG";
 
-export type CategoricalNodeId = "EPS" | "AES" | "H";
+export type CategoricalNodeId = "EPS" | "AES";
 
 export type NodeId = ContinuousNodeId | CategoricalNodeId;
 

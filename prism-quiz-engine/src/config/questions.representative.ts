@@ -1,8 +1,7 @@
 import type { QuestionDef } from "../types.js";
 import {
   AES_PROTOTYPES,
-  EPS_PROTOTYPES,
-  H_PROTOTYPES
+  EPS_PROTOTYPES
 } from "./categories.js";
 
 export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
@@ -111,7 +110,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     touchProfile: [
       { node: "MAT", kind: "continuous", role: "position", weight: 0.85, touchType: "causal_allocation" },
       { node: "ONT_S", kind: "continuous", role: "position", weight: 0.55, touchType: "causal_allocation" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.20, touchType: "merit_structure_proxy" }
     ],
     allocationMap: {
       effort_choices: { continuous: { MAT: -0.8, ONT_S: -0.5, COM: -0.4 } },
@@ -159,7 +157,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: {
           PRO: { pos: [0.55, 0.30, 0.10, 0.04, 0.01], sal: [0.05, 0.15, 0.40, 0.40] },
           COM: { pos: [0.40, 0.30, 0.15, 0.10, 0.05], sal: [0.10, 0.20, 0.40, 0.30] }
-        }
+        },
       },
       restricted: {
         continuous: {
@@ -191,7 +189,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     rewriteNeeded: false,
     touchProfile: [
       { node: "EPS", kind: "categorical", role: "category", weight: 0.70, touchType: "authority_ranking" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.45, touchType: "authority_ranking" },
       { node: "PRO", kind: "continuous", role: "position", weight: 0.25, touchType: "governance_priority" }
     ],
     rankingMap: {
@@ -200,12 +197,12 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       elected_officials: { continuous: { PRO: 0.4 } },
       elders_religious: {
         categorical: {
-          H: H_PROTOTYPES.traditional,
           EPS: EPS_PROTOTYPES.traditionalist
         }
       },
       business_stakeholders: {
-        categorical: { H: H_PROTOTYPES.institutional }
+        categorical: { EPS: EPS_PROTOTYPES.institutionalist },
+        continuous: { PRO: -0.3 }
       }
     }
   },
@@ -218,17 +215,28 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     quality: 0.90,
     rewriteNeeded: false,
     touchProfile: [
-      { node: "H", kind: "categorical", role: "category", weight: 0.85, touchType: "socialization_pair" },
       { node: "ONT_H", kind: "continuous", role: "position", weight: 0.20, touchType: "human_nature_proxy" }
     ],
     pairMaps: {
       independence_vs_elders: {
-        independence: { categorical: { H: H_PROTOTYPES.egalitarian } },
-        respect_for_elders: { categorical: { H: H_PROTOTYPES.traditional } }
+        independence: {
+          continuous: { ONT_H: 0.6 },
+          categorical: { EPS: EPS_PROTOTYPES.autonomous, AES: AES_PROTOTYPES.authentic }
+        },
+        respect_for_elders: {
+          continuous: { ONT_H: -0.6 },
+          categorical: { EPS: EPS_PROTOTYPES.traditionalist, AES: AES_PROTOTYPES.pastoral }
+        }
       },
       obedience_vs_self_reliance: {
-        obedience: { categorical: { H: H_PROTOTYPES.paternal } },
-        self_reliance: { categorical: { H: H_PROTOTYPES.meritocratic } }
+        obedience: {
+          continuous: { ONT_H: -0.5 },
+          categorical: { EPS: EPS_PROTOTYPES.institutionalist, AES: AES_PROTOTYPES.statesman }
+        },
+        self_reliance: {
+          continuous: { ONT_H: 0.5 },
+          categorical: { EPS: EPS_PROTOTYPES.empiricist, AES: AES_PROTOTYPES.technocrat }
+        }
       }
     }
   },
@@ -638,7 +646,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     rewriteNeeded: true,
     touchProfile: [
       { node: "PRO", kind: "continuous", role: "position", weight: 0.45, touchType: "policy_bundle" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.25, touchType: "policy_bundle" },
       { node: "ONT_H", kind: "continuous", role: "position", weight: 0.15, touchType: "policy_bundle" }
     ],
     optionEvidence: {
@@ -647,20 +654,17 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
           PRO: { pos: [0.02, 0.08, 0.20, 0.38, 0.32] },
           ONT_H: { pos: [0.05, 0.12, 0.30, 0.33, 0.20] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.egalitarian } }
       },
       balanced_security: {
         continuous: {
           PRO: { pos: [0.08, 0.20, 0.44, 0.20, 0.08] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.institutional } }
       },
       security_priority: {
         continuous: {
           PRO: { pos: [0.32, 0.38, 0.20, 0.08, 0.02] },
           ONT_H: { pos: [0.20, 0.33, 0.30, 0.12, 0.05] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.strong_order } }
       }
     }
   },
@@ -828,7 +832,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     quality: 0.40,
     rewriteNeeded: true,
     touchProfile: [
-      { node: "H", kind: "categorical", role: "category", weight: 0.35, touchType: "policy_bundle" },
       { node: "PRO", kind: "continuous", role: "position", weight: 0.30, touchType: "policy_bundle" },
       { node: "ONT_H", kind: "continuous", role: "position", weight: 0.20, touchType: "policy_bundle" },
       { node: "COM", kind: "continuous", role: "position", weight: 0.10, touchType: "policy_bundle" }
@@ -839,20 +842,17 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
           PRO: { pos: [0.05, 0.12, 0.25, 0.35, 0.23] },
           ONT_H: { pos: [0.04, 0.10, 0.25, 0.38, 0.23] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.egalitarian } }
       },
       balanced_approach: {
         continuous: {
           PRO: { pos: [0.10, 0.20, 0.40, 0.20, 0.10] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.institutional } }
       },
       punishment_focus: {
         continuous: {
           PRO: { pos: [0.30, 0.35, 0.22, 0.09, 0.04] },
           ONT_H: { pos: [0.25, 0.33, 0.25, 0.12, 0.05] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.strong_order } }
       }
     }
   },
@@ -868,7 +868,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     rewriteNeeded: false,
     touchProfile: [
       { node: "MAT", kind: "continuous", role: "position", weight: 0.90, touchType: "fairness_threshold" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.15, touchType: "market_hierarchy_proxy" }
     ],
     optionEvidence: {
       ratio_10_to_1: {
@@ -947,7 +946,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     rewriteNeeded: false,
     touchProfile: [
       { node: "PRO", kind: "continuous", role: "position", weight: 0.75, touchType: "error_asymmetry" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.30, touchType: "punishment_order_proxy" },
       { node: "ONT_H", kind: "continuous", role: "position", weight: 0.15, touchType: "human_motive_proxy" }
     ],
     optionEvidence: {
@@ -955,19 +953,16 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: {
           PRO: { pos: [0.02, 0.08, 0.20, 0.35, 0.35], sal: [0.05, 0.15, 0.40, 0.40] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.egalitarian, sal: [0.08, 0.20, 0.40, 0.32] } }
       },
       balance_both_errors: {
         continuous: {
           PRO: { pos: [0.10, 0.22, 0.36, 0.22, 0.10], sal: [0.10, 0.25, 0.38, 0.27] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.institutional, sal: [0.12, 0.28, 0.38, 0.22] } }
       },
       rather_convict_innocent: {
         continuous: {
           PRO: { pos: [0.35, 0.35, 0.20, 0.08, 0.02], sal: [0.05, 0.15, 0.40, 0.40] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.strong_order, sal: [0.08, 0.20, 0.40, 0.32] } }
       }
     }
   },
@@ -1054,7 +1049,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     touchProfile: [
       { node: "PRO", kind: "continuous", role: "position", weight: 0.55, touchType: "public_health_authority" },
       { node: "CU", kind: "continuous", role: "position", weight: 0.25, touchType: "collective_uniformity" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.10, touchType: "authority_proxy" },
       { node: "COM", kind: "continuous", role: "position", weight: 0.10, touchType: "collective_action_proxy" }
     ],
     optionEvidence: {
@@ -1063,7 +1057,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
           PRO: { pos: [0.25, 0.32, 0.25, 0.12, 0.06] },
           CU: { pos: [0.04, 0.10, 0.25, 0.35, 0.26] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.institutional, sal: [0.15, 0.28, 0.35, 0.22] } }
       },
       comply_reluctantly: {
         continuous: {
@@ -1076,7 +1069,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
           PRO: { pos: [0.04, 0.10, 0.20, 0.32, 0.34] },
           CU: { pos: [0.28, 0.30, 0.25, 0.12, 0.05] }
         },
-        categorical: { H: { cat: H_PROTOTYPES.meritocratic, sal: [0.15, 0.28, 0.35, 0.22] } }
       }
     }
   },
@@ -1714,7 +1706,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     rewriteNeeded: false,
     touchProfile: [
       { node: "ZS", kind: "continuous", role: "position", weight: 0.05, touchType: "background_context" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.05, touchType: "background_context" },
       { node: "TRB", kind: "continuous", role: "position", weight: 0.05, touchType: "background_context" }
     ],
     optionEvidence: {
@@ -1758,7 +1749,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "PRO", kind: "continuous", role: "position", weight: 0.35, touchType: "leader_evaluation" },
       { node: "AES", kind: "categorical", role: "category", weight: 0.45, touchType: "leader_evaluation" },
       { node: "EPS", kind: "categorical", role: "category", weight: 0.20, touchType: "leader_evaluation" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.20, touchType: "leader_evaluation" },
       { node: "ENG", kind: "continuous", role: "position", weight: 0.10, touchType: "leader_evaluation" }
     ],
     optionEvidence: {
@@ -1766,28 +1756,24 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         categorical: {
           AES: { cat: AES_PROTOTYPES.technocrat, sal: [0.02, 0.08, 0.35, 0.55] },
           EPS: { cat: EPS_PROTOTYPES.empiricist, sal: [0.03, 0.12, 0.38, 0.47] },
-          H: { cat: H_PROTOTYPES.meritocratic, sal: [0.05, 0.18, 0.40, 0.37] }
         }
       },
       moral_character: {
         categorical: {
           AES: { cat: AES_PROTOTYPES.pastoral, sal: [0.02, 0.08, 0.35, 0.55] },
           EPS: { cat: EPS_PROTOTYPES.intuitionist, sal: [0.03, 0.12, 0.38, 0.47] },
-          H: { cat: H_PROTOTYPES.traditional, sal: [0.05, 0.18, 0.40, 0.37] }
         }
       },
       fights_for_us: {
         categorical: {
           AES: { cat: AES_PROTOTYPES.fighter, sal: [0.02, 0.08, 0.35, 0.55] },
           EPS: { cat: EPS_PROTOTYPES.autonomous, sal: [0.03, 0.12, 0.38, 0.47] },
-          H: { cat: H_PROTOTYPES.strong_order, sal: [0.05, 0.18, 0.40, 0.37] }
         }
       },
       unifying_vision: {
         categorical: {
           AES: { cat: AES_PROTOTYPES.visionary, sal: [0.02, 0.08, 0.35, 0.55] },
           EPS: { cat: EPS_PROTOTYPES.institutionalist, sal: [0.03, 0.12, 0.38, 0.47] },
-          H: { cat: H_PROTOTYPES.egalitarian, sal: [0.05, 0.18, 0.40, 0.37] }
         }
       }
     }
@@ -2017,7 +2003,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "MAT", kind: "continuous", role: "position", weight: 0.70, touchType: "economic_attribution" },
       { node: "ONT_S", kind: "continuous", role: "position", weight: 0.65, touchType: "economic_attribution" },
       { node: "ZS", kind: "continuous", role: "position", weight: 0.40, touchType: "conflict_attribution" },
-      { node: "H", kind: "categorical", role: "category", weight: 0.15, touchType: "labor_order_proxy" }
     ],
     rankingMap: {
       global_competition: {
@@ -2028,15 +2013,12 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       },
       corporate_decisions: {
         continuous: { MAT: 0.7, ZS: 0.6 },
-        categorical: { H: H_PROTOTYPES.egalitarian }
       },
       government_policy: {
         continuous: { MAT: 0.3, ONT_S: 0.3 },
-        categorical: { H: H_PROTOTYPES.institutional }
       },
       worker_choices: {
         continuous: { MAT: -0.6, ONT_S: -0.5 },
-        categorical: { H: H_PROTOTYPES.meritocratic }
       }
     }
   },
@@ -2098,7 +2080,6 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "AES", kind: "categorical", role: "salience", weight: 0.30, touchType: "best_worst" },
       { node: "COM", kind: "continuous", role: "salience", weight: 0.30, touchType: "best_worst" },
       { node: "ZS", kind: "continuous", role: "salience", weight: 0.20, touchType: "best_worst" },
-      { node: "H", kind: "categorical", role: "salience", weight: 0.25, touchType: "best_worst" },
       { node: "ONT_H", kind: "continuous", role: "salience", weight: 0.20, touchType: "best_worst" },
       { node: "ONT_S", kind: "continuous", role: "salience", weight: 0.20, touchType: "best_worst" },
       { node: "PF", kind: "continuous", role: "salience", weight: 0.35, touchType: "best_worst" },

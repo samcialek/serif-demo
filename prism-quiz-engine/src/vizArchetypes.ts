@@ -2,7 +2,6 @@ import { ARCHETYPES } from "./config/archetypes.js";
 import {
   EPS_CATEGORIES,
   AES_CATEGORIES,
-  H_CATEGORIES,
   TRB_ANCHORS,
 } from "./config/categories.js";
 import type {
@@ -20,7 +19,7 @@ const CONT_IDS: ContinuousNodeId[] = [
   "ZS", "ONT_H", "ONT_S", "PF", "TRB", "ENG",
 ];
 
-const CAT_IDS: CategoricalNodeId[] = ["EPS", "AES", "H"];
+const CAT_IDS: CategoricalNodeId[] = ["EPS", "AES"];
 
 const CONT_FULLNAMES: Record<ContinuousNodeId, string> = {
   MAT: "Material Conditions",
@@ -40,13 +39,11 @@ const CONT_FULLNAMES: Record<ContinuousNodeId, string> = {
 const CAT_FULLNAMES: Record<CategoricalNodeId, string> = {
   EPS: "Epistemology",
   AES: "Aesthetic / Leader Style",
-  H: "Hierarchy",
 };
 
 const CAT_LABEL_ARRAYS: Record<CategoricalNodeId, readonly string[]> = {
   EPS: EPS_CATEGORIES,
   AES: AES_CATEGORIES,
-  H: H_CATEGORIES,
 };
 
 const POS_COLORS: Record<number, string> = {

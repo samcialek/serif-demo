@@ -18,15 +18,6 @@ export const AES_CATEGORIES = [
   "visionary"
 ] as const;
 
-export const H_CATEGORIES = [
-  "egalitarian",
-  "meritocratic",
-  "institutional",
-  "traditional",
-  "paternal",
-  "strong_order"
-] as const;
-
 export const TRB_ANCHORS = [
   "national",
   "ideological",
@@ -46,7 +37,7 @@ export const UNIFORM_CAT: CategoricalDist = [
   1 / 6
 ];
 
-export const CATEGORY_COST_MATRIX: Record<"EPS" | "AES" | "H", number[][]> = {
+export const CATEGORY_COST_MATRIX: Record<"EPS" | "AES", number[][]> = {
   EPS: [
     [0, 0.4, 0.9, 0.8, 0.6, 1.1],
     [0.4, 0, 0.7, 0.7, 0.5, 1.0],
@@ -62,14 +53,6 @@ export const CATEGORY_COST_MATRIX: Record<"EPS" | "AES" | "H", number[][]> = {
     [0.7, 0.7, 0.5, 0, 0.6, 0.5],
     [0.9, 0.8, 0.7, 0.6, 0, 0.7],
     [0.6, 0.5, 0.6, 0.5, 0.7, 0]
-  ],
-  H: [
-    [0, 0.5, 0.6, 0.9, 0.7, 1.0],
-    [0.5, 0, 0.4, 0.7, 0.6, 0.8],
-    [0.6, 0.4, 0, 0.5, 0.5, 0.7],
-    [0.9, 0.7, 0.5, 0, 0.4, 0.6],
-    [0.7, 0.6, 0.5, 0.4, 0, 0.5],
-    [1.0, 0.8, 0.7, 0.6, 0.5, 0]
   ]
 };
 
@@ -105,18 +88,3 @@ export const AES_PROTOTYPES: Record<string, CategoricalDist> & {
   visionary: [0.06, 0.08, 0.05, 0.06, 0.08, 0.67]
 };
 
-export const H_PROTOTYPES: Record<string, CategoricalDist> & {
-  egalitarian: CategoricalDist;
-  meritocratic: CategoricalDist;
-  institutional: CategoricalDist;
-  traditional: CategoricalDist;
-  paternal: CategoricalDist;
-  strong_order: CategoricalDist;
-} = {
-  egalitarian: [0.74, 0.10, 0.06, 0.03, 0.03, 0.04],
-  meritocratic: [0.10, 0.72, 0.08, 0.03, 0.03, 0.04],
-  institutional: [0.06, 0.10, 0.70, 0.05, 0.05, 0.04],
-  traditional: [0.03, 0.05, 0.06, 0.72, 0.08, 0.06],
-  paternal: [0.04, 0.06, 0.08, 0.12, 0.62, 0.08],
-  strong_order: [0.03, 0.04, 0.06, 0.10, 0.12, 0.65]
-};

@@ -11,5 +11,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/config/archetypes_109_backup.ts",
+    "src/config/archetypes_133.ts",
+    "src/config/archetypes.sample.ts"
+  ]
 }

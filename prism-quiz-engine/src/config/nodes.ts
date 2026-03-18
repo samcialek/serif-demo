@@ -12,7 +12,6 @@ export const NODE_DEFS: NodeDef[] = [
   { id: "COM", type: "continuous", cluster: "MEANS" },
 
   { id: "ZS", type: "continuous", cluster: "REALITY" },
-  { id: "H", type: "categorical", cluster: "REALITY" },
   { id: "ONT_H", type: "continuous", cluster: "REALITY" },
   { id: "ONT_S", type: "continuous", cluster: "REALITY" },
 
@@ -40,4 +39,4 @@ export const CONTINUOUS_NODES = NODE_DEFS.filter(
 
 export const CATEGORICAL_NODES = NODE_DEFS.filter(
   (n) => n.type === "categorical"
-).map((n) => n.id) as Array<"EPS" | "AES" | "H">;
+).map((n) => n.id) as Array<"EPS" | "AES">;

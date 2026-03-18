@@ -35,7 +35,7 @@ function continuousDistance(
 }
 
 function categoricalDistance(
-  nodeId: "EPS" | "AES" | "H",
+  nodeId: "EPS" | "AES",
   respondentCatDist: [number, number, number, number, number, number],
   respondentSalDist: [number, number, number, number],
   archetypeProbs: [number, number, number, number, number, number],
@@ -69,7 +69,7 @@ export function archetypeDistance(state: RespondentState, archetype: Archetype):
     } else {
       const node = state.categorical[nodeId as keyof typeof state.categorical];
       total += categoricalDistance(
-        nodeId as "EPS" | "AES" | "H",
+        nodeId as "EPS" | "AES",
         node.catDist,
         node.salDist,
         template.probs,
