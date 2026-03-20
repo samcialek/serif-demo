@@ -171,7 +171,7 @@
         ZS: { kind: "continuous", pos: 2, sal: 1 },
         ONT_H: { kind: "continuous", pos: 2, sal: 1 },
         ONT_S: { kind: "continuous", pos: 3, sal: 1 },
-        PF: { kind: "continuous", pos: 4, sal: 1 },
+        PF: { kind: "continuous", pos: 2, sal: 1 },
         TRB: { kind: "continuous", pos: 2, sal: 1 },
         ENG: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         EPS: { kind: "categorical", probs: [0.25, 0.58, 0.05, 0.03, 0.06, 0.03], sal: 2, antiCats: [5] },
@@ -230,8 +230,8 @@
       nodes: {
         MAT: { kind: "continuous", pos: 1, sal: 2, anti: "high" },
         CD: { kind: "continuous", pos: 1, sal: 2, anti: "high" },
-        CU: { kind: "continuous", pos: 4, sal: 2, anti: "high" },
-        MOR: { kind: "continuous", pos: 4, sal: 2, anti: "high" },
+        CU: { kind: "continuous", pos: 4, sal: 2, anti: "low" },
+        MOR: { kind: "continuous", pos: 4, sal: 2, anti: "low" },
         PRO: { kind: "continuous", pos: 2, sal: 2, anti: "high" },
         COM: { kind: "continuous", pos: 1, sal: 2, anti: "high" },
         ZS: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
@@ -303,7 +303,7 @@
         ZS: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         ONT_H: { kind: "continuous", pos: 3, sal: 1 },
         ONT_S: { kind: "continuous", pos: 4, sal: 1 },
-        PF: { kind: "continuous", pos: 4, sal: 1 },
+        PF: { kind: "continuous", pos: 2, sal: 1 },
         TRB: { kind: "continuous", pos: 3, sal: 1 },
         ENG: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         EPS: { kind: "categorical", probs: [0.08, 0.08, 0.08, 0.2, 0.5, 0.06], sal: 2, antiCats: [2, 5] },
@@ -369,7 +369,7 @@
         ZS: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         ONT_H: { kind: "continuous", pos: 1, sal: 2, anti: "high" },
         ONT_S: { kind: "continuous", pos: 4, sal: 1 },
-        PF: { kind: "continuous", pos: 4, sal: 1 },
+        PF: { kind: "continuous", pos: 2, sal: 1 },
         TRB: { kind: "continuous", pos: 3, sal: 1 },
         ENG: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         EPS: { kind: "categorical", probs: [0.08, 0.08, 0.08, 0.2, 0.5, 0.06], sal: 2, antiCats: [2, 5] },
@@ -1042,7 +1042,7 @@
       tier: "T1",
       prior: 1 / 124,
       nodes: {
-        MAT: { kind: "continuous", pos: 1, sal: 3, anti: "low" },
+        MAT: { kind: "continuous", pos: 1, sal: 3, anti: "high" },
         CD: { kind: "continuous", pos: 5, sal: 3, anti: "low" },
         CU: { kind: "continuous", pos: 2, sal: 3, anti: "high" },
         MOR: { kind: "continuous", pos: 3, sal: 3, anti: "low" },
@@ -1310,7 +1310,7 @@
         CD: { kind: "continuous", pos: 2, sal: 2 },
         CU: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         MOR: { kind: "continuous", pos: 5, sal: 2 },
-        PRO: { kind: "continuous", pos: 1, sal: 3, anti: "low" },
+        PRO: { kind: "continuous", pos: 1, sal: 3, anti: "high" },
         COM: { kind: "continuous", pos: 3, sal: 2 },
         ZS: { kind: "continuous", pos: 1, sal: 3, anti: "high" },
         ONT_H: { kind: "continuous", pos: 5, sal: 3, anti: "low" },
@@ -1338,7 +1338,7 @@
         ONT_H: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         ONT_S: { kind: "continuous", pos: 1, sal: 2 },
         PF: { kind: "continuous", pos: 3, sal: 2 },
-        TRB: { kind: "continuous", pos: 4, sal: 3, anti: "high" },
+        TRB: { kind: "continuous", pos: 1, sal: 3, anti: "high" },
         ENG: { kind: "continuous", pos: 3, sal: 1 },
         EPS: { kind: "categorical", probs: [0.62, 0.14, 0.03, 0.04, 0.15, 0.02], sal: 3, antiCats: [2, 3, 5] },
         AES: { kind: "categorical", probs: [0.06, 0.18, 0.05, 0.06, 0.08, 0.57], sal: 3 }
@@ -2591,7 +2591,7 @@
         ZS: { kind: "continuous", pos: 3, sal: 1 },
         ONT_H: { kind: "continuous", pos: 3, sal: 0 },
         ONT_S: { kind: "continuous", pos: 4, sal: 1 },
-        PF: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
+        PF: { kind: "continuous", pos: 1, sal: 2, anti: "high" },
         TRB: { kind: "continuous", pos: 4, sal: 2 },
         ENG: { kind: "continuous", pos: 3, sal: 1 },
         EPS: { kind: "categorical", probs: [0.1, 0.58, 0.05, 0.03, 0.16, 0.08], sal: 2, antiCats: [5] },
@@ -2723,7 +2723,7 @@
         ZS: { kind: "continuous", pos: 2, sal: 1 },
         ONT_H: { kind: "continuous", pos: 4, sal: 1 },
         ONT_S: { kind: "continuous", pos: 3, sal: 1 },
-        PF: { kind: "continuous", pos: 4, sal: 2 },
+        PF: { kind: "continuous", pos: 2, sal: 2 },
         TRB: { kind: "continuous", pos: 4, sal: 2 },
         ENG: { kind: "continuous", pos: 5, sal: 2, anti: "low" },
         EPS: { kind: "categorical", probs: [0.05, 0.05, 0.08, 0.58, 0.19, 0.05], sal: 2, antiCats: [0, 5] },
@@ -2885,9 +2885,9 @@
         { node: "ONT_S", kind: "continuous", role: "position", weight: 0.55, touchType: "causal_allocation" }
       ],
       allocationMap: {
-        effort_choices: { continuous: { MAT: -0.8, ONT_S: -0.5, COM: -0.4 } },
-        family_background: { continuous: { MAT: 0.6, ONT_S: 0.7, COM: 0.3 } },
-        discrimination_bias: { continuous: { MAT: 0.8, ONT_S: 0.8, COM: 0.5 } },
+        effort_choices: { continuous: { MAT: 0.8, ONT_S: -0.5, COM: -0.4 } },
+        family_background: { continuous: { MAT: -0.6, ONT_S: 0.7, COM: 0.3 } },
+        discrimination_bias: { continuous: { MAT: -0.8, ONT_S: 0.8, COM: 0.5 } },
         luck_random: { continuous: { ONT_S: 0.4, COM: 0.2 } }
       }
     },
@@ -3190,11 +3190,11 @@
         { node: "MAT", kind: "continuous", role: "salience", weight: 0.35, touchType: "policy_preference" }
       ],
       sliderMap: {
-        "0-20": { continuous: { MAT: { pos: [0.6, 0.25, 0.1, 0.04, 0.01], sal: [0.05, 0.15, 0.4, 0.4] } } },
-        "21-40": { continuous: { MAT: { pos: [0.3, 0.4, 0.2, 0.07, 0.03], sal: [0.08, 0.22, 0.4, 0.3] } } },
+        "0-20": { continuous: { MAT: { pos: [0.01, 0.04, 0.1, 0.25, 0.6], sal: [0.05, 0.15, 0.4, 0.4] } } },
+        "21-40": { continuous: { MAT: { pos: [0.03, 0.07, 0.2, 0.4, 0.3], sal: [0.08, 0.22, 0.4, 0.3] } } },
         "41-60": { continuous: { MAT: { pos: [0.08, 0.18, 0.48, 0.18, 0.08], sal: [0.1, 0.25, 0.38, 0.27] } } },
-        "61-80": { continuous: { MAT: { pos: [0.03, 0.07, 0.2, 0.4, 0.3], sal: [0.08, 0.22, 0.4, 0.3] } } },
-        "81-100": { continuous: { MAT: { pos: [0.01, 0.04, 0.1, 0.25, 0.6], sal: [0.05, 0.15, 0.4, 0.4] } } }
+        "61-80": { continuous: { MAT: { pos: [0.3, 0.4, 0.2, 0.07, 0.03], sal: [0.08, 0.22, 0.4, 0.3] } } },
+        "81-100": { continuous: { MAT: { pos: [0.6, 0.25, 0.1, 0.04, 0.01], sal: [0.05, 0.15, 0.4, 0.4] } } }
       }
     },
     // Q19 — human_progress_salience (slider)
@@ -3253,11 +3253,11 @@
         { node: "ZS", kind: "continuous", role: "position", weight: 0.15, touchType: "outgroup_trust_estimate" }
       ],
       sliderMap: {
-        "0-20": { continuous: { TRB: { pos: [0.55, 0.28, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.08, 0.2, 0.38, 0.34] } } },
-        "21-40": { continuous: { TRB: { pos: [0.3, 0.38, 0.2, 0.09, 0.03], sal: [0.08, 0.2, 0.4, 0.32] }, ZS: { sal: [0.1, 0.25, 0.38, 0.27] } } },
+        "0-20": { continuous: { TRB: { pos: [0.01, 0.04, 0.12, 0.28, 0.55], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.08, 0.2, 0.38, 0.34] } } },
+        "21-40": { continuous: { TRB: { pos: [0.03, 0.09, 0.2, 0.38, 0.3], sal: [0.08, 0.2, 0.4, 0.32] }, ZS: { sal: [0.1, 0.25, 0.38, 0.27] } } },
         "41-60": { continuous: { TRB: { pos: [0.08, 0.18, 0.48, 0.18, 0.08], sal: [0.1, 0.25, 0.38, 0.27] }, ZS: { sal: [0.15, 0.3, 0.35, 0.2] } } },
-        "61-80": { continuous: { TRB: { pos: [0.03, 0.09, 0.2, 0.38, 0.3], sal: [0.08, 0.2, 0.4, 0.32] }, ZS: { sal: [0.15, 0.3, 0.35, 0.2] } } },
-        "81-100": { continuous: { TRB: { pos: [0.01, 0.04, 0.12, 0.28, 0.55], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.15, 0.3, 0.35, 0.2] } } }
+        "61-80": { continuous: { TRB: { pos: [0.3, 0.38, 0.2, 0.09, 0.03], sal: [0.08, 0.2, 0.4, 0.32] }, ZS: { sal: [0.15, 0.3, 0.35, 0.2] } } },
+        "81-100": { continuous: { TRB: { pos: [0.55, 0.28, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.15, 0.3, 0.35, 0.2] } } }
       }
     },
     // Q38 — rules_procedures_matter_salience (slider)
@@ -3441,17 +3441,17 @@
       optionEvidence: {
         principle_first: {
           continuous: {
-            COM: { pos: [0.02, 0.08, 0.2, 0.38, 0.32], sal: [0.03, 0.12, 0.4, 0.45] }
+            COM: { pos: [0.32, 0.38, 0.2, 0.08, 0.02], sal: [0.03, 0.12, 0.4, 0.45] }
           }
         },
         coalition_first: {
           continuous: {
-            COM: { pos: [0.32, 0.38, 0.2, 0.08, 0.02], sal: [0.03, 0.12, 0.4, 0.45] }
+            COM: { pos: [0.02, 0.08, 0.2, 0.38, 0.32], sal: [0.03, 0.12, 0.4, 0.45] }
           }
         },
         depends_on_issue: {
           continuous: {
-            COM: { pos: [0.08, 0.18, 0.42, 0.22, 0.1], sal: [0.1, 0.25, 0.38, 0.27] }
+            COM: { pos: [0.1, 0.22, 0.42, 0.18, 0.08], sal: [0.1, 0.25, 0.38, 0.27] }
           }
         }
       }
@@ -3509,25 +3509,25 @@
       optionEvidence: {
         aggressive_transition: {
           continuous: {
-            MAT: { pos: [0.02, 0.08, 0.2, 0.35, 0.35] },
+            MAT: { pos: [0.35, 0.35, 0.2, 0.08, 0.02] },
             ONT_S: { pos: [0.03, 0.1, 0.25, 0.35, 0.27] }
           }
         },
         gradual_transition: {
           continuous: {
-            MAT: { pos: [0.08, 0.18, 0.4, 0.24, 0.1] },
+            MAT: { pos: [0.1, 0.24, 0.4, 0.18, 0.08] },
             ONT_S: { pos: [0.08, 0.18, 0.4, 0.24, 0.1] }
           }
         },
         market_led: {
           continuous: {
-            MAT: { pos: [0.3, 0.35, 0.22, 0.09, 0.04] },
+            MAT: { pos: [0.04, 0.09, 0.22, 0.35, 0.3] },
             ONT_S: { pos: [0.2, 0.3, 0.3, 0.14, 0.06] }
           }
         },
         no_action_needed: {
           continuous: {
-            MAT: { pos: [0.45, 0.3, 0.15, 0.07, 0.03] },
+            MAT: { pos: [0.03, 0.07, 0.15, 0.3, 0.45] },
             ONT_S: { pos: [0.3, 0.3, 0.25, 0.1, 0.05] }
           }
         }
@@ -3550,25 +3550,25 @@
       optionEvidence: {
         strict_merit: {
           continuous: {
-            MAT: { pos: [0.5, 0.3, 0.13, 0.05, 0.02] },
+            MAT: { pos: [0.02, 0.05, 0.13, 0.3, 0.5] },
             MOR: { pos: [0.35, 0.3, 0.22, 0.09, 0.04] }
           }
         },
         holistic_review: {
           continuous: {
-            MAT: { pos: [0.05, 0.15, 0.35, 0.3, 0.15] },
+            MAT: { pos: [0.15, 0.3, 0.35, 0.15, 0.05] },
             MOR: { pos: [0.05, 0.12, 0.3, 0.33, 0.2] }
           }
         },
         affirmative_action: {
           continuous: {
-            MAT: { pos: [0.02, 0.06, 0.18, 0.34, 0.4] },
+            MAT: { pos: [0.4, 0.34, 0.18, 0.06, 0.02] },
             MOR: { pos: [0.03, 0.08, 0.22, 0.35, 0.32] }
           }
         },
         lottery: {
           continuous: {
-            MAT: { pos: [0.08, 0.15, 0.3, 0.28, 0.19] }
+            MAT: { pos: [0.19, 0.28, 0.3, 0.15, 0.08] }
           }
         }
       }
@@ -3622,22 +3622,22 @@
       optionEvidence: {
         ratio_10_to_1: {
           continuous: {
-            MAT: { pos: [0.01, 0.04, 0.15, 0.35, 0.45], sal: [0.05, 0.15, 0.38, 0.42] }
+            MAT: { pos: [0.45, 0.35, 0.15, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
           }
         },
         ratio_50_to_1: {
           continuous: {
-            MAT: { pos: [0.04, 0.12, 0.35, 0.32, 0.17], sal: [0.08, 0.22, 0.4, 0.3] }
+            MAT: { pos: [0.17, 0.32, 0.35, 0.12, 0.04], sal: [0.08, 0.22, 0.4, 0.3] }
           }
         },
         ratio_200_to_1: {
           continuous: {
-            MAT: { pos: [0.2, 0.35, 0.28, 0.12, 0.05], sal: [0.1, 0.25, 0.38, 0.27] }
+            MAT: { pos: [0.05, 0.12, 0.28, 0.35, 0.2], sal: [0.1, 0.25, 0.38, 0.27] }
           }
         },
         market_decides: {
           continuous: {
-            MAT: { pos: [0.45, 0.3, 0.15, 0.07, 0.03], sal: [0.08, 0.2, 0.38, 0.34] }
+            MAT: { pos: [0.03, 0.07, 0.15, 0.3, 0.45], sal: [0.08, 0.2, 0.38, 0.34] }
           }
         }
       }
@@ -3763,7 +3763,7 @@
       optionEvidence: {
         rather_help_undeserving: {
           continuous: {
-            MAT: { pos: [0.02, 0.08, 0.22, 0.35, 0.33], sal: [0.05, 0.15, 0.4, 0.4] },
+            MAT: { pos: [0.33, 0.35, 0.22, 0.08, 0.02], sal: [0.05, 0.15, 0.4, 0.4] },
             MOR: { pos: [0.03, 0.1, 0.25, 0.35, 0.27], sal: [0.08, 0.2, 0.4, 0.32] }
           }
         },
@@ -3775,7 +3775,7 @@
         },
         rather_miss_needy: {
           continuous: {
-            MAT: { pos: [0.33, 0.35, 0.22, 0.08, 0.02], sal: [0.05, 0.15, 0.4, 0.4] },
+            MAT: { pos: [0.02, 0.08, 0.22, 0.35, 0.33], sal: [0.05, 0.15, 0.4, 0.4] },
             MOR: { pos: [0.27, 0.35, 0.25, 0.1, 0.03], sal: [0.08, 0.2, 0.4, 0.32] }
           }
         }
@@ -3988,19 +3988,19 @@
       optionEvidence: {
         prioritize_safety: {
           continuous: {
-            PRO: { pos: [0.3, 0.35, 0.22, 0.09, 0.04] }
+            PRO: { pos: [0.04, 0.09, 0.22, 0.35, 0.3] }
           },
           categorical: { EPS: { cat: EPS_PROTOTYPES.institutionalist, sal: [0.1, 0.25, 0.38, 0.27] } }
         },
         balanced_timeline: {
           continuous: {
-            PRO: { pos: [0.1, 0.22, 0.38, 0.22, 0.08] }
+            PRO: { pos: [0.08, 0.22, 0.38, 0.22, 0.1] }
           },
           categorical: { EPS: { cat: EPS_PROTOTYPES.empiricist, sal: [0.12, 0.28, 0.38, 0.22] } }
         },
         prioritize_speed: {
           continuous: {
-            PRO: { pos: [0.04, 0.09, 0.22, 0.35, 0.3] }
+            PRO: { pos: [0.3, 0.35, 0.22, 0.09, 0.04] }
           },
           categorical: { EPS: { cat: EPS_PROTOTYPES.autonomous, sal: [0.1, 0.25, 0.38, 0.27] } }
         }
@@ -4023,23 +4023,23 @@
       optionEvidence: {
         follow_always: {
           continuous: {
-            PRO: { pos: [0.4, 0.32, 0.18, 0.07, 0.03] }
+            PRO: { pos: [0.03, 0.07, 0.18, 0.32, 0.4] }
           }
         },
         follow_then_advocate: {
           continuous: {
-            PRO: { pos: [0.1, 0.25, 0.38, 0.2, 0.07] },
+            PRO: { pos: [0.07, 0.2, 0.38, 0.25, 0.1] },
             COM: { pos: [0.05, 0.12, 0.28, 0.33, 0.22] }
           }
         },
         ignore_quietly: {
           continuous: {
-            PRO: { pos: [0.04, 0.1, 0.22, 0.35, 0.29] }
+            PRO: { pos: [0.29, 0.35, 0.22, 0.1, 0.04] }
           }
         },
         openly_challenge: {
           continuous: {
-            PRO: { pos: [0.03, 0.07, 0.18, 0.32, 0.4] },
+            PRO: { pos: [0.4, 0.32, 0.18, 0.07, 0.03] },
             COM: { pos: [0.22, 0.28, 0.25, 0.15, 0.1] }
           }
         }
@@ -4095,22 +4095,22 @@
       optionEvidence: {
         no_big_deal: {
           continuous: {
-            TRB: { pos: [0.01, 0.04, 0.15, 0.38, 0.42], sal: [0.05, 0.15, 0.38, 0.42] }
+            TRB: { pos: [0.42, 0.38, 0.15, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
           }
         },
         keep_friendship: {
           continuous: {
-            TRB: { pos: [0.04, 0.12, 0.35, 0.3, 0.19], sal: [0.05, 0.18, 0.4, 0.37] }
+            TRB: { pos: [0.19, 0.3, 0.35, 0.12, 0.04], sal: [0.05, 0.18, 0.4, 0.37] }
           }
         },
         distance_somewhat: {
           continuous: {
-            TRB: { pos: [0.22, 0.32, 0.28, 0.13, 0.05], sal: [0.03, 0.15, 0.4, 0.42] }
+            TRB: { pos: [0.05, 0.13, 0.28, 0.32, 0.22], sal: [0.03, 0.15, 0.4, 0.42] }
           }
         },
         end_friendship: {
           continuous: {
-            TRB: { pos: [0.48, 0.28, 0.15, 0.06, 0.03], sal: [0.02, 0.1, 0.38, 0.5] }
+            TRB: { pos: [0.03, 0.06, 0.15, 0.28, 0.48], sal: [0.02, 0.1, 0.38, 0.5] }
           }
         }
       }
@@ -4132,22 +4132,22 @@
       optionEvidence: {
         equal_society: {
           continuous: {
-            MAT: { pos: [0.01, 0.04, 0.12, 0.35, 0.48], sal: [0.05, 0.15, 0.38, 0.42] }
+            MAT: { pos: [0.48, 0.35, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
           }
         },
         safety_net_society: {
           continuous: {
-            MAT: { pos: [0.04, 0.12, 0.3, 0.34, 0.2], sal: [0.08, 0.22, 0.4, 0.3] }
+            MAT: { pos: [0.2, 0.34, 0.3, 0.12, 0.04], sal: [0.08, 0.22, 0.4, 0.3] }
           }
         },
         opportunity_society: {
           continuous: {
-            MAT: { pos: [0.18, 0.3, 0.32, 0.14, 0.06], sal: [0.08, 0.22, 0.4, 0.3] }
+            MAT: { pos: [0.06, 0.14, 0.32, 0.3, 0.18], sal: [0.08, 0.22, 0.4, 0.3] }
           }
         },
         free_market_society: {
           continuous: {
-            MAT: { pos: [0.45, 0.3, 0.15, 0.07, 0.03], sal: [0.05, 0.15, 0.38, 0.42] }
+            MAT: { pos: [0.03, 0.07, 0.15, 0.3, 0.45], sal: [0.05, 0.15, 0.38, 0.42] }
           }
         }
       }
@@ -4331,19 +4331,19 @@
         very_conservative: {
           continuous: {
             CD: { pos: [0.28, 0.25, 0.22, 0.15, 0.1] },
-            MAT: { pos: [0.26, 0.25, 0.22, 0.16, 0.11] }
+            MAT: { pos: [0.11, 0.16, 0.22, 0.25, 0.26] }
           }
         },
         moderate_household: {
           continuous: {
             CD: { pos: [0.15, 0.22, 0.3, 0.2, 0.13] },
-            MAT: { pos: [0.15, 0.22, 0.3, 0.2, 0.13] }
+            MAT: { pos: [0.13, 0.2, 0.3, 0.22, 0.15] }
           }
         },
         very_progressive: {
           continuous: {
             CD: { pos: [0.1, 0.15, 0.22, 0.25, 0.28] },
-            MAT: { pos: [0.11, 0.16, 0.22, 0.25, 0.26] }
+            MAT: { pos: [0.26, 0.25, 0.22, 0.16, 0.11] }
           }
         },
         not_political: {
@@ -4726,13 +4726,13 @@
           continuous: { ONT_S: 0.6 }
         },
         corporate_decisions: {
-          continuous: { MAT: 0.7, ZS: 0.6 }
+          continuous: { MAT: -0.7, ZS: 0.6 }
         },
         government_policy: {
-          continuous: { MAT: 0.3, ONT_S: 0.3 }
+          continuous: { MAT: -0.3, ONT_S: 0.3 }
         },
         worker_choices: {
-          continuous: { MAT: -0.6, ONT_S: -0.5 }
+          continuous: { MAT: 0.6, ONT_S: -0.5 }
         }
       }
     },
@@ -4762,7 +4762,7 @@
           continuous: { CU: -0.6, CD: -0.4 }
         },
         economic_contribution: {
-          continuous: { CU: 0.2, MAT: -0.3 }
+          continuous: { CU: 0.2, MAT: 0.3 }
         },
         cultural_customs: {
           continuous: { CU: -0.8, CD: -0.6 }
@@ -4800,7 +4800,7 @@
       ],
       rankingMap: {
         fairness: {
-          continuous: { MAT: 0.5, MOR: 0.4, PRO: 0.3 }
+          continuous: { MAT: -0.5, MOR: 0.4, PRO: 0.3 }
         },
         procedural_integrity: {
           continuous: { PRO: 0.6, COM: 0.3 }
@@ -4812,7 +4812,7 @@
           continuous: { COM: 0.5, TRB: -0.3, MOR: 0.3 }
         },
         individual_freedom: {
-          continuous: { PRO: 0.5, MAT: -0.3 }
+          continuous: { PRO: 0.5, MAT: 0.3 }
         },
         tradition_continuity: {
           continuous: { CD: -0.5, CU: -0.4 }

@@ -112,9 +112,9 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "ONT_S", kind: "continuous", role: "position", weight: 0.55, touchType: "causal_allocation" },
     ],
     allocationMap: {
-      effort_choices: { continuous: { MAT: -0.8, ONT_S: -0.5, COM: -0.4 } },
-      family_background: { continuous: { MAT: 0.6, ONT_S: 0.7, COM: 0.3 } },
-      discrimination_bias: { continuous: { MAT: 0.8, ONT_S: 0.8, COM: 0.5 } },
+      effort_choices: { continuous: { MAT: 0.8, ONT_S: -0.5, COM: -0.4 } },
+      family_background: { continuous: { MAT: -0.6, ONT_S: 0.7, COM: 0.3 } },
+      discrimination_bias: { continuous: { MAT: -0.8, ONT_S: 0.8, COM: 0.5 } },
       luck_random: { continuous: { ONT_S: 0.4, COM: 0.2 } }
     }
   },
@@ -423,11 +423,11 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "MAT", kind: "continuous", role: "salience", weight: 0.35, touchType: "policy_preference" }
     ],
     sliderMap: {
-      "0-20":   { continuous: { MAT: { pos: [0.60, 0.25, 0.10, 0.04, 0.01], sal: [0.05, 0.15, 0.40, 0.40] } } },
-      "21-40":  { continuous: { MAT: { pos: [0.30, 0.40, 0.20, 0.07, 0.03], sal: [0.08, 0.22, 0.40, 0.30] } } },
+      "0-20":   { continuous: { MAT: { pos: [0.01, 0.04, 0.10, 0.25, 0.60], sal: [0.05, 0.15, 0.40, 0.40] } } },
+      "21-40":  { continuous: { MAT: { pos: [0.03, 0.07, 0.20, 0.40, 0.30], sal: [0.08, 0.22, 0.40, 0.30] } } },
       "41-60":  { continuous: { MAT: { pos: [0.08, 0.18, 0.48, 0.18, 0.08], sal: [0.10, 0.25, 0.38, 0.27] } } },
-      "61-80":  { continuous: { MAT: { pos: [0.03, 0.07, 0.20, 0.40, 0.30], sal: [0.08, 0.22, 0.40, 0.30] } } },
-      "81-100": { continuous: { MAT: { pos: [0.01, 0.04, 0.10, 0.25, 0.60], sal: [0.05, 0.15, 0.40, 0.40] } } }
+      "61-80":  { continuous: { MAT: { pos: [0.30, 0.40, 0.20, 0.07, 0.03], sal: [0.08, 0.22, 0.40, 0.30] } } },
+      "81-100": { continuous: { MAT: { pos: [0.60, 0.25, 0.10, 0.04, 0.01], sal: [0.05, 0.15, 0.40, 0.40] } } }
     }
   },
 
@@ -489,11 +489,11 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "ZS", kind: "continuous", role: "position", weight: 0.15, touchType: "outgroup_trust_estimate" }
     ],
     sliderMap: {
-      "0-20":   { continuous: { TRB: { pos: [0.55, 0.28, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.08, 0.20, 0.38, 0.34] } } },
-      "21-40":  { continuous: { TRB: { pos: [0.30, 0.38, 0.20, 0.09, 0.03], sal: [0.08, 0.20, 0.40, 0.32] }, ZS: { sal: [0.10, 0.25, 0.38, 0.27] } } },
+      "0-20":   { continuous: { TRB: { pos: [0.01, 0.04, 0.12, 0.28, 0.55], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.08, 0.20, 0.38, 0.34] } } },
+      "21-40":  { continuous: { TRB: { pos: [0.03, 0.09, 0.20, 0.38, 0.30], sal: [0.08, 0.20, 0.40, 0.32] }, ZS: { sal: [0.10, 0.25, 0.38, 0.27] } } },
       "41-60":  { continuous: { TRB: { pos: [0.08, 0.18, 0.48, 0.18, 0.08], sal: [0.10, 0.25, 0.38, 0.27] }, ZS: { sal: [0.15, 0.30, 0.35, 0.20] } } },
-      "61-80":  { continuous: { TRB: { pos: [0.03, 0.09, 0.20, 0.38, 0.30], sal: [0.08, 0.20, 0.40, 0.32] }, ZS: { sal: [0.15, 0.30, 0.35, 0.20] } } },
-      "81-100": { continuous: { TRB: { pos: [0.01, 0.04, 0.12, 0.28, 0.55], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.15, 0.30, 0.35, 0.20] } } }
+      "61-80":  { continuous: { TRB: { pos: [0.30, 0.38, 0.20, 0.09, 0.03], sal: [0.08, 0.20, 0.40, 0.32] }, ZS: { sal: [0.15, 0.30, 0.35, 0.20] } } },
+      "81-100": { continuous: { TRB: { pos: [0.55, 0.28, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }, ZS: { sal: [0.15, 0.30, 0.35, 0.20] } } }
     }
   },
 
@@ -686,17 +686,17 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       principle_first: {
         continuous: {
-          COM: { pos: [0.02, 0.08, 0.20, 0.38, 0.32], sal: [0.03, 0.12, 0.40, 0.45] }
+          COM: { pos: [0.32, 0.38, 0.20, 0.08, 0.02], sal: [0.03, 0.12, 0.40, 0.45] }
         }
       },
       coalition_first: {
         continuous: {
-          COM: { pos: [0.32, 0.38, 0.20, 0.08, 0.02], sal: [0.03, 0.12, 0.40, 0.45] }
+          COM: { pos: [0.02, 0.08, 0.20, 0.38, 0.32], sal: [0.03, 0.12, 0.40, 0.45] }
         }
       },
       depends_on_issue: {
         continuous: {
-          COM: { pos: [0.08, 0.18, 0.42, 0.22, 0.10], sal: [0.10, 0.25, 0.38, 0.27] }
+          COM: { pos: [0.10, 0.22, 0.42, 0.18, 0.08], sal: [0.10, 0.25, 0.38, 0.27] }
         }
       }
     }
@@ -756,25 +756,25 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       aggressive_transition: {
         continuous: {
-          MAT: { pos: [0.02, 0.08, 0.20, 0.35, 0.35] },
+          MAT: { pos: [0.35, 0.35, 0.20, 0.08, 0.02] },
           ONT_S: { pos: [0.03, 0.10, 0.25, 0.35, 0.27] }
         }
       },
       gradual_transition: {
         continuous: {
-          MAT: { pos: [0.08, 0.18, 0.40, 0.24, 0.10] },
+          MAT: { pos: [0.10, 0.24, 0.40, 0.18, 0.08] },
           ONT_S: { pos: [0.08, 0.18, 0.40, 0.24, 0.10] }
         }
       },
       market_led: {
         continuous: {
-          MAT: { pos: [0.30, 0.35, 0.22, 0.09, 0.04] },
+          MAT: { pos: [0.04, 0.09, 0.22, 0.35, 0.30] },
           ONT_S: { pos: [0.20, 0.30, 0.30, 0.14, 0.06] }
         }
       },
       no_action_needed: {
         continuous: {
-          MAT: { pos: [0.45, 0.30, 0.15, 0.07, 0.03] },
+          MAT: { pos: [0.03, 0.07, 0.15, 0.30, 0.45] },
           ONT_S: { pos: [0.30, 0.30, 0.25, 0.10, 0.05] }
         }
       }
@@ -798,25 +798,25 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       strict_merit: {
         continuous: {
-          MAT: { pos: [0.50, 0.30, 0.13, 0.05, 0.02] },
+          MAT: { pos: [0.02, 0.05, 0.13, 0.30, 0.50] },
           MOR: { pos: [0.35, 0.30, 0.22, 0.09, 0.04] }
         }
       },
       holistic_review: {
         continuous: {
-          MAT: { pos: [0.05, 0.15, 0.35, 0.30, 0.15] },
+          MAT: { pos: [0.15, 0.30, 0.35, 0.15, 0.05] },
           MOR: { pos: [0.05, 0.12, 0.30, 0.33, 0.20] }
         }
       },
       affirmative_action: {
         continuous: {
-          MAT: { pos: [0.02, 0.06, 0.18, 0.34, 0.40] },
+          MAT: { pos: [0.40, 0.34, 0.18, 0.06, 0.02] },
           MOR: { pos: [0.03, 0.08, 0.22, 0.35, 0.32] }
         }
       },
       lottery: {
         continuous: {
-          MAT: { pos: [0.08, 0.15, 0.30, 0.28, 0.19] }
+          MAT: { pos: [0.19, 0.28, 0.30, 0.15, 0.08] }
         }
       }
     }
@@ -872,22 +872,22 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       ratio_10_to_1: {
         continuous: {
-          MAT: { pos: [0.01, 0.04, 0.15, 0.35, 0.45], sal: [0.05, 0.15, 0.38, 0.42] }
+          MAT: { pos: [0.45, 0.35, 0.15, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
         }
       },
       ratio_50_to_1: {
         continuous: {
-          MAT: { pos: [0.04, 0.12, 0.35, 0.32, 0.17], sal: [0.08, 0.22, 0.40, 0.30] }
+          MAT: { pos: [0.17, 0.32, 0.35, 0.12, 0.04], sal: [0.08, 0.22, 0.40, 0.30] }
         }
       },
       ratio_200_to_1: {
         continuous: {
-          MAT: { pos: [0.20, 0.35, 0.28, 0.12, 0.05], sal: [0.10, 0.25, 0.38, 0.27] }
+          MAT: { pos: [0.05, 0.12, 0.28, 0.35, 0.20], sal: [0.10, 0.25, 0.38, 0.27] }
         }
       },
       market_decides: {
         continuous: {
-          MAT: { pos: [0.45, 0.30, 0.15, 0.07, 0.03], sal: [0.08, 0.20, 0.38, 0.34] }
+          MAT: { pos: [0.03, 0.07, 0.15, 0.30, 0.45], sal: [0.08, 0.20, 0.38, 0.34] }
         }
       }
     }
@@ -1018,7 +1018,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       rather_help_undeserving: {
         continuous: {
-          MAT: { pos: [0.02, 0.08, 0.22, 0.35, 0.33], sal: [0.05, 0.15, 0.40, 0.40] },
+          MAT: { pos: [0.33, 0.35, 0.22, 0.08, 0.02], sal: [0.05, 0.15, 0.40, 0.40] },
           MOR: { pos: [0.03, 0.10, 0.25, 0.35, 0.27], sal: [0.08, 0.20, 0.40, 0.32] }
         }
       },
@@ -1030,7 +1030,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       },
       rather_miss_needy: {
         continuous: {
-          MAT: { pos: [0.33, 0.35, 0.22, 0.08, 0.02], sal: [0.05, 0.15, 0.40, 0.40] },
+          MAT: { pos: [0.02, 0.08, 0.22, 0.35, 0.33], sal: [0.05, 0.15, 0.40, 0.40] },
           MOR: { pos: [0.27, 0.35, 0.25, 0.10, 0.03], sal: [0.08, 0.20, 0.40, 0.32] }
         }
       }
@@ -1250,19 +1250,19 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       prioritize_safety: {
         continuous: {
-          PRO: { pos: [0.30, 0.35, 0.22, 0.09, 0.04] }
+          PRO: { pos: [0.04, 0.09, 0.22, 0.35, 0.30] }
         },
         categorical: { EPS: { cat: EPS_PROTOTYPES.institutionalist, sal: [0.10, 0.25, 0.38, 0.27] } }
       },
       balanced_timeline: {
         continuous: {
-          PRO: { pos: [0.10, 0.22, 0.38, 0.22, 0.08] }
+          PRO: { pos: [0.08, 0.22, 0.38, 0.22, 0.10] }
         },
         categorical: { EPS: { cat: EPS_PROTOTYPES.empiricist, sal: [0.12, 0.28, 0.38, 0.22] } }
       },
       prioritize_speed: {
         continuous: {
-          PRO: { pos: [0.04, 0.09, 0.22, 0.35, 0.30] }
+          PRO: { pos: [0.30, 0.35, 0.22, 0.09, 0.04] }
         },
         categorical: { EPS: { cat: EPS_PROTOTYPES.autonomous, sal: [0.10, 0.25, 0.38, 0.27] } }
       }
@@ -1286,23 +1286,23 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       follow_always: {
         continuous: {
-          PRO: { pos: [0.40, 0.32, 0.18, 0.07, 0.03] }
+          PRO: { pos: [0.03, 0.07, 0.18, 0.32, 0.40] }
         }
       },
       follow_then_advocate: {
         continuous: {
-          PRO: { pos: [0.10, 0.25, 0.38, 0.20, 0.07] },
+          PRO: { pos: [0.07, 0.20, 0.38, 0.25, 0.10] },
           COM: { pos: [0.05, 0.12, 0.28, 0.33, 0.22] }
         }
       },
       ignore_quietly: {
         continuous: {
-          PRO: { pos: [0.04, 0.10, 0.22, 0.35, 0.29] }
+          PRO: { pos: [0.29, 0.35, 0.22, 0.10, 0.04] }
         }
       },
       openly_challenge: {
         continuous: {
-          PRO: { pos: [0.03, 0.07, 0.18, 0.32, 0.40] },
+          PRO: { pos: [0.40, 0.32, 0.18, 0.07, 0.03] },
           COM: { pos: [0.22, 0.28, 0.25, 0.15, 0.10] }
         }
       }
@@ -1360,22 +1360,22 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       no_big_deal: {
         continuous: {
-          TRB: { pos: [0.01, 0.04, 0.15, 0.38, 0.42], sal: [0.05, 0.15, 0.38, 0.42] }
+          TRB: { pos: [0.42, 0.38, 0.15, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
         }
       },
       keep_friendship: {
         continuous: {
-          TRB: { pos: [0.04, 0.12, 0.35, 0.30, 0.19], sal: [0.05, 0.18, 0.40, 0.37] }
+          TRB: { pos: [0.19, 0.30, 0.35, 0.12, 0.04], sal: [0.05, 0.18, 0.40, 0.37] }
         }
       },
       distance_somewhat: {
         continuous: {
-          TRB: { pos: [0.22, 0.32, 0.28, 0.13, 0.05], sal: [0.03, 0.15, 0.40, 0.42] }
+          TRB: { pos: [0.05, 0.13, 0.28, 0.32, 0.22], sal: [0.03, 0.15, 0.40, 0.42] }
         }
       },
       end_friendship: {
         continuous: {
-          TRB: { pos: [0.48, 0.28, 0.15, 0.06, 0.03], sal: [0.02, 0.10, 0.38, 0.50] }
+          TRB: { pos: [0.03, 0.06, 0.15, 0.28, 0.48], sal: [0.02, 0.10, 0.38, 0.50] }
         }
       }
     }
@@ -1398,22 +1398,22 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     optionEvidence: {
       equal_society: {
         continuous: {
-          MAT: { pos: [0.01, 0.04, 0.12, 0.35, 0.48], sal: [0.05, 0.15, 0.38, 0.42] }
+          MAT: { pos: [0.48, 0.35, 0.12, 0.04, 0.01], sal: [0.05, 0.15, 0.38, 0.42] }
         }
       },
       safety_net_society: {
         continuous: {
-          MAT: { pos: [0.04, 0.12, 0.30, 0.34, 0.20], sal: [0.08, 0.22, 0.40, 0.30] }
+          MAT: { pos: [0.20, 0.34, 0.30, 0.12, 0.04], sal: [0.08, 0.22, 0.40, 0.30] }
         }
       },
       opportunity_society: {
         continuous: {
-          MAT: { pos: [0.18, 0.30, 0.32, 0.14, 0.06], sal: [0.08, 0.22, 0.40, 0.30] }
+          MAT: { pos: [0.06, 0.14, 0.32, 0.30, 0.18], sal: [0.08, 0.22, 0.40, 0.30] }
         }
       },
       free_market_society: {
         continuous: {
-          MAT: { pos: [0.45, 0.30, 0.15, 0.07, 0.03], sal: [0.05, 0.15, 0.38, 0.42] }
+          MAT: { pos: [0.03, 0.07, 0.15, 0.30, 0.45], sal: [0.05, 0.15, 0.38, 0.42] }
         }
       }
     }
@@ -1603,19 +1603,19 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       very_conservative: {
         continuous: {
           CD: { pos: [0.28, 0.25, 0.22, 0.15, 0.10] },
-          MAT: { pos: [0.26, 0.25, 0.22, 0.16, 0.11] }
+          MAT: { pos: [0.11, 0.16, 0.22, 0.25, 0.26] }
         }
       },
       moderate_household: {
         continuous: {
           CD: { pos: [0.15, 0.22, 0.30, 0.20, 0.13] },
-          MAT: { pos: [0.15, 0.22, 0.30, 0.20, 0.13] }
+          MAT: { pos: [0.13, 0.20, 0.30, 0.22, 0.15] }
         }
       },
       very_progressive: {
         continuous: {
           CD: { pos: [0.10, 0.15, 0.22, 0.25, 0.28] },
-          MAT: { pos: [0.11, 0.16, 0.22, 0.25, 0.26] }
+          MAT: { pos: [0.26, 0.25, 0.22, 0.16, 0.11] }
         }
       },
       not_political: {
@@ -2012,13 +2012,13 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: { ONT_S: 0.6 }
       },
       corporate_decisions: {
-        continuous: { MAT: 0.7, ZS: 0.6 },
+        continuous: { MAT: -0.7, ZS: 0.6 },
       },
       government_policy: {
-        continuous: { MAT: 0.3, ONT_S: 0.3 },
+        continuous: { MAT: -0.3, ONT_S: 0.3 },
       },
       worker_choices: {
-        continuous: { MAT: -0.6, ONT_S: -0.5 },
+        continuous: { MAT: 0.6, ONT_S: -0.5 },
       }
     }
   },
@@ -2049,7 +2049,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: { CU: -0.6, CD: -0.4 }
       },
       economic_contribution: {
-        continuous: { CU: 0.2, MAT: -0.3 }
+        continuous: { CU: 0.2, MAT: 0.3 }
       },
       cultural_customs: {
         continuous: { CU: -0.8, CD: -0.6 }
@@ -2089,7 +2089,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     ],
     rankingMap: {
       fairness: {
-        continuous: { MAT: 0.5, MOR: 0.4, PRO: 0.3 }
+        continuous: { MAT: -0.5, MOR: 0.4, PRO: 0.3 }
       },
       procedural_integrity: {
         continuous: { PRO: 0.6, COM: 0.3 }
@@ -2101,7 +2101,7 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: { COM: 0.5, TRB: -0.3, MOR: 0.3 }
       },
       individual_freedom: {
-        continuous: { PRO: 0.5, MAT: -0.3 }
+        continuous: { PRO: 0.5, MAT: 0.3 }
       },
       tradition_continuity: {
         continuous: { CD: -0.5, CU: -0.4 }
@@ -2230,9 +2230,9 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
     ],
     allocationMap: {
       preserve_heritage: { continuous: { CD: -0.8, PRO: -0.3 } },
-      modernize_infrastructure: { continuous: { CD: 0.5, PRO: 0.2, MAT: -0.4 } },
+      modernize_infrastructure: { continuous: { CD: 0.5, PRO: 0.2, MAT: 0.4 } },
       community_deliberation: { continuous: { PRO: 0.7, COM: 0.5 } },
-      market_based_development: { continuous: { MAT: -0.8, PRO: -0.5 } }
+      market_based_development: { continuous: { MAT: 0.8, PRO: -0.5 } }
     }
   },
 
@@ -2415,11 +2415,11 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
       { node: "COM", kind: "continuous", role: "position", weight: 0.20, touchType: "pragmatism_proxy" }
     ],
     rankingMap: {
-      free_market_growth: { continuous: { MAT: -0.9, PRO: -0.5 } },
-      government_redistribution: { continuous: { MAT: 0.8, PRO: 0.4 } },
-      strong_regulations: { continuous: { PRO: 0.7, MAT: 0.3 } },
-      community_mutual_aid: { continuous: { COM: 0.6, MAT: 0.3, PRO: -0.3 } },
-      charitable_giving: { continuous: { MAT: -0.4, COM: 0.3 } }
+      free_market_growth: { continuous: { MAT: 0.9, PRO: -0.5 } },
+      government_redistribution: { continuous: { MAT: -0.8, PRO: 0.4 } },
+      strong_regulations: { continuous: { PRO: 0.7, MAT: -0.3 } },
+      community_mutual_aid: { continuous: { COM: 0.6, MAT: -0.3, PRO: -0.3 } },
+      charitable_giving: { continuous: { MAT: 0.4, COM: 0.3 } }
     }
   },
 
