@@ -1,7 +1,7 @@
 import { ARCHETYPES } from "./config/archetypes.js";
 import { REPRESENTATIVE_QUESTIONS } from "./config/questions.representative.js";
 import { FULL_QUESTIONS } from "./config/questions.full.js";
-import { FIXED_12 } from "./engine/config.js";
+import { FIXED_16 } from "./engine/config.js";
 import { CONTINUOUS_NODES, CATEGORICAL_NODES } from "./config/nodes.js";
 import { createInitialState } from "./state/initialState.js";
 import type {
@@ -19,9 +19,10 @@ import {
   applySingleChoiceAnswer,
   applySliderAnswer,
 } from "./engine/update.js";
-import { recomputeArchetypePosterior, viableArchetypes } from "./engine/archetypeDistance.js";
+import { recomputeArchetypePosterior, recomputeFinalPosterior, viableArchetypes, pruneArchetypes } from "./engine/archetypeDistance.js";
 import { updateNodeStatuses } from "./engine/nodeStatus.js";
-import { selectNextQuestion } from "./engine/nextQuestion.js";
+import { selectNextBatch } from "./engine/nextQuestion.js";
+import { shouldStop } from "./engine/stopRule.js";
 
 // ---------------------------------------------------------------------------
 // Question bank setup (same pattern as catDiagnostic.ts)
@@ -253,8 +254,8 @@ for (const trueArchetype of ARCHETYPES) {
 
   const state = createInitialState();
 
-  // Phase 1: Fixed 12
-  for (const qid of FIXED_12) {
+  // Phase 1: Fixed 16 (matches production browser.ts)
+  for (const qid of FIXED_16) {
     const q = BANK_BY_ID.get(qid);
     if (!q) continue;
     const answer = answers.get(q.id);
@@ -262,22 +263,32 @@ for (const trueArchetype of ARCHETYPES) {
     applySimulatedAnswer(state, q, answer);
   }
   recomputeArchetypePosterior(state, ARCHETYPES);
+  pruneArchetypes(state, ARCHETYPES);
   updateNodeStatuses(state, viableCandidates(state, ARCHETYPES));
 
-  // Phase 2: Adaptive questions
+  // Phase 2: Batch-adaptive questions (matches production browser.ts)
   let rounds = 0;
   while (Object.keys(state.answers).length < 63 && rounds < 51) {
-    rounds++;
-    const next = selectNextQuestion(state, QUESTION_BANK, ARCHETYPES);
-    if (!next) break;
-    const answer = answers.get(next.id);
-    if (!answer) {
-      applySingleChoiceAnswer(state, next, "default");
-    } else {
-      applySimulatedAnswer(state, next, answer);
+    const batch = selectNextBatch(state, QUESTION_BANK, ARCHETYPES);
+    if (batch.length === 0) break;
+
+    for (const next of batch) {
+      rounds++;
+      const answer = answers.get(next.id);
+      if (!answer) {
+        applySingleChoiceAnswer(state, next, "default");
+      } else {
+        applySimulatedAnswer(state, next, answer);
+      }
+      recomputeArchetypePosterior(state, ARCHETYPES);
     }
-    recomputeArchetypePosterior(state, ARCHETYPES);
+
+    // Prune at batch boundary (matches production)
+    pruneArchetypes(state, ARCHETYPES);
     updateNodeStatuses(state, viableCandidates(state, ARCHETYPES));
+
+    // Check stop rule after each batch
+    if (Object.keys(state.answers).length >= 25 && shouldStop(state, ARCHETYPES)) break;
   }
 
   // Collect posterior results

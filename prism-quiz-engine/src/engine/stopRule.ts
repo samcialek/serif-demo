@@ -1,21 +1,14 @@
 import type { Archetype, ContinuousNodeId, CategoricalNodeId, RespondentState } from "../types.js";
-import {
-  STOP_MARGIN_THRESHOLD,
-  STOP_POSTERIOR_THRESHOLD,
-  STOP_MIN_QUESTIONS,
-  STOP_MIN_CONSECUTIVE_LEADS,
-  STOP_AGREEMENT_K,
-} from "./config.js";
+import { getConfig } from "../optimize/runtimeConfig.js";
 
-// Confidence gap above which a categorical node's "live_unresolved" status
-// does not block the stop rule.  The node REMAINS live_unresolved for
-// question-selection gating, but the stop rule treats it as effectively
-// resolved because the respondent's category is crystallised.
 const CAT_CONFIDENT_GAP = 0.50;
 
 // Precompute cosine similarities between archetype node vectors once.
-// Used to detect close pairs that need a higher margin.
 let _pairSimilarityCache: Map<string, number> | null = null;
+
+export function resetSimilarityCache(): void {
+  _pairSimilarityCache = null;
+}
 
 function ensureSimilarityCache(archetypes: Archetype[]): Map<string, number> {
   if (_pairSimilarityCache) return _pairSimilarityCache;
@@ -58,8 +51,9 @@ export function shouldStop(
   state: RespondentState,
   archetypes?: Archetype[]
 ): boolean {
+  const cfg = getConfig();
   const nAnswered = Object.keys(state.answers).length;
-  if (nAnswered < STOP_MIN_QUESTIONS) return false;
+  if (nAnswered < cfg.STOP_MIN_QUESTIONS) return false;
 
   const entries = Object.entries(state.archetypePosterior)
     .sort((a, b) => b[1] - a[1]);
@@ -69,45 +63,29 @@ export function shouldStop(
   const second = entries[1]?.[1] ?? 0;
   const margin = top - second;
 
-  // ---------------------------------------------------------------------------
-  // Adaptive posterior threshold: with 100+ archetypes, even a clear winner
-  // may only reach ~20%. Scale the threshold based on the effective number
-  // of archetypes still in play (those with >0.5% posterior).
-  // ---------------------------------------------------------------------------
   const significantCount = entries.filter(([, p]) => p > 0.005).length;
-  // With 5 significant: threshold = 0.25 (original)
-  // With 20 significant: threshold = ~0.15
-  // With 40 significant: threshold = ~0.12
   const adaptiveThreshold = Math.max(
     0.10,
-    Math.min(STOP_POSTERIOR_THRESHOLD, 1.0 / Math.sqrt(significantCount) * 0.55)
+    Math.min(cfg.STOP_POSTERIOR_THRESHOLD, 1.0 / Math.sqrt(significantCount) * 0.55)
   );
 
-  // If the top-2 archetypes are very similar (cosine > 0.96), require a
-  // higher margin before stopping — these pairs are inherently hard to
-  // separate and early stopping is likely to catch the wrong one.
-  let effectiveMargin = STOP_MARGIN_THRESHOLD;
+  let effectiveMargin = cfg.STOP_MARGIN_THRESHOLD;
+  let pairSim = 0;
   if (archetypes) {
     const cache = ensureSimilarityCache(archetypes);
     const key = [topId, secondId].sort().join("|");
-    const sim = cache.get(key) ?? 0;
-    if (sim > 0.95) {
-      effectiveMargin = STOP_MARGIN_THRESHOLD * 4.0;
-    } else if (sim > 0.92) {
-      effectiveMargin = STOP_MARGIN_THRESHOLD * 2.5;
+    pairSim = cache.get(key) ?? 0;
+    if (pairSim > 0.95) {
+      effectiveMargin = cfg.STOP_MARGIN_THRESHOLD * 4.0;
+    } else if (pairSim > 0.92) {
+      effectiveMargin = cfg.STOP_MARGIN_THRESHOLD * 2.5;
     }
   }
 
-  // Leader must have held the top spot for several consecutive questions.
-  const stableLeader = (state.consecutiveLeadCount ?? 0) >= STOP_MIN_CONSECUTIVE_LEADS;
+  const consecutiveCount = state.consecutiveLeadCount ?? 0;
+  const stableLeader = consecutiveCount >= cfg.STOP_MIN_CONSECUTIVE_LEADS;
 
-  // ---------------------------------------------------------------------------
-  // Hierarchical stop: unresolved nodes only block if top-K candidates
-  // actually disagree on them. If all viable leaders agree on a node, its
-  // "unresolved" status is non-blocking — resolution won't change the outcome.
-  // ---------------------------------------------------------------------------
-
-  const topKIds = entries.slice(0, STOP_AGREEMENT_K).map(([id]) => id);
+  const topKIds = entries.slice(0, cfg.STOP_AGREEMENT_K).map(([id]) => id);
   const topKArchetypes = archetypes
     ? archetypes.filter((a) => topKIds.includes(a.id))
     : [];
@@ -140,8 +118,6 @@ export function shouldStop(
       n.status === "live_unresolved" && !topKAgreeOnContinuous(nodeId)
   );
 
-  // Categorical nodes only block stopping if their distribution is still
-  // uncertain (top–second gap < CAT_CONFIDENT_GAP) AND top-K disagree.
   const anyCategoricalBlocking = Object.entries(state.categorical).some(([nodeId, n]) => {
     if (n.status !== "live_unresolved") return false;
     const sorted = [...n.catDist].sort((a, b) => b - a);
@@ -150,27 +126,19 @@ export function shouldStop(
     return !topKAgreeOnCategorical(nodeId);
   });
 
-  // Primary stop: adaptive threshold + margin + stable leader + no blocking nodes
+  const highConfOverride =
+    top >= cfg.HC_POSTERIOR &&
+    margin >= cfg.HC_MARGIN &&
+    consecutiveCount >= cfg.HC_CONSECUTIVE &&
+    pairSim < cfg.HC_COSINE_BLOCK;
+
   const primaryStop =
     top >= adaptiveThreshold &&
     margin >= effectiveMargin &&
     stableLeader &&
-    !anyContinuousBlocking &&
-    !anyCategoricalBlocking;
+    (highConfOverride || (!anyContinuousBlocking && !anyCategoricalBlocking));
 
-  // Secondary stop: if the leader has been stable for a long run and the
-  // margin is solid, stop even if some nodes are still unresolved. This
-  // handles the "moderate respondent" case where nodes stay unresolved
-  // because the respondent genuinely sits between positions.
-  //
-  // IMPORTANT: The secondary stop must ALSO respect cosine similarity.
-  // Check the leader against the top-3 candidates (not just #2) since the
-  // true archetype might be in 3rd place getting confused with the leader.
-  //
-  // Also require the margin to be a clear fraction of the top posterior
-  // (relative margin) — not just an absolute gap. A 5% gap when the leader
-  // is at 15% is very different from a 5% gap when the leader is at 40%.
-  const deepStableLeader = (state.consecutiveLeadCount ?? 0) >= 6;
+  const deepStableLeader = consecutiveCount >= 6;
 
   let secondaryMarginMultiplier = 1.5;
   if (archetypes) {
@@ -190,15 +158,26 @@ export function shouldStop(
     }
   }
 
-  // Require both absolute margin AND relative margin (leader must be ≥1.4x runner-up)
   const solidAbsMargin = margin >= effectiveMargin * secondaryMarginMultiplier;
   const solidRelMargin = second > 0 ? (top / second) >= 1.4 : true;
   const secondaryStop =
-    nAnswered >= 32 &&
+    nAnswered >= cfg.SECONDARY_MIN_Q &&
     top >= adaptiveThreshold &&
     solidAbsMargin &&
     solidRelMargin &&
     deepStableLeader;
 
-  return primaryStop || secondaryStop;
+  const ultraConfStop =
+    nAnswered >= cfg.UC_MIN_Q &&
+    top >= cfg.UC_POSTERIOR &&
+    margin >= cfg.UC_MARGIN &&
+    consecutiveCount >= cfg.UC_CONSECUTIVE;
+
+  const lateGameStop =
+    nAnswered >= cfg.LATE_GAME_MIN_Q &&
+    top >= cfg.LATE_GAME_POSTERIOR &&
+    margin >= cfg.LATE_GAME_MARGIN &&
+    consecutiveCount >= cfg.LATE_GAME_CONSECUTIVE;
+
+  return primaryStop || secondaryStop || ultraConfStop || lateGameStop;
 }

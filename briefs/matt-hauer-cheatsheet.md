@@ -87,6 +87,12 @@ Matt's likely daily reality right now: making synthetic agents that are believab
 
 ---
 
+## 🔑 Key Context: The Ro Khanna Bet & John Wrote Your Role
+
+**The Ro Khanna Bet:** You have a Polymarket position on Ro Khanna for President. He's currently at ~0.9%. The play is to exit when he announces he's running and the price spikes to ~6%. This is a great conversation piece with Matt — it shows you think about prediction markets, probability, and political forecasting in a practical, skin-in-the-game way. Connects directly to Aaru's Polls product (replacing traditional polling with synthetic population prediction).
+
+**John wrote your role:** The Researcher job description was written by John Kessler specifically. This means the role was designed with a particular vision — ask Matt what John's thinking was behind the role design. What gap is this person supposed to fill? This also means John already has a mental model of who he wants — your job tonight is to show you match that model.
+
 ## ⛔ Don't
 
 - Don't oversell PRISM — if he asks: "I built a political disposition model with 111 archetypes, theory-driven layers, calibrated against real elections. Happy to show you."

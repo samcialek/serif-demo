@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "bundle": "esbuild src/browser.ts --bundle --platform=browser --outfile=../docs/quiz/prism-engine.js --format=iife",
     "start": "node dist/index.js",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "test": "tsx src/accuracyTest.ts",
+    "diagnostic": "tsx src/confusionDiagnostic.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

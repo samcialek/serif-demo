@@ -1231,6 +1231,327 @@ export const FULL_QUESTIONS: QuestionDef[] = [
       eligibleIf: ["screen20_or_late_screen"],
       goodFollowupsIfUnresolved: [51, 55, 56, 60]
     }
+  ),
+
+  // =========================================================================
+  // SECTION VI — NEW GAP-TARGETED EXPANSION (Q64-Q75)
+  // =========================================================================
+
+  // Q64 — Political Frustration (PF position via grievance framing + salience)
+  q(
+    64,
+    "stage2",
+    "VI",
+    "political_frustration",
+    "single_choice",
+    0.93,
+    false,
+    [
+      t("PF", "continuous", "position", 0.90, "grievance_proxy"),
+      t("PF", "continuous", "salience", 0.40, "frustration_intensity"),
+      t("ENG", "continuous", "salience", 0.15, "engagement_proxy")
+    ],
+    {
+      eligibleIf: ["PF_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [42, 60, 40]
+    }
+  ),
+
+  /* Q65, Q66, Q67, Q68, Q70, Q73, Q74, Q75 — evidence maps miscalibrated,
+     cause accuracy regression. Need recalibration against 124 archetype signatures.
+     See src/optimize/questionDiag.ts for individual impact analysis.
+  // Q65 — Party-Culture Conflict Response (PF salience + CD salience joint)
+  q(
+    65,
+    "stage2",
+    "VI",
+    "party_culture_conflict_response",
+    "single_choice",
+    0.90,
+    false,
+    [
+      t("PF", "continuous", "salience", 0.70, "loyalty_tradeoff"),
+      t("CD", "continuous", "salience", 0.55, "cultural_salience"),
+      t("COM", "continuous", "position", 0.25, "pragmatism_proxy")
+    ],
+    {
+      eligibleIf: ["PF_live_or_unresolved", "CD_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [64, 74, 42]
+    }
+  ),
+
+  // Q66 — Community Fund Allocation (CD + PRO joint)
+  q(
+    66,
+    "stage2",
+    "VI",
+    "community_fund_allocation",
+    "allocation",
+    0.89,
+    false,
+    [
+      t("CD", "continuous", "position", 0.75, "value_allocation"),
+      t("PRO", "continuous", "position", 0.60, "governance_allocation"),
+      t("MAT", "continuous", "position", 0.20, "economic_proxy")
+    ],
+    {
+      eligibleIf: ["CD_live_or_unresolved", "PRO_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [72, 73, 74]
+    }
+  ),
+
+  // Q67 — Universal vs Local Obligations (CU + MOR + ZS joint)
+  q(
+    67,
+    "stage2",
+    "VI",
+    "universal_vs_local_obligations",
+    "pairwise",
+    0.92,
+    false,
+    [
+      t("CU", "continuous", "position", 0.70, "scope_tradeoff"),
+      t("MOR", "continuous", "position", 0.80, "scope_tradeoff"),
+      t("ZS", "continuous", "position", 0.40, "resource_view")
+    ],
+    {
+      eligibleIf: ["CU_live_or_unresolved", "MOR_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [74, 70, 50]
+    }
+  ),
+
+  // Q68 — Opponent Success Response (COM + ONT_H joint)
+  q(
+    68,
+    "stage2",
+    "VI",
+    "opponent_success_response",
+    "single_choice",
+    0.91,
+    false,
+    [
+      t("COM", "continuous", "position", 0.80, "compromise_proxy"),
+      t("ONT_H", "continuous", "position", 0.45, "optimism_proxy"),
+      t("ZS", "continuous", "position", 0.25, "zero_sum_proxy")
+    ],
+    {
+      eligibleIf: ["COM_live_or_unresolved", "ONT_H_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [69, 70, 72]
+    }
+  ),
+  */ // end Q65-Q68 comment block
+
+  // Q69 — Common Ground Salience (re-enabled: Q72 removed, interaction no longer applies)
+  q(
+    69,
+    "stage2",
+    "VI",
+    "common_ground_salience",
+    "slider",
+    0.91,
+    false,
+    [
+      t("COM", "continuous", "salience", 0.90, "direct_salience"),
+      t("PRO", "continuous", "position", 0.15, "governance_proxy")
+    ],
+    {
+      eligibleIf: ["COM_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [68, 7]
+    }
+  ),
+
+  /* Q70 — needs recalibration: breaks 029, 052
+  // Q70 — Zero-Sum Politics (ZS salience + position)
+  q(
+    70,
+    "stage2",
+    "VI",
+    "zero_sum_politics_view",
+    "slider",
+    0.90,
+    false,
+    [
+      t("ZS", "continuous", "salience", 0.85, "direct_salience"),
+      t("ZS", "continuous", "position", 0.50, "direct_placement")
+    ],
+    {
+      eligibleIf: ["ZS_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [31, 68, 67]
+    }
+  ),
+  */ // end Q70 comment block
+
+  /* Q71 — individually safe (98.4%) but causes interaction with Q72 that breaks 117.
+     Re-enable if Q72 is removed, or if evidence maps are recalibrated.
+  q(
+    71,
+    "stage2",
+    "VI",
+    "rhetoric_style_importance",
+    "slider",
+    0.88,
+    false,
+    [
+      t("AES", "categorical", "salience", 0.90, "direct_salience"),
+      t("ENG", "continuous", "salience", 0.20, "attention_proxy")
+    ],
+    {
+      eligibleIf: ["AES_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [56, 61, 62]
+    }
+  ),
+  */
+
+  /* Q72 removed — PRO+COM process/outcome tradeoff is already well-covered
+     by existing questions in the bank. */
+
+  /* Q73-Q75 — needs recalibration: Q73 breaks 119, Q74 breaks 10 archetypes, Q75 breaks 050
+  // Q73 — Inequality Solutions Ranking (MAT + PRO joint)
+  q(
+    73,
+    "stage2",
+    "VI",
+    "inequality_solutions_ranking",
+    "ranking",
+    0.90,
+    false,
+    [
+      t("MAT", "continuous", "position", 0.70, "economic_ranking"),
+      t("PRO", "continuous", "position", 0.40, "governance_ranking"),
+      t("COM", "continuous", "position", 0.20, "pragmatism_proxy")
+    ],
+    {
+      eligibleIf: ["MAT_live_or_unresolved", "PRO_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [66, 72, 13]
+    }
+  ),
+
+  // Q74 — Culture vs Diversity Scope (MOR + CD pairwise)
+  q(
+    74,
+    "stage2",
+    "VI",
+    "culture_vs_diversity_scope",
+    "pairwise",
+    0.91,
+    false,
+    [
+      t("MOR", "continuous", "position", 0.70, "moral_scope"),
+      t("CD", "continuous", "position", 0.65, "cultural_direction"),
+      t("CU", "continuous", "position", 0.30, "universalism_proxy")
+    ],
+    {
+      eligibleIf: ["MOR_live_or_unresolved", "CD_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [67, 66, 50]
+    }
+  ),
+
+  // Q75 — Cross-Party Marriage (TRB + PF joint)
+  q(
+    75,
+    "stage2",
+    "VI",
+    "cross_party_marriage_comfort",
+    "single_choice",
+    0.92,
+    false,
+    [
+      t("TRB", "continuous", "position", 0.70, "network_homophily"),
+      t("PF", "continuous", "salience", 0.55, "identity_strength"),
+      t("PF", "continuous", "position", 0.30, "partisan_intensity")
+    ],
+    {
+      eligibleIf: ["TRB_live_or_unresolved", "PF_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [64, 65, 42]
+    }
+  )
+  */ // end Q73-Q75 comment block
+
+  // ── Coverage-gap fillers (Q76-Q79) ──────────────────────────────
+  // Added to address biases found in 10k random simulation:
+  //   Q76 — ONT_S position skews +0.861 high (structuralist); need individualist coverage
+  //   Q77 — EPS intuitionist (3.2%) and nihilist (0.4%) nearly unreachable
+  //   Q78 — AES authentic (4.5%) despite being most common AES in archetype bank
+  //   Q79 — EPS nihilist dedicated (0% win rate in simulations)
+
+  // Q76 — Success Attribution (ONT_S individualist coverage)
+  q(
+    76,
+    "stage2",
+    "IV",
+    "success_attribution",
+    "single_choice",
+    0.91,
+    false,
+    [
+      t("ONT_S", "continuous", "position", 0.90, "causal_attribution"),
+      t("ONT_S", "continuous", "salience", 0.40, "causal_attribution"),
+      t("ZS", "continuous", "position", 0.20, "distributional_worldview")
+    ],
+    {
+      eligibleIf: ["ONT_S_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [20, 15, 29]
+    }
+  ),
+
+  // Q77 — Decision-Making Style (EPS intuitionist + nihilist coverage)
+  q(
+    77,
+    "stage2",
+    "III",
+    "decision_making_style",
+    "single_choice",
+    0.93,
+    false,
+    [
+      t("EPS", "categorical", "category", 0.85, "decision_style"),
+      t("EPS", "categorical", "salience", 0.35, "decision_style"),
+      t("AES", "categorical", "category", 0.15, "style_proxy")
+    ],
+    {
+      eligibleIf: ["EPS_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [79, 22, 55]
+    }
+  ),
+
+  // Q78 — Speaker Appeal (AES authentic coverage)
+  q(
+    78,
+    "stage2",
+    "V",
+    "speaker_appeal",
+    "single_choice",
+    0.92,
+    false,
+    [
+      t("AES", "categorical", "category", 0.88, "rhetorical_preference"),
+      t("AES", "categorical", "salience", 0.40, "rhetorical_preference"),
+      t("EPS", "categorical", "category", 0.15, "style_proxy")
+    ],
+    {
+      eligibleIf: ["AES_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [56, 61, 62]
+    }
+  ),
+
+  // Q79 — Expert Disagreement (EPS nihilist dedicated)
+  q(
+    79,
+    "stage2",
+    "III",
+    "expert_disagreement_reaction",
+    "single_choice",
+    0.90,
+    false,
+    [
+      t("EPS", "categorical", "category", 0.82, "epistemic_response"),
+      t("EPS", "categorical", "salience", 0.40, "epistemic_response"),
+      t("ENG", "continuous", "salience", 0.15, "attention_proxy")
+    ],
+    {
+      eligibleIf: ["EPS_live_or_unresolved"],
+      goodFollowupsIfUnresolved: [77, 22, 44]
+    }
   )
 ];
 

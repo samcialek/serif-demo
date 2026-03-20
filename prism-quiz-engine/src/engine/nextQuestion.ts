@@ -6,7 +6,9 @@ import type {
   QuestionDef,
   RespondentState
 } from "../types.js";
-import { FIXED_12, EXPLOIT_BLEND_START, EXPLOIT_BLEND_END } from "./config.js";
+import { FIXED_16 } from "./config.js";
+import { getConfig } from "../optimize/runtimeConfig.js";
+import { viableArchetypes } from "./archetypeDistance.js";
 import { archetypeDistance } from "./archetypeDistance.js";
 
 // ---------------------------------------------------------------------------
@@ -42,7 +44,7 @@ function evaluatePredicate(state: RespondentState, predicate: string): boolean {
   switch (predicate) {
     // Eligible once we're past the fixed12 phase
     case "screen20_or_late_screen":
-      return answered >= FIXED_12.length;
+      return answered >= FIXED_16.length;
 
     // Late-stage consistency checks — most of the quiz is done
     case "late_consistency_check_only":
@@ -255,6 +257,35 @@ function discriminationScore(
 }
 
 // ---------------------------------------------------------------------------
+// Devil's advocate: probe the leader's blind spots
+//
+// When the leader has many sal≤1 (indifferent) nodes, the engine should
+// still ask about those nodes to verify the respondent truly doesn't care.
+// If the respondent HAS strong opinions on those nodes, it means the
+// leader is a "black hole" attractor that wins by being vague, not correct.
+// ---------------------------------------------------------------------------
+
+function leaderBlindSpotScore(
+  state: RespondentState,
+  q: QuestionDef,
+  leader: Archetype
+): number {
+  let score = 0;
+  let count = 0;
+  for (const touch of q.touchProfile) {
+    if (touch.node === "TRB_ANCHOR") continue;
+    const template = leader.nodes[touch.node as keyof typeof leader.nodes];
+    if (!template) continue;
+    count++;
+    // Leader is indifferent on this node — worth probing
+    if (template.sal <= 1) {
+      score += touch.weight * nodeUncertainty(state, touch.node);
+    }
+  }
+  return count > 0 ? score / count : 0;
+}
+
+// ---------------------------------------------------------------------------
 // Blended scoring: smooth transition from exploration to exploitation
 //
 // Starts blending at EXPLOIT_BLEND_START, fully exploitative by
@@ -267,15 +298,16 @@ function scoreQuestionBlended(
   q: QuestionDef,
   archetypes: Archetype[]
 ): number {
+  const cfg = getConfig();
   const nAnswered = Object.keys(state.answers).length;
 
-  if (nAnswered < EXPLOIT_BLEND_START) {
+  if (nAnswered < cfg.EXPLOIT_BLEND_START) {
     return scoreExploration(state, q, archetypes);
   }
 
   const exploitAlpha = Math.min(
     1.0,
-    (nAnswered - EXPLOIT_BLEND_START) / (EXPLOIT_BLEND_END - EXPLOIT_BLEND_START)
+    (nAnswered - cfg.EXPLOIT_BLEND_START) / (cfg.EXPLOIT_BLEND_END - cfg.EXPLOIT_BLEND_START)
   );
 
   const exploreScore = scoreExploration(state, q, archetypes);
@@ -287,8 +319,20 @@ function scoreQuestionBlended(
 
   const discrimScore = discriminationScore(state, q, candidates);
 
+  // Devil's advocate: probe the leader's blind spots during exploitation
+  let devilScore = 0;
+  if (cfg.DEVILS_ADVOCATE_WEIGHT > 0 && exploitAlpha > 0) {
+    const leader = candidates[0]!;
+    devilScore = leaderBlindSpotScore(state, q, leader);
+  }
+
   // Blend: as we move past EXPLOIT_BLEND_START, weight discrimination higher
-  return exploreScore * (1 - exploitAlpha) + discrimScore * exploitAlpha;
+  // The devil's advocate term scales with exploitation alpha — only active
+  // during exploitation when we have a clear leader to challenge
+  return (
+    exploreScore * (1 - exploitAlpha) +
+    (discrimScore + cfg.DEVILS_ADVOCATE_WEIGHT * devilScore) * exploitAlpha
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -321,4 +365,72 @@ export function scoreQuestionForExposure(
   archetypes: Archetype[]
 ): number {
   return scoreQuestionBlended(state, q, archetypes);
+}
+
+// ---------------------------------------------------------------------------
+// Batch selection: pick 3-4 complementary questions for the adaptive phase.
+//
+// Greedy with node-diversity penalty: score all eligible questions, pick the
+// best, then penalize subsequent candidates that overlap on the same nodes
+// so the batch covers diverse dimensions.
+// ---------------------------------------------------------------------------
+
+function computeBatchSize(state: RespondentState, archetypes: Archetype[]): number {
+  const cfg = getConfig();
+  const viable = viableArchetypes(state, archetypes);
+  if (viable.length > 20) return cfg.BATCH_SIZE_MAX;
+  if (viable.length > cfg.BATCH_PRUNE_MIN_VIABLE) return cfg.BATCH_SIZE_MIN;
+  return 1; // fine discrimination — single question mode
+}
+
+export function selectNextBatch(
+  state: RespondentState,
+  available: QuestionDef[],
+  archetypes: Archetype[]
+): QuestionDef[] {
+  const batchSize = computeBatchSize(state, archetypes);
+
+  const eligible = available.filter(
+    (q) => !(q.id in state.answers) && isQuestionEligible(state, q)
+  );
+  if (!eligible.length) return [];
+
+  // Score all eligible questions
+  const scored = eligible.map((q) => ({
+    q,
+    baseScore: scoreQuestionBlended(state, q, archetypes),
+  }));
+  scored.sort((a, b) => b.baseScore - a.baseScore);
+
+  const batch: QuestionDef[] = [];
+  const selectedNodes = new Set<string>();
+
+  while (batch.length < batchSize && scored.length > 0) {
+    // Consider the top 10 candidates with node-overlap penalty
+    const cfg = getConfig();
+    const searchDepth = Math.min(scored.length, cfg.BATCH_SEARCH_DEPTH);
+    let bestIdx = 0;
+    let bestScore = -Infinity;
+
+    for (let i = 0; i < searchDepth; i++) {
+      const candidate = scored[i]!;
+      const touchNodes = candidate.q.touchProfile.map((t) => t.node);
+      const overlapCount = touchNodes.filter((n) => selectedNodes.has(n)).length;
+      const overlapPenalty = 1 - cfg.NODE_OVERLAP_PENALTY * overlapCount / Math.max(1, touchNodes.length);
+      const adjustedScore = candidate.baseScore * overlapPenalty;
+
+      if (adjustedScore > bestScore) {
+        bestScore = adjustedScore;
+        bestIdx = i;
+      }
+    }
+
+    const selected = scored.splice(bestIdx, 1)[0]!;
+    batch.push(selected.q);
+    for (const t of selected.q.touchProfile) {
+      selectedNodes.add(t.node);
+    }
+  }
+
+  return batch;
 }

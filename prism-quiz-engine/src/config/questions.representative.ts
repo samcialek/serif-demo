@@ -2107,5 +2107,602 @@ export const REPRESENTATIVE_QUESTIONS: QuestionDef[] = [
         continuous: { CD: -0.5, CU: -0.4 }
       }
     }
+  },
+
+  // =========================================================================
+  // NEW QUESTIONS 64-75: Gap-targeted expansion
+  // =========================================================================
+
+  // Q64 — Political Frustration (PF position via grievance framing + salience)
+  // "When you think about what's most wrong with the country right now,
+  //  which frustration resonates most?"
+  {
+    id: 64,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "political_frustration",
+    uiType: "single_choice",
+    quality: 0.93,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "PF", kind: "continuous", role: "position", weight: 0.90, touchType: "grievance_proxy" },
+      { node: "PF", kind: "continuous", role: "salience", weight: 0.40, touchType: "frustration_intensity" }
+    ],
+    optionEvidence: {
+      // "Corporations and the wealthy have too much power, ordinary people are left behind"
+      corporate_power_inequality: {
+        continuous: {
+          PF: { pos: [0.55, 0.30, 0.10, 0.03, 0.02], sal: [0.03, 0.12, 0.38, 0.47] }
+        }
+      },
+      // "Government has grown too large and intrusive, individual freedom is eroding"
+      government_overreach: {
+        continuous: {
+          PF: { pos: [0.02, 0.05, 0.12, 0.36, 0.45], sal: [0.03, 0.12, 0.38, 0.47] }
+        }
+      },
+      // "Both sides are more interested in fighting than solving real problems"
+      both_sides_broken: {
+        continuous: {
+          PF: { pos: [0.06, 0.14, 0.58, 0.14, 0.08], sal: [0.30, 0.38, 0.22, 0.10] }
+        }
+      },
+      // "The system itself is fundamentally unjust and needs radical change"
+      system_unjust: {
+        continuous: {
+          PF: { pos: [0.60, 0.22, 0.10, 0.05, 0.03], sal: [0.02, 0.08, 0.35, 0.55] }
+        }
+      },
+      // "Traditional values and social cohesion are being abandoned"
+      values_eroding: {
+        continuous: {
+          PF: { pos: [0.02, 0.03, 0.08, 0.32, 0.55], sal: [0.02, 0.10, 0.38, 0.50] }
+        }
+      },
+      // "I don't think much about politics — it doesn't affect my daily life"
+      politics_irrelevant: {
+        continuous: {
+          PF: { pos: [0.10, 0.15, 0.45, 0.18, 0.12], sal: [0.55, 0.30, 0.12, 0.03] }
+        }
+      }
+    }
+  }
+
+  /* Q65, Q66, Q67, Q68 — evidence maps miscalibrated, need recalibration.
+     See src/optimize/questionDiag.ts for individual impact analysis.
+  // Q65 — Party-Culture Conflict Response (PF salience + CD salience joint)
+  ,{
+    id: 65,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "party_culture_conflict_response",
+    uiType: "single_choice",
+    quality: 0.90,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "PF", kind: "continuous", role: "salience", weight: 0.70, touchType: "loyalty_tradeoff" },
+      { node: "CD", kind: "continuous", role: "salience", weight: 0.55, touchType: "cultural_salience" },
+      { node: "COM", kind: "continuous", role: "position", weight: 0.25, touchType: "pragmatism_proxy" }
+    ],
+    optionEvidence: {
+      vote_party_anyway: {
+        continuous: {
+          PF: { sal: [0.02, 0.08, 0.35, 0.55] },
+          CD: { sal: [0.40, 0.30, 0.20, 0.10] },
+          COM: { pos: [0.05, 0.12, 0.25, 0.33, 0.25] }
+        }
+      },
+      vote_other_party: {
+        continuous: {
+          PF: { sal: [0.30, 0.35, 0.25, 0.10] },
+          CD: { sal: [0.03, 0.10, 0.37, 0.50] }
+        }
+      },
+      stay_home: {
+        continuous: {
+          PF: { sal: [0.50, 0.30, 0.15, 0.05] },
+          CD: { sal: [0.25, 0.35, 0.28, 0.12] },
+          ENG: { pos: [0.50, 0.30, 0.12, 0.05, 0.03] }
+        }
+      },
+      look_for_independent: {
+        continuous: {
+          PF: { sal: [0.20, 0.35, 0.30, 0.15] },
+          COM: { pos: [0.35, 0.30, 0.20, 0.10, 0.05] }
+        }
+      }
+    }
+  },
+
+  // Q66 — Community Fund Allocation (CD + PRO joint)
+  {
+    id: 66,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "community_fund_allocation",
+    uiType: "allocation",
+    quality: 0.89,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "CD", kind: "continuous", role: "position", weight: 0.75, touchType: "value_allocation" },
+      { node: "PRO", kind: "continuous", role: "position", weight: 0.60, touchType: "governance_allocation" },
+      { node: "MAT", kind: "continuous", role: "position", weight: 0.20, touchType: "economic_proxy" }
+    ],
+    allocationMap: {
+      preserve_heritage: { continuous: { CD: -0.8, PRO: -0.3 } },
+      modernize_infrastructure: { continuous: { CD: 0.5, PRO: 0.2, MAT: -0.4 } },
+      community_deliberation: { continuous: { PRO: 0.7, COM: 0.5 } },
+      market_based_development: { continuous: { MAT: -0.8, PRO: -0.5 } }
+    }
+  },
+
+  // Q67 — Universal vs Local Obligations (CU + MOR + ZS joint — pairwise)
+  {
+    id: 67,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "universal_vs_local_obligations",
+    uiType: "pairwise",
+    quality: 0.92,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "CU", kind: "continuous", role: "position", weight: 0.70, touchType: "scope_tradeoff" },
+      { node: "MOR", kind: "continuous", role: "position", weight: 0.80, touchType: "scope_tradeoff" },
+      { node: "ZS", kind: "continuous", role: "position", weight: 0.40, touchType: "resource_view" }
+    ],
+    pairMaps: {
+      own_community_vs_strangers_abroad: {
+        protect_own_community: {
+          continuous: { CU: -0.7, MOR: -0.8, ZS: 0.4 }
+        },
+        protect_strangers_abroad: {
+          continuous: { CU: 0.7, MOR: 0.8, ZS: -0.4 }
+        }
+      },
+      national_sovereignty_vs_international_coop: {
+        national_sovereignty: {
+          continuous: { CU: -0.6, MOR: -0.5, ZS: 0.5 }
+        },
+        international_cooperation: {
+          continuous: { CU: 0.6, MOR: 0.5, ZS: -0.5 }
+        }
+      },
+      local_charity_vs_global_aid: {
+        local_charity: {
+          continuous: { MOR: -0.6, CU: -0.4 }
+        },
+        global_aid: {
+          continuous: { MOR: 0.6, CU: 0.4 }
+        }
+      }
+    }
+  },
+
+  // Q68 — Opponent Success Response (COM + ONT_H joint)
+  {
+    id: 68,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "opponent_success_response",
+    uiType: "single_choice",
+    quality: 0.91,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "COM", kind: "continuous", role: "position", weight: 0.80, touchType: "compromise_proxy" },
+      { node: "ONT_H", kind: "continuous", role: "position", weight: 0.45, touchType: "optimism_proxy" },
+      { node: "ZS", kind: "continuous", role: "position", weight: 0.25, touchType: "zero_sum_proxy" }
+    ],
+    optionEvidence: {
+      maybe_good_outcome: {
+        continuous: {
+          COM: { pos: [0.02, 0.05, 0.15, 0.38, 0.40], sal: [0.10, 0.25, 0.40, 0.25] },
+          ONT_H: { pos: [0.02, 0.05, 0.20, 0.40, 0.33], sal: [0.10, 0.25, 0.40, 0.25] },
+          ZS: { pos: [0.35, 0.30, 0.20, 0.10, 0.05], sal: [0.15, 0.30, 0.35, 0.20] }
+        }
+      },
+      worried_but_accept: {
+        continuous: {
+          COM: { pos: [0.05, 0.15, 0.40, 0.25, 0.15], sal: [0.10, 0.25, 0.40, 0.25] },
+          ONT_H: { pos: [0.05, 0.15, 0.40, 0.25, 0.15], sal: [0.12, 0.28, 0.38, 0.22] },
+          ZS: { pos: [0.10, 0.20, 0.35, 0.25, 0.10], sal: [0.12, 0.28, 0.38, 0.22] }
+        }
+      },
+      fight_to_reverse: {
+        continuous: {
+          COM: { pos: [0.40, 0.30, 0.15, 0.10, 0.05], sal: [0.05, 0.15, 0.40, 0.40] },
+          ONT_H: { pos: [0.20, 0.30, 0.30, 0.15, 0.05], sal: [0.08, 0.20, 0.40, 0.32] },
+          ZS: { pos: [0.05, 0.10, 0.20, 0.30, 0.35], sal: [0.05, 0.15, 0.40, 0.40] }
+        }
+      },
+      system_broken: {
+        continuous: {
+          COM: { pos: [0.55, 0.25, 0.12, 0.05, 0.03], sal: [0.03, 0.10, 0.35, 0.52] },
+          ONT_H: { pos: [0.40, 0.30, 0.18, 0.08, 0.04], sal: [0.05, 0.15, 0.35, 0.45] },
+          ZS: { pos: [0.02, 0.05, 0.13, 0.30, 0.50], sal: [0.03, 0.10, 0.35, 0.52] }
+        }
+      }
+    }
+  },
+  */ // end Q65-Q68 comment block
+
+  // Q69 — Common Ground Salience (COM salience via slider)
+  // Re-enabled: Q72 was removed, so interaction no longer applies.
+  ,{
+    id: 69,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "common_ground_salience",
+    uiType: "slider",
+    quality: 0.91,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "COM", kind: "continuous", role: "salience", weight: 0.90, touchType: "direct_salience" },
+      { node: "PRO", kind: "continuous", role: "position", weight: 0.15, touchType: "governance_proxy" }
+    ],
+    sliderMap: {
+      "0-20":   { continuous: { COM: { sal: [0.55, 0.30, 0.12, 0.03] } } },
+      "21-40":  { continuous: { COM: { sal: [0.25, 0.42, 0.25, 0.08] } } },
+      "41-60":  { continuous: { COM: { sal: [0.10, 0.28, 0.40, 0.22] } } },
+      "61-80":  { continuous: { COM: { sal: [0.04, 0.12, 0.38, 0.46] } } },
+      "81-100": { continuous: { COM: { sal: [0.02, 0.08, 0.30, 0.60] } } }
+    }
+  }
+
+  /* Q70 — needs recalibration: breaks 029 Liberationist Progressive, 052 Distributist Localist
+  // Q70 — Zero-Sum Politics (ZS salience + position)
+  {
+    id: 70,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "zero_sum_politics_view",
+    uiType: "slider",
+    quality: 0.90,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "ZS", kind: "continuous", role: "salience", weight: 0.85, touchType: "direct_salience" },
+      { node: "ZS", kind: "continuous", role: "position", weight: 0.50, touchType: "direct_placement" }
+    ],
+    sliderMap: {
+      "0-20":   { continuous: { ZS: { pos: [0.55, 0.25, 0.12, 0.05, 0.03], sal: [0.50, 0.30, 0.15, 0.05] } } },
+      "21-40":  { continuous: { ZS: { pos: [0.25, 0.35, 0.25, 0.10, 0.05], sal: [0.25, 0.38, 0.25, 0.12] } } },
+      "41-60":  { continuous: { ZS: { pos: [0.08, 0.18, 0.40, 0.22, 0.12], sal: [0.12, 0.28, 0.38, 0.22] } } },
+      "61-80":  { continuous: { ZS: { pos: [0.04, 0.08, 0.20, 0.38, 0.30], sal: [0.05, 0.15, 0.38, 0.42] } } },
+      "81-100": { continuous: { ZS: { pos: [0.02, 0.05, 0.10, 0.25, 0.58], sal: [0.03, 0.10, 0.32, 0.55] } } }
+    }
+  },
+  */ // end Q70 comment block
+
+  /* Q71 — individually safe (98.4%) but causes interaction with Q72 that breaks 117.
+     Re-enable if Q72 is removed, or if evidence maps are recalibrated.
+  {
+    id: 71,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "rhetoric_style_importance",
+    uiType: "slider",
+    quality: 0.88,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "AES", kind: "categorical", role: "salience", weight: 0.90, touchType: "direct_salience" },
+      { node: "ENG", kind: "continuous", role: "salience", weight: 0.20, touchType: "attention_proxy" }
+    ],
+    sliderMap: {
+      "0-20":   { categorical: { AES: { sal: [0.55, 0.30, 0.12, 0.03] } } },
+      "21-40":  { categorical: { AES: { sal: [0.25, 0.42, 0.25, 0.08] } } },
+      "41-60":  { categorical: { AES: { sal: [0.10, 0.28, 0.40, 0.22] } } },
+      "61-80":  { categorical: { AES: { sal: [0.05, 0.15, 0.38, 0.42] } } },
+      "81-100": { categorical: { AES: { sal: [0.02, 0.08, 0.30, 0.60] } } }
+    }
+  },
+  */
+
+  /* Q72 removed — PRO+COM process/outcome tradeoff is already well-covered
+     by existing questions in the bank. */
+
+  /* Q73-Q75 — needs recalibration: Q73 breaks 119, Q74 breaks 10 archetypes, Q75 breaks 050
+  // Q73 — Inequality Solutions Ranking (MAT + PRO joint)
+  {
+    id: 73,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "inequality_solutions_ranking",
+    uiType: "ranking",
+    quality: 0.90,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "MAT", kind: "continuous", role: "position", weight: 0.70, touchType: "economic_ranking" },
+      { node: "PRO", kind: "continuous", role: "position", weight: 0.40, touchType: "governance_ranking" },
+      { node: "COM", kind: "continuous", role: "position", weight: 0.20, touchType: "pragmatism_proxy" }
+    ],
+    rankingMap: {
+      free_market_growth: { continuous: { MAT: -0.9, PRO: -0.5 } },
+      government_redistribution: { continuous: { MAT: 0.8, PRO: 0.4 } },
+      strong_regulations: { continuous: { PRO: 0.7, MAT: 0.3 } },
+      community_mutual_aid: { continuous: { COM: 0.6, MAT: 0.3, PRO: -0.3 } },
+      charitable_giving: { continuous: { MAT: -0.4, COM: 0.3 } }
+    }
+  },
+
+  // Q74 — Culture vs Diversity Scope (MOR + CD pairwise)
+  {
+    id: 74,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "culture_vs_diversity_scope",
+    uiType: "pairwise",
+    quality: 0.91,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "MOR", kind: "continuous", role: "position", weight: 0.70, touchType: "moral_scope" },
+      { node: "CD", kind: "continuous", role: "position", weight: 0.65, touchType: "cultural_direction" },
+      { node: "CU", kind: "continuous", role: "position", weight: 0.30, touchType: "universalism_proxy" }
+    ],
+    pairMaps: {
+      preserve_culture_vs_embrace_diversity: {
+        preserve_culture: {
+          continuous: { CD: -0.7, MOR: -0.5, CU: -0.4 }
+        },
+        embrace_diversity: {
+          continuous: { CD: 0.5, MOR: 0.5, CU: 0.4 }
+        }
+      },
+      national_obligations_vs_global_obligations: {
+        national_obligations_first: {
+          continuous: { MOR: -0.7, CU: -0.5, CD: -0.3 }
+        },
+        global_obligations_first: {
+          continuous: { MOR: 0.7, CU: 0.5, CD: 0.3 }
+        }
+      }
+    }
+  },
+
+  // Q75 — Cross-Party Marriage (TRB + PF joint)
+  {
+    id: 75,
+    stage: "stage2",
+    section: "VI",
+    promptShort: "cross_party_marriage_comfort",
+    uiType: "single_choice",
+    quality: 0.92,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "TRB", kind: "continuous", role: "position", weight: 0.70, touchType: "network_homophily" },
+      { node: "PF", kind: "continuous", role: "salience", weight: 0.55, touchType: "identity_strength" },
+      { node: "PF", kind: "continuous", role: "position", weight: 0.30, touchType: "partisan_intensity" }
+    ],
+    optionEvidence: {
+      no_problem: {
+        continuous: {
+          TRB: { pos: [0.45, 0.30, 0.15, 0.07, 0.03], sal: [0.25, 0.35, 0.28, 0.12] },
+          PF: { sal: [0.40, 0.32, 0.20, 0.08] }
+        }
+      },
+      slight_discomfort: {
+        continuous: {
+          TRB: { pos: [0.10, 0.25, 0.35, 0.20, 0.10], sal: [0.10, 0.25, 0.40, 0.25] },
+          PF: { sal: [0.15, 0.30, 0.35, 0.20] }
+        }
+      },
+      serious_concern: {
+        continuous: {
+          TRB: { pos: [0.03, 0.07, 0.15, 0.35, 0.40], sal: [0.03, 0.12, 0.38, 0.47] },
+          PF: { sal: [0.03, 0.12, 0.35, 0.50] }
+        }
+      },
+      very_upset: {
+        continuous: {
+          TRB: { pos: [0.01, 0.03, 0.06, 0.20, 0.70], sal: [0.01, 0.05, 0.30, 0.64] },
+          PF: { sal: [0.01, 0.05, 0.25, 0.69] }
+        }
+      }
+    }
+  }
+  */ // end Q73-Q75 comment block
+
+  // ── Coverage-gap fillers (Q76-Q79) ──────────────────────────────
+  // Q76 — Success Attribution (ONT_S individualist coverage)
+  // Asking about success (not failure) naturally elicits individualist attribution
+  // without social-desirability bias toward structural explanations.
+  ,{
+    id: 76,
+    stage: "stage2",
+    section: "IV",
+    promptShort: "success_attribution",
+    uiType: "single_choice",
+    quality: 0.91,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "ONT_S", kind: "continuous", role: "position",  weight: 0.90, touchType: "causal_attribution" },
+      { node: "ONT_S", kind: "continuous", role: "salience",  weight: 0.40, touchType: "causal_attribution" },
+      { node: "ZS",    kind: "continuous", role: "position",  weight: 0.20, touchType: "distributional_worldview" }
+    ],
+    optionEvidence: {
+      hard_work_talent: {
+        continuous: {
+          ONT_S: { pos: [0.62, 0.22, 0.10, 0.04, 0.02], sal: [0.05, 0.15, 0.40, 0.40] },
+          ZS:    { pos: [0.35, 0.30, 0.22, 0.09, 0.04] }
+        }
+      },
+      good_choices: {
+        continuous: {
+          ONT_S: { pos: [0.22, 0.48, 0.20, 0.07, 0.03], sal: [0.08, 0.22, 0.42, 0.28] },
+          ZS:    { pos: [0.25, 0.35, 0.25, 0.10, 0.05] }
+        }
+      },
+      right_connections: {
+        continuous: {
+          ONT_S: { pos: [0.06, 0.14, 0.48, 0.22, 0.10], sal: [0.10, 0.25, 0.38, 0.27] },
+          ZS:    { pos: [0.08, 0.18, 0.38, 0.24, 0.12] }
+        }
+      },
+      system_advantages: {
+        continuous: {
+          ONT_S: { pos: [0.02, 0.06, 0.15, 0.45, 0.32], sal: [0.03, 0.12, 0.38, 0.47] },
+          ZS:    { pos: [0.05, 0.10, 0.25, 0.35, 0.25] }
+        }
+      },
+      whole_system: {
+        continuous: {
+          ONT_S: { pos: [0.01, 0.03, 0.08, 0.28, 0.60], sal: [0.02, 0.08, 0.35, 0.55] },
+          ZS:    { pos: [0.03, 0.07, 0.18, 0.32, 0.40] }
+        }
+      }
+    }
+  },
+
+  // Q77 — Decision-Making Style (EPS intuitionist + nihilist coverage)
+  // Life-decision framing (not political) avoids priming institutional answers.
+  // "gut_feeling" gives intuitionist a dignified path; "cant_predict" normalizes nihilism.
+  {
+    id: 77,
+    stage: "stage2",
+    section: "III",
+    promptShort: "decision_making_style",
+    uiType: "single_choice",
+    quality: 0.93,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "EPS", kind: "categorical", role: "category",  weight: 0.85, touchType: "decision_style" },
+      { node: "EPS", kind: "categorical", role: "salience",  weight: 0.35, touchType: "decision_style" },
+      { node: "AES", kind: "categorical", role: "category",  weight: 0.15, touchType: "style_proxy" }
+    ],
+    optionEvidence: {
+      research_data: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.empiricist,      sal: [0.05, 0.15, 0.42, 0.38] }
+        }
+      },
+      trusted_advice: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.institutionalist, sal: [0.05, 0.18, 0.40, 0.37] }
+        }
+      },
+      values_tradition: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.traditionalist,   sal: [0.05, 0.15, 0.40, 0.40] }
+        }
+      },
+      gut_feeling: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.intuitionist,     sal: [0.08, 0.20, 0.40, 0.32] },
+          AES: { cat: AES_PROTOTYPES.authentic,         sal: [0.12, 0.28, 0.38, 0.22] }
+        }
+      },
+      own_reasoning: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.autonomous,       sal: [0.06, 0.18, 0.42, 0.34] }
+        }
+      },
+      cant_predict: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.nihilist,         sal: [0.25, 0.35, 0.28, 0.12] }
+        }
+      }
+    }
+  },
+
+  // Q78 — Speaker Appeal (AES authentic coverage)
+  // Behavioral framing ("would you show up?") reveals aesthetic preference
+  // without asking respondents to self-classify their communication style.
+  {
+    id: 78,
+    stage: "stage2",
+    section: "V",
+    promptShort: "speaker_appeal",
+    uiType: "single_choice",
+    quality: 0.92,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "AES", kind: "categorical", role: "category",  weight: 0.88, touchType: "rhetorical_preference" },
+      { node: "AES", kind: "categorical", role: "salience",  weight: 0.40, touchType: "rhetorical_preference" },
+      { node: "EPS", kind: "categorical", role: "category",  weight: 0.15, touchType: "style_proxy" }
+    ],
+    optionEvidence: {
+      bridge_builder: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.statesman,   sal: [0.05, 0.15, 0.40, 0.40] }
+        }
+      },
+      deep_expertise: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.technocrat,  sal: [0.05, 0.15, 0.42, 0.38] }
+        }
+      },
+      community_voice: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.pastoral,    sal: [0.05, 0.18, 0.40, 0.37] }
+        }
+      },
+      says_what_they_think: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.authentic,   sal: [0.05, 0.15, 0.40, 0.40] },
+          EPS: { cat: EPS_PROTOTYPES.intuitionist, sal: [0.15, 0.28, 0.35, 0.22] }
+        }
+      },
+      calls_out_power: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.fighter,     sal: [0.03, 0.12, 0.40, 0.45] }
+        }
+      },
+      big_picture: {
+        categorical: {
+          AES: { cat: AES_PROTOTYPES.visionary,   sal: [0.05, 0.15, 0.42, 0.38] }
+        }
+      }
+    }
+  },
+
+  // Q79 — Expert Disagreement (EPS nihilist dedicated)
+  // Expert disagreement is a natural experiment for epistemic style.
+  // "tune_out" normalizes nihilism as practical uncertainty acceptance.
+  {
+    id: 79,
+    stage: "stage2",
+    section: "III",
+    promptShort: "expert_disagreement_reaction",
+    uiType: "single_choice",
+    quality: 0.90,
+    rewriteNeeded: false,
+    touchProfile: [
+      { node: "EPS", kind: "categorical", role: "category",  weight: 0.82, touchType: "epistemic_response" },
+      { node: "EPS", kind: "categorical", role: "salience",  weight: 0.40, touchType: "epistemic_response" },
+      { node: "ENG", kind: "continuous",  role: "salience",  weight: 0.15, touchType: "attention_proxy" }
+    ],
+    optionEvidence: {
+      check_evidence: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.empiricist,      sal: [0.03, 0.12, 0.40, 0.45] }
+        }
+      },
+      check_credentials: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.institutionalist, sal: [0.05, 0.15, 0.42, 0.38] }
+        }
+      },
+      check_values: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.traditionalist,   sal: [0.05, 0.15, 0.40, 0.40] }
+        }
+      },
+      check_experience: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.intuitionist,     sal: [0.08, 0.20, 0.40, 0.32] }
+        }
+      },
+      both_wrong: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.autonomous,       sal: [0.05, 0.15, 0.42, 0.38] }
+        }
+      },
+      tune_out: {
+        categorical: {
+          EPS: { cat: EPS_PROTOTYPES.nihilist,         sal: [0.40, 0.32, 0.20, 0.08] }
+        },
+        continuous: {
+          ENG: { sal: [0.55, 0.30, 0.12, 0.03] }
+        }
+      }
+    }
   }
 ];

@@ -289,8 +289,10 @@ PRIORS: Dict[str, PriorSpec] = {
 
     "travel_load→sleep_efficiency": PriorSpec(
         theta_mu=0.5, theta_sigma=0.15, theta_unit="jet lag score",
-        beta_below_mu=-1.5, beta_below_sigma=0.8,      # Residual architecture disruption
-        beta_above_mu=-8.0, beta_above_sigma=3.0,      # Acute phase very disruptive
+        beta_below_mu=-3.0, beta_below_sigma=1.0,      # Linear degradation: 0 jet lag is optimal,
+                                                        # sleep efficiency drops as jet lag increases.
+                                                        # Negative beta_below = y falls as x rises toward theta.
+        beta_above_mu=-8.0, beta_above_sigma=3.0,      # Acute phase very disruptive (steeper drop)
         effect_unit="%", per_unit="per 0.2 load",
         source="Dunican et al. 2023; Fowler et al. MSSE 2017; Oura/NUS SLEEP 2025",
         curve_type="plateau_down",
@@ -731,8 +733,9 @@ PRIORS: Dict[str, PriorSpec] = {
     ),
     "travel_load→deep_sleep": PriorSpec(
         theta_mu=0.5, theta_sigma=0.15, theta_unit="jet lag score",
-        beta_below_mu=-2.0, beta_below_sigma=1.5,
-        beta_above_mu=-5.0, beta_above_sigma=3.0,
+        beta_below_mu=-2.0, beta_below_sigma=0.8,      # Linear SWS loss below threshold; tightened sigma
+                                                        # to resist v_max artifact (no jet lag is always best).
+        beta_above_mu=-5.0, beta_above_sigma=3.0,      # Steeper SWS loss above threshold
         effect_unit="min", per_unit="per 0.2 load",
         source="Dunican et al. 2023; jet lag SWS disruption",
         curve_type="plateau_down",
