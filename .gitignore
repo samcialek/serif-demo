@@ -22,10 +22,8 @@ Oron_Akek_Data/
 /_build_notes.py
 /extract_pdf.py
 
-# Non-code files in Serif_Demo/ root
-/Serif_Demo/*.pdf
-/Serif_Demo/*.png
-/Serif_Demo/*.md
+# Serif Demo — lives in its own repo (C:\Users\samci\Downloads\Serif_Demo)
+/Serif_Demo/
 
 # Environment
 .env
