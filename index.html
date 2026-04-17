@@ -5,13 +5,26 @@
     <link rel="icon" type="image/png" href="/serif-demo/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Serif</title>
-    <script type="module" crossorigin src="/serif-demo/assets/index-unfx_1oL.js"></script>
+    <script type="module" crossorigin src="/serif-demo/assets/index-Cy3ExMgZ.js"></script>
     <link rel="modulepreload" crossorigin href="/serif-demo/assets/react-vendor-DaGjvQ9R.js">
     <link rel="modulepreload" crossorigin href="/serif-demo/assets/utils-BMrmdSYR.js">
-    <link rel="modulepreload" crossorigin href="/serif-demo/assets/ui-vendor-DNIgLbKO.js">
-    <link rel="stylesheet" crossorigin href="/serif-demo/assets/index-iDDRdSDi.css">
+    <link rel="modulepreload" crossorigin href="/serif-demo/assets/ui-vendor-D41oAvtg.js">
+    <link rel="stylesheet" crossorigin href="/serif-demo/assets/index-CTfAfOYs.css">
   </head>
   <body>
-    <div id="root"></div>
+    <!-- GitHub Pages SPA redirect handler -->
+    <script>
+      (function(l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <div id="root"></div>
   </body>
 </html>
